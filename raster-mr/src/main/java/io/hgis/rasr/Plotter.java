@@ -9,4 +9,5 @@ public interface Plotter {
 
     void plot(int x, int y);
 
+    void setValue(int v);
 }

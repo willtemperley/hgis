@@ -14,9 +14,7 @@ import org.apache.hadoop.hbase.client.HTable
 import scala.collection.JavaConversions._
 
 /**
- * Re loads all site grids ...
  *
- * Created by will on 24/10/2014.
  */
 object LoadWays {
 

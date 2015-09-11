@@ -51,14 +51,28 @@ public class Rasterizer {
 
     }
 
+    /*
+     * 0 <= m <= 1 therefore x increases faster or equal to y
+     *
+     * Floating point implementation would maintain an error term e, which is incremented by m each time x is incremented,
+     * until e > 0.5, in which case y is incremented and the error term is decreased by one.
+     *
+     * For performance the e > 0.5 test is integral here by multiplying both sides by 2(dx)
+     *
+     *
+     *
+     */
     private static void rasterizePositiveX(int x1, int y1, int x2, int y2, Plotter view) {
         int dx = x2 - x1;
         int dy = y2 - y1;
         int y = y1;
-        int eps = 0;
+        int eps = 0; //this is error term multiplied by dx
+
 
         for (int x = x1; x <= x2; x++) {
             view.plot(x, y);
+            // Increment y, if eps + dy is >= dx
+            // (left shift 1 multiplies by 2!)
             eps += dy;
             if ((eps << 1) >= dx) {
                 y++;
@@ -87,7 +101,7 @@ public class Rasterizer {
         int dx = x2 - x1;
         int dy = y2 - y1;
         int y = y1;
-        int eps = 0;
+        int eps = dx;
 
         for (int x = x1; x <= x2; x++) {
             view.plot(x, y);
@@ -104,7 +118,7 @@ public class Rasterizer {
         int dx = x2 - x1;
         int dy = y2 - y1;
         int x = x1;
-        int eps = 0;
+        int eps = dy;
 
         for (int y = y1; y <= y2; y++) {
             view.plot(x, y);

@@ -20,7 +20,7 @@ import scala.util.Random
 /*
 *
 */
-object RasterizeMR {
+object RasterizeMR2 {
 
 
   val width: Int = 51200
@@ -88,7 +88,7 @@ object RasterizeMR {
           context.write(gridKey, pixel)
         }
 
-        override def setValue(v: Int): Unit = Unit
+        override def setValue(v: Int) = Unit
       }
 
       if (wkb != null){
@@ -115,22 +115,23 @@ object RasterizeMR {
   }
 
   /**
+   * Plots a binary image
    *
    * @param raster a JAI raster
    */
   class WritableRasterPlotter(raster: WritableRaster) extends Plotter {
 
-    val pix = new Array[Int](1)
+    var plotValue = 1
 
     def plot(x: Int, y: Int) {
 
-      raster.getPixel(x, y, pix)
-      pix(0) = pix(0) + 1
-      raster.setPixel(x, y, pix)
+        raster.setPixel(x, y, Array[Int]( if(plotValue > 255) 255 else plotValue) )
 
     }
 
-    override def setValue(v: Int): Unit = pix(0) = v
+    def setValue(v: Int): Unit = {
+      plotValue = v
+    }
   }
 
 
@@ -155,10 +156,10 @@ object RasterizeMR {
       val ras: WritableRaster = image.getRaster
       val plotter = new WritableRasterPlotter(ras)
 
-      val orig = grid.gridIdToOrigin(key.get())
-
-      for (value <- values) {
-        val pix = grid.keyToPixel(value.get())
+      val x = values.groupBy(f => f).mapValues(_.size)
+      for (value <- x) {
+        val pix = grid.keyToPixel(value._1.get)
+        val orig = grid.gridIdToOrigin(key.get)
         val x = pix._1 - orig._1
         val y = pix._2 - orig._2
         if (x >=0 && x < tileSize && y >= 0 && y < tileSize) {
@@ -172,8 +173,8 @@ object RasterizeMR {
           put.add(CFV, "error".getBytes, message.getBytes)
           context.write(null, put)
         }
-
       }
+
 
       ImageIO.write(image, "png", bos)
   

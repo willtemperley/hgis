@@ -1,9 +1,10 @@
 package io.hgis.rasr
 
-import java.awt.Point
+import java.awt.{Graphics, Point}
 import java.awt.image.{BufferedImage, WritableRaster}
 import java.io.{File, FileOutputStream, IOException}
 import javax.imageio.ImageIO
+import javax.swing.{JPanel, JFrame, WindowConstants}
 
 import com.vividsolutions.jts.geom.{Coordinate, Geometry}
 import com.vividsolutions.jts.io.{ParseException, WKTReader}
@@ -21,9 +22,13 @@ object RasterSandbox {
 
   class WritableRasterPlotter(raster: WritableRaster) extends Plotter {
 
+    val pixVal = Array[Int](1)
+
+    def setValue(v: Int) = pixVal(0) = v
+
     def plot(x: Int, y: Int) {
       try {
-        raster.setPixel(x, height - y, Array[Int](1))
+        raster.setPixel(x, height - y, pixVal)
       }
       catch {
         case e: ArrayIndexOutOfBoundsException => {
@@ -32,6 +37,7 @@ object RasterSandbox {
         }
       }
     }
+
   }
 
 
@@ -44,9 +50,10 @@ object RasterSandbox {
     val coords = geom.getCoordinates
     val gr = new GlobalGrid(width, height, tileSize)
 
-    val image: BufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY)
+    val image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY)
     val ras: WritableRaster = image.getRaster
     val wrp = new WritableRasterPlotter(ras)
+    wrp.setValue(255)
 
     //Sliding iterates the gaps in the fence :)
     val slide: Iterator[Array[Coordinate]] = coords.sliding(2)
@@ -61,36 +68,44 @@ object RasterSandbox {
       Rasterizer.rasterize(a1._1, a1._2, b1._1, b1._2, wrp)
     }
 
-    val fos = new FileOutputStream(new File("E:/tmp/rasterized.png"))
-    ImageIO.write(image, "png", fos)
-
-    //    val frame: JFrame = new JFrame
-//    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
-//    frame.setSize(width, height)
-//    frame.setVisible(true)
+    val frame: JFrame = new JFrame
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
+    frame.setSize(width, height)
+    frame.setVisible(true)
 //
 //    val image: BufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY)
 //    val ras: WritableRaster = image.getRaster
 //    val plotter: Plotter = new WritableRasterPlotter(ras)
 //
-//    val w1: Point = new Point(20, 180)
-//    val w2: Point = new Point(40, 20)
-//    val w3: Point = new Point(80, 40)
-//    val w4: Point = new Point(120, 20)
-//    val w5: Point = new Point(140, 180)
+    val w1: Point = new Point(20, 180)
+    val w2: Point = new Point(40, 20)
+    val w3: Point = new Point(80, 40)
+    val w4: Point = new Point(120, 20)
+    val w5: Point = new Point(140, 180)
 //
-//    rasterize(w1, w2, plotter)
-//    rasterize(w2, w3, plotter)
-//    rasterize(w3, w4, plotter)
-//    rasterize(w4, w5, plotter)
-//
-//    val pane: JPanel = new JPanel() {
-//      protected override def paintComponent(g: Graphics) {
-//        super.paintComponent(g)
-//        g.drawImage(image, 0, 0, null)
-//      }
-//    }
-//    frame.add(pane)
+    rasterize(w1, w2, wrp)
+    rasterize(w2, w3, wrp)
+    rasterize(w3, w4, wrp)
+    rasterize(w4, w5, wrp)
+
+    wrp.setValue(100)
+
+    wrp.plot(w1.getX.toInt, w1.getY.toInt)
+    wrp.plot(w2.getX.toInt, w2.getY.toInt)
+    wrp.plot(w3.getX.toInt, w3.getY.toInt)
+    wrp.plot(w4.getX.toInt, w4.getY.toInt)
+    wrp.plot(w5.getX.toInt, w5.getY.toInt)
+
+    val fos = new FileOutputStream(new File("E:/tmp/rasterized.png"))
+    ImageIO.write(image, "png", fos)
+
+    val pane: JPanel = new JPanel() {
+      protected override def paintComponent(g: Graphics) {
+        super.paintComponent(g)
+        g.drawImage(image, 0, 0, null)
+      }
+    }
+    frame.add(pane)
   }
 
   /**

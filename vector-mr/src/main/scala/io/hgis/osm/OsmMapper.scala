@@ -38,19 +38,6 @@ trait OsmMapper {
       .toMap
   }
 
-//  /**
-//   * Takes hex WKB and writes as binary to mapper
-//   *
-//   * @param context the mapper context to write to
-//   * @param geomColName the name of the geometry column
-//   * @param hex the hex to convert to a wkb byte[]
-//   */
-//  def writeHexWKB(context: Mapper[LongWritable, Text, ImmutableBytesWritable, KeyValue]#Context, geomColName: String, hex: String): Unit = {
-//    val linestring = Bytes.fromHex(hex)
-//    val kv = new KeyValue(hKey.get(), CFV, geomColName.getBytes, linestring)
-//    context.write(hKey, kv)
-//  }
-
   /**
    * Hex to bytes
    *
@@ -59,71 +46,6 @@ trait OsmMapper {
    */
   def hexToBytes(hex: String): Array[Byte] = DatatypeConverter.parseHexBinary(hex)
 
-//  def writeWKT(wkbReader: WKBReader, wktWriter: WKTWriter, context: Mapper[LongWritable, Text, ImmutableBytesWritable, KeyValue]#Context, hex: String, wktColName: Array[Byte] = "wkt".getBytes): Unit = {
-//    val bytes = Bytes.fromHex(hex)
-//    val geom = wkbReader.read(bytes)
-//    val wkt = wktWriter.write(geom)
-//
-//    val kv = new KeyValue(hKey.get(), CFV, wktColName, wkt.getBytes)
-//    context.write(hKey, kv)
-//  }
-
-//  /**
-//   * Simply writes out the raw text.
-//   *
-//   * @param context the contex to write to
-//   * @param fields  the f
-//   */
-//  def writeRawText(context: Mapper[LongWritable, Text, ImmutableBytesWritable, KeyValue]#Context, fields: Array[String]): Unit = {
-//
-//    val id = fields(0).toLong
-//
-//    val nextBytes = new Array[Byte](4)
-//    Random.nextBytes(nextBytes)
-//    hKey.set(nextBytes ++ Bytes.toBytes(id))
-//
-//    {
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.ID, Bytes.toBytes(id))
-//      context.write(hKey, kv)
-//    }
-//    {
-//      val version = fields(1).toInt
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.VERSION, Bytes.toBytes(version))
-//      context.write(hKey, kv)
-//    }
-//    {
-//      val userId = fields(2).toInt
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.USER_ID, Bytes.toBytes(userId))
-//      context.write(hKey, kv)
-//    }
-//    {
-//      val tStamp = fields(3)
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.TSTAMP, Bytes.toBytes(tStamp))
-//      context.write(hKey, kv)
-//    }
-//    {
-//      val changesetId = fields(4)
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.CHANGESET_ID, Bytes.toBytes(changesetId))
-//      context.write(hKey, kv)
-//    }
-//    {
-//      val tags = fields(5)
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.TAGS, Bytes.toBytes(tags))
-//      context.write(hKey, kv)
-//    }
-//    //Ignoring the nodes fields(6)
-//    {
-//      val hex = fields(7)
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.HEX_GEOM, Bytes.toBytes(hex))
-//      context.write(hKey, kv)
-//    }
-//
-//    {
-//      val updated = fields(8)
-//      val kv = new KeyValue(hKey.get(), CFV, WayDAO.DATE_UPDATED, Bytes.toBytes(updated))
-//      context.write(hKey, kv)
-//    }
-//  }
 
   /**
    * Writes out the common OSM fields and sets the ID

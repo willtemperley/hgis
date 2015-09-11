@@ -1,6 +1,8 @@
 package io.hgis.dump
 
-import java.io.{PrintWriter, File, FileOutputStream}
+import java.awt.image.BufferedImage
+import java.io.{ByteArrayInputStream, File, FileOutputStream, PrintWriter}
+import javax.imageio.ImageIO
 
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.WKTReader
@@ -13,7 +15,7 @@ import org.apache.hadoop.hbase.util.Bytes
  * Created by willtemperley@gmail.com on 05-Jun-15.
  *
  */
-object ExtractRasters extends GeometryScanner {
+object ExtractOneBigRaster extends GeometryScanner {
 
   val wktReader = new WKTReader()
   val grid = new GlobalGrid(51200, 25600, 1024)
@@ -27,30 +29,38 @@ object ExtractRasters extends GeometryScanner {
     val scanner = htable.getScanner(scan)
     val ways = getIterator(scanner)
 
+    val bigImage: BufferedImage = new BufferedImage(51200, 25600, BufferedImage.TYPE_BYTE_GRAY)
+    val bigRas = bigImage.getRaster
+    val bigFos = new FileOutputStream(new File("target/bigras.png"))
 
 
+    var i = 0
     for (img <- ways) {
 
-      val value = img.getValue("cfv".getBytes, "error".getBytes)
-      if (value != null) {
-        println(Bytes.toString(value))
-      } else {
+      i += 1
 
-        val v = img.getValue("cfv".getBytes, "image".getBytes)
+      val v = img.getValue("cfv".getBytes, "image".getBytes)
 
-        //      val p = img.getValue("cfv".getBytes, "origin".getBytes)
-
-
+      if (v != null) {
         val orig = grid.gridIdToOrigin(img.getRow)
-        val name = orig._1 + "_" + orig._2
 
-        val fos = new FileOutputStream(new File("target/" + name + ".png"))
-        fos.write(v)
+        if (orig._1 < 51200) {
+          val bais = new ByteArrayInputStream(v)
 
-        writePNGWfile(name,  grid.pixelToPoint(orig._1, orig._2))
+          val imgR = ImageIO.read(bais)
+
+          val pix = imgR.getRaster.getPixels(0, 0, grid.tileSize, grid.tileSize, new Array[Int](grid.tileSize * grid.tileSize))
+
+          println(i + "= " + orig._1 + " : " + orig._2)
+
+          bigRas.setPixels(orig._1, 25600 - orig._2, grid.tileSize, grid.tileSize, pix)
+        }
       }
 
+
     }
+
+    ImageIO.write(bigImage, "TIFF", bigFos)
 
   }
 

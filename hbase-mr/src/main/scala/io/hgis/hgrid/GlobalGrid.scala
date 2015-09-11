@@ -44,7 +44,12 @@ class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
 
   }
 
-  //Get the bottom left offset of a grid
+  /**
+   * From the id of a grid cell, calculate the offset in pixels from the bottom left of the grid (+x, +y axes)
+   *
+   * @param id the grid cell id
+   * @return
+   */
   def gridIdToOrigin(id: Array[Byte]): (Int, Int) = {
 
     val x = keyToPixel(id)

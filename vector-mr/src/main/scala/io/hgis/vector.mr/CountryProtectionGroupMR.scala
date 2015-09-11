@@ -36,9 +36,9 @@ http://hbase.apache.org/book/mapreduce.example.html
 object CountryProtectionGroupMR {
 
   val wkbImportOp = OperatorImportFromWkb.local()
-  val geom: (Result) => Geometry = geomColumn("cfv", "geom")
-  val siteId: (Result) => String = stringColumn("cfv", "site_id")
-  val eeId: (Result) => String = stringColumn("cfv", "ee_id")
+  val geom = geomColumn("cfv", "geom") _
+  val siteId = stringColumn("cfv", "site_id") _
+  val eeId = stringColumn("cfv", "ee_id") _
   val sr = SpatialReference.create(4326)
   val wkbExport = OperatorExportToWkb.local
   val EEZ: String = "E"
