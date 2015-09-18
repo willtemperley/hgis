@@ -1,4 +1,4 @@
-package io.hgis.rasr;
+package io.hgis.rasterize;
 
 
 
@@ -57,9 +57,7 @@ public class Rasterizer {
      * Floating point implementation would maintain an error term e, which is incremented by m each time x is incremented,
      * until e > 0.5, in which case y is incremented and the error term is decreased by one.
      *
-     * For performance the e > 0.5 test is integral here by multiplying both sides by 2(dx)
-     *
-     *
+     * For performance the e > 0.5 test has been made integral by multiplying both sides by 2(dx)
      *
      */
     private static void rasterizePositiveX(int x1, int y1, int x2, int y2, Plotter view) {

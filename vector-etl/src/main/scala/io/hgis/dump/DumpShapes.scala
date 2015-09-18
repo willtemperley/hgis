@@ -12,10 +12,11 @@ import com.vividsolutions.jts.io.WKBReader
 import io.hgis.ConfigurationFactory
 import io.hgis.domain.SiteGrid
 import io.hgis.inject.JPAModule
+import io.hgis.scanutil.TableIterator
 import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.hbase.client._
 
-object DumpShapes extends GeometryScanner {
+object DumpShapes extends TableIterator {
 
   val injector = Guice.createInjector(new JPAModule)
   val em = injector.getInstance(classOf[EntityManager])

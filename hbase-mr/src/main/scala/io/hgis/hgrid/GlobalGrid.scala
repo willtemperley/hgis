@@ -6,8 +6,9 @@ import org.apache.hadoop.hbase.util.Bytes
 /**
  * Created by willtemperley@gmail.com on 28-May-15.
  *
+ *
+ *
  */
-
 class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
 
   val geomFact = new GeometryFactory(new PrecisionModel(), 4326)
@@ -26,7 +27,6 @@ class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
 
     (x1, y1)
   }
-
 
   /**
    * Generates a grid id for a pixel
@@ -66,12 +66,23 @@ class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
   def toBytes(x: Int, y: Int) = Bytes.toBytes(x) ++ Bytes.toBytes(y)
 
   /**
+   * Just strings three integers into a byte array
+   *
+   * @param x x coord
+   * @param y y coord
+   * @return
+   */
+  def toBytes(x: Int, y: Int, v: Int) = Bytes.toBytes(x) ++ Bytes.toBytes(y) ++ Bytes.toBytes(v)
+
+  /**
    * The inverse of pixelToKey
    *
    * @param bytes the strung-together data
    * @return a point as a tuple
    */
-  def keyToPixel(bytes: Array[Byte]) = (Bytes.toInt(bytes.slice(0,4)), Bytes.toInt(bytes.slice(4,8)))
+  def keyToPixel(bytes: Array[Byte]): (Int, Int) = {
+    (Bytes.toInt(bytes.slice(0,4)), Bytes.toInt(bytes.slice(4,8)))
+  }
 
   def pixelToPoint(x: Int, y: Int): Point = {
 

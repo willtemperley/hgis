@@ -3,13 +3,14 @@ package io.hgis.dump
 import com.vividsolutions.jts.io.WKBReader
 import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
+import io.hgis.scanutil.TableIterator
 import org.apache.hadoop.hbase.client.{Scan, HTable}
 
 /**
  * Created by willtemperley@gmail.com on 05-Jun-15.
  *
  */
-object DumpWays extends GeometryScanner {
+object DumpWays extends TableIterator {
 
   val wkbReader = new WKBReader()
 

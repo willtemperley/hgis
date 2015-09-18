@@ -1,4 +1,4 @@
-package io.hgis.rasr
+package io.hgis.rasterize
 
 import java.awt.{Graphics, Point}
 import java.awt.image.{BufferedImage, WritableRaster}
@@ -15,9 +15,9 @@ import io.hgis.hgrid.GlobalGrid
  */
 object RasterSandbox {
 //  private[io.hgis.rasr] var wkt: String = "LINESTRING(8.2781685 47.0604113,8.2780609 47.0604835,8.2780074 47.0605195,8.2780656 47.060572,8.2780936 47.0606383,8.2781062 47.0610193)"
-  private[rasr] var wkt: String = "LINESTRING(10.689697265625 -25.0927734375, 34.595947265625 -20.1708984375, 38.814697265625 -35.6396484375, 13.502197265625 -39.1552734375, 10.689697265625 -25.0927734375)"
-  private[rasr] var width: Int = 2000
-  private[rasr] var height: Int = 1000
+  private[rasterize] var wkt: String = "LINESTRING(10.689697265625 -25.0927734375, 34.595947265625 -20.1708984375, 38.814697265625 -35.6396484375, 13.502197265625 -39.1552734375, 10.689697265625 -25.0927734375)"
+  private[rasterize] var width: Int = 2000
+  private[rasterize] var height: Int = 1000
   val tileSize = 1024
 
   class WritableRasterPlotter(raster: WritableRaster) extends Plotter {

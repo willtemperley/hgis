@@ -17,6 +17,7 @@ package io.hgis.osm
 import java.lang.Iterable
 
 import com.vividsolutions.jts.io.{WKBReader, WKBWriter}
+import io.hgis.accessutil.AccessUtil
 import io.hgis.hgrid.GlobalGrid
 import io.hgis.osmdomain.WayDAO
 import io.hgis.ConfigurationFactory
@@ -68,9 +69,28 @@ object WayRasterizer {
     //    val wkbImportOp = OperatorImportFromWkb.local()
     val wkbReader = new WKBReader()
     val emittedKey = new ImmutableBytesWritable()
-    val intWritable = new IntWritable()
-    intWritable.set(1)
+    val intWritable = new IntWritable(1)
+
     val grid = new GlobalGrid(4320, 2160, 512)
+
+    val highwayColumn = AccessUtil.stringColumn("cft", "highway") _
+
+    val highwayMap = Map(
+        "motorway" -> 1,
+        "trunk" -> 2,
+        "primary" -> 3,
+        "secondary" -> 4,
+        "tertiary" -> 5,
+        "motorway link" -> 6,
+        "primary link" -> 7,
+        "unclassified" -> 8,
+        "road" -> 9,
+        "residential" -> 10,
+        "service" -> 11,
+        "track" -> 12,
+        "pedestrian" -> 13
+    ).withDefaultValue(14)
+
 
     /*
     Pretty much like the wordcount example! Snaps a point to a grid and writes that out with the dummy 1 value.
@@ -82,14 +102,16 @@ object WayRasterizer {
 
       val wkb = result.getValue(WayDAO.getCF, WayDAO.GEOM)
 
-      //      val hwy = result.getValue("cft".getBytes, "highway".getBytes)
+      val hwy = highwayColumn(result)
+
+
       if (wkb != null){// && hwy != null) {
 
         val way = wkbReader.read(wkb)
         val pts = way.getCoordinates.map(f => grid.snap(f.getOrdinate(0), f.getOrdinate(1)))
 
         for (p <- pts) {
-          emittedKey.set(pointToBytes(p._1, p._2))
+          emittedKey.set(pointToBytes(p._1, p._2) ++ Bytes.toBytes(highwayMap(hwy)))
           context.write(emittedKey, intWritable)
         }
 

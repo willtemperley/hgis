@@ -1,4 +1,4 @@
-package io.hgis.rasr
+package io.hgis.rasterize
 
 import io.hgis.hgrid.GlobalGrid
 import org.junit.{Assert, Test}

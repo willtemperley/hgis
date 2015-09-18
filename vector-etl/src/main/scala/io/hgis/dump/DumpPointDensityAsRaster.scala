@@ -8,6 +8,7 @@ import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
 import io.hgis.hgrid.GlobalGrid
 import io.hgis.rasterize.RasterWriter
+import io.hgis.scanutil.TableIterator
 import org.apache.hadoop.hbase.client.{HTable, Scan}
 
 /**
@@ -17,7 +18,7 @@ import org.apache.hadoop.hbase.client.{HTable, Scan}
  *
  */
 // FIXME make generic
-object DumpPointDensityAsRaster extends GeometryScanner {
+object DumpPointDensityAsRaster extends TableIterator {
 
 
   val grid = new GlobalGrid(4320, 2160, 1024)
@@ -60,7 +61,7 @@ object DumpPointDensityAsRaster extends GeometryScanner {
 
     }
 
-    RasterWriter.paint(4320, 2160, vals, new File("target/ras.png"))
+//    RasterWriter.paint(4320, 2160, vals, new File("target/ras.png"))
 
 //    sw.write("target/pts.shp")
   }

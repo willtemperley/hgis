@@ -1,4 +1,4 @@
-package io.hgis.rasr;
+package io.hgis.rasterize;
 
 /**
  * Can be implemented by raster surfaces which plot point-by-point

@@ -5,6 +5,7 @@ import com.vividsolutions.jts.io.WKBReader
 import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
 import io.hgis.hgrid.GlobalGrid
+import io.hgis.scanutil.TableIterator
 import org.apache.hadoop.hbase.client.{HTable, Scan}
 
 /**
@@ -14,7 +15,7 @@ import org.apache.hadoop.hbase.client.{HTable, Scan}
  *
  */
 // FIXME make generic
-object DumpPointDensity extends GeometryScanner {
+object DumpPointDensity extends TableIterator {
 
   val grid = new GlobalGrid(4320, 2160, 1024)
   val wkbReader = new WKBReader

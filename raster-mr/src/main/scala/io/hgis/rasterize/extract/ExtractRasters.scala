@@ -1,11 +1,12 @@
-package io.hgis.dump
+package io.hgis.rasterize.extract
 
-import java.io.{PrintWriter, File, FileOutputStream}
+import java.io.{File, FileOutputStream, PrintWriter}
 
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.WKTReader
 import io.hgis.ConfigurationFactory
 import io.hgis.hgrid.GlobalGrid
+import io.hgis.scanutil.TableIterator
 import org.apache.hadoop.hbase.client.{HTable, Scan}
 import org.apache.hadoop.hbase.util.Bytes
 
@@ -13,10 +14,10 @@ import org.apache.hadoop.hbase.util.Bytes
  * Created by willtemperley@gmail.com on 05-Jun-15.
  *
  */
-object ExtractRasters extends GeometryScanner {
+object ExtractRasters extends TableIterator {
 
   val wktReader = new WKTReader()
-  val grid = new GlobalGrid(51200, 25600, 1024)
+  val grid = new GlobalGrid(43200, 21600, 1080)
 
   def main(args: Array[String]): Unit = {
 
@@ -26,8 +27,6 @@ object ExtractRasters extends GeometryScanner {
     scan.addFamily("cfv".getBytes)
     val scanner = htable.getScanner(scan)
     val ways = getIterator(scanner)
-
-
 
     for (img <- ways) {
 

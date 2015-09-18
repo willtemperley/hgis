@@ -19,7 +19,8 @@ object AccessUtil {
   }
 
   def stringColumn(cf: String, col: String)(v: Result): String = {
-    Bytes.toString(v.getValue(cf.getBytes, col.getBytes))
+    val bytes = v.getValue(cf.getBytes, col.getBytes)
+    if (bytes == null) null else Bytes.toString(bytes)
   }
 
   def intColumn(cf: String, col: String)(v: Result): Int = {
