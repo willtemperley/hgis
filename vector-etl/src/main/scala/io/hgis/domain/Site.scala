@@ -6,6 +6,7 @@ import com.esri.core.geometry.Geometry
 import com.vividsolutions.jts.geom.MultiPolygon
 import io.hgis.hdomain.HasRowKey
 import io.hgis.vector.domain.TSite
+import io.hgis.vector.domain.gen.AnalysisUnit
 import org.apache.hadoop.hbase.util.Bytes
 import org.hibernate.annotations.Type
 
@@ -15,7 +16,7 @@ import org.hibernate.annotations.Type
 
 @Entity
 @Table(schema = "protected_sites", name = "wdpa_latest_all")
-class Site extends HasRowKey with TSite {
+class Site extends HasRowKey with TSite with AnalysisUnit {
 
   @Id
   @Column(name = "id")
@@ -23,7 +24,7 @@ class Site extends HasRowKey with TSite {
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")
-  var jtsGeom: MultiPolygon = _
+  var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
 
   @Column
   override var name: String = _
@@ -48,5 +49,7 @@ class Site extends HasRowKey with TSite {
     getRandomByteArray ++ Bytes.toBytes(siteId)
   }
 
-
+  //FIXME
+  @Transient
+  override var analysisUnitId: Int = _
 }

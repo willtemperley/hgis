@@ -2,27 +2,22 @@ package io.hgis.vector.domain
 
 import com.esri.core.geometry.Geometry
 import io.hgis.hdomain.HasRowKey
+import io.hgis.vector.domain.gen.GriddedEntity
 import org.apache.hadoop.hbase.util.Bytes
 
 /**
  *
  * Created by willtemperley@gmail.com on 19-Nov-14.
  */
-trait TSiteGrid extends HasRowKey {
+trait TSiteGrid extends HasRowKey with GriddedEntity {
 
   var siteId: Int
-
-  var gridId: Int
 
   var iucnCat: String
 
   var catId: Int
 
   var isDesignated: Boolean
-
-  var geom: Geometry
-
-  var jtsGeom: com.vividsolutions.jts.geom.Geometry
 
   //Very paranoid rowkey generation!
   override def getRowKey: Array[Byte] = {

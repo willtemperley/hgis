@@ -12,7 +12,7 @@ import com.google.inject.Guice
 import com.vividsolutions.jts.io.WKBReader
 import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
-import io.hgis.domain.{EEPro, EcoregionEEZProtectionC, EcoregionEEZProtectionR}
+import io.hgis.domain.{EEPro, EcoregionEEZProtection}
 import io.hgis.inject.JPAModule
 import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.hbase.client._
@@ -31,9 +31,7 @@ object DumpEcoregionProtection {
 
   def main(args: Array[String]) {
 
-    val isCumulative = args(0).toBoolean
-
-    val htable: HTableInterface = new HTable(ConfigurationFactory.get, "ee_protection")
+    val htable = new HTable(ConfigurationFactory.get, "ee_protection")
     System.out.println("Processing table " + htable)
 
     val scan: Scan = new Scan
@@ -48,7 +46,7 @@ object DumpEcoregionProtection {
     var result = scanner.next
     while (result != null) {
       i += 1
-      persistEntity(result, if (isCumulative) new EcoregionEEZProtectionC else new EcoregionEEZProtectionR)
+      persistEntity(result, new EcoregionEEZProtection)
       if (i % 1000 == 0) {
         println(i)
         em.getTransaction.commit()

@@ -38,6 +38,25 @@ trait OsmMapper {
       .toMap
   }
 
+  val metaColMap = Map(
+    0 -> "id",
+    1 -> "version",
+    2 -> "userid",
+    3 -> "tstamp",
+    4 -> "changesetid",
+    5 -> "tags",
+    6 -> "default",
+    7 -> "hex",
+    8 -> "updated"
+  )
+
+  /*
+   * Zips up tags with their list index, then gets the tag name from the index and maps that to the value
+   */
+  def getMetaTags(meta: Iterable[String]): Map[String, String] = {
+    meta.zipWithIndex.map(m => metaColMap.getOrElse(m._2, "default") -> m._1).toMap
+  }
+
   /**
    * Hex to bytes
    *
@@ -47,57 +66,9 @@ trait OsmMapper {
   def hexToBytes(hex: String): Array[Byte] = DatatypeConverter.parseHexBinary(hex)
 
 
-  /**
-   * Writes out the common OSM fields and sets the ID
-   *
-   * @param context the contex to write to
-   * @param fields  the f
-   */
-  def writeMetaData(context: Mapper[LongWritable, Text, ImmutableBytesWritable, KeyValue]#Context, fields: Array[String]): Unit = {
-
-    val id = fields(0).toLong
-
-    val nextBytes = new Array[Byte](4)
-    Random.nextBytes(nextBytes)
-    hKey.set(nextBytes ++ Bytes.toBytes(id))
-
-    {
-      val kv = new KeyValue(hKey.get(), CFV, WayDAO.ID, Bytes.toBytes(id))
-      context.write(hKey, kv)
-    }
-    {
-      val version = fields(1).toInt
-      val kv = new KeyValue(hKey.get(), CFV, WayDAO.VERSION, Bytes.toBytes(version))
-      context.write(hKey, kv)
-    }
-    {
-      val userId = fields(2).toInt
-      val kv = new KeyValue(hKey.get(), CFV, WayDAO.USER_ID, Bytes.toBytes(userId))
-      context.write(hKey, kv)
-    }
-    {
-      val tStamp = fields(3)
-      val kv = new KeyValue(hKey.get(), CFV, WayDAO.TSTAMP, Bytes.toBytes(tStamp))
-      context.write(hKey, kv)
-    }
-    {
-      val changesetId = fields(4).toLong
-      val kv = new KeyValue(hKey.get(), CFV, WayDAO.CHANGESET_ID, Bytes.toBytes(changesetId))
-      context.write(hKey, kv)
-    }
-    {
-      val updated = fields(8)
-      val kv = new KeyValue(hKey.get(), CFV, WayDAO.DATE_UPDATED, Bytes.toBytes(updated))
-      context.write(hKey, kv)
-    }
-  }
-
   def writeTags(context: Mapper[LongWritable, Text, ImmutableBytesWritable, KeyValue]#Context, tagMap: Map[String, String]): Unit = {
-    if (!tagMap.isDefinedAt("highway")) {
-      throw new RuntimeException("HAS TO BE A HIGHWAY")
-    }
-
 
     tagMap.foreach(f => context.write(hKey, new KeyValue(hKey.get(), CFT, f._1.getBytes, Bytes.toBytes(f._2))))
+
   }
 }

@@ -10,12 +10,12 @@ import org.hibernate.annotations.Type
  * Created by tempehu on 01-Dec-14.
  */
 @Entity
-@Table(schema = "hgrid", name = "ecoregion_eez_protection_r")
-class EcoregionEEZProtectionR extends EEPro {
+@Table(schema = "hgrid", name = "ecoregion_eez_protection_c")
+class EcoregionEEZProtection  extends EEPro {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq")
-  @SequenceGenerator(allocationSize = 1, name = "seq", sequenceName = "hgrid.ecoregion_eez_protection_r_id_seq")
+  @SequenceGenerator(allocationSize = 1, name = "seq", sequenceName = "hgrid.ecoregion_eez_protection_c_id_seq")
   var id: Int = _
 
 }

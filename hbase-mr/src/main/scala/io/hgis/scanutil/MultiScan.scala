@@ -7,7 +7,7 @@ import org.apache.hadoop.hbase.util.Base64
 /**
  * Multi-scans have to be serialized to strings and no utility seems to exist to do this.
  *
- * Created by tempehu on 11-Dec-14.
+ * Created by willtemperley@gmail.com on 11-Dec-14.
  */
 object MultiScan {
 

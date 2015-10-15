@@ -5,6 +5,7 @@ import java.nio.ByteBuffer
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb, OperatorImportFromWkt}
 import com.vividsolutions.jts.geom
 import com.vividsolutions.jts.io.{WKBReader, WKBWriter, WKTWriter}
+import org.apache.hadoop.hbase.client.HTable
 
 /**
  * Created by willtemperley@gmail.com on 21-Nov-14.
@@ -27,4 +28,5 @@ trait ConvertsGeometry {
   def esriToJTS(esriGeom: Geometry): geom.Geometry = {
     jtsWkbReader.read(esriWkbWriter.execute(0, esriGeom, null).array())
   }
+
 }

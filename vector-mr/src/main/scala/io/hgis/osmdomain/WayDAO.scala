@@ -1,5 +1,6 @@
 package io.hgis.osmdomain
 
+import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.io.{WKBReader, WKBWriter}
 import io.hgis.hdomain.HSerializable
 import org.apache.hadoop.hbase.client.{Put, Result}
@@ -10,6 +11,12 @@ import org.apache.hadoop.hbase.util.Bytes
  * Created by tempehu on 23-Apr-15.
  */
 object WayDAO extends HSerializable[TWay] {
+
+  class Way extends TWay {
+
+    override var id: Long = _
+    override var linestring: Geometry = _
+  }
   
   override def toPut(obj: TWay, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
@@ -48,8 +55,8 @@ object WayDAO extends HSerializable[TWay] {
    * @param result An HBase row result
    * @return A domain object of type T
    */
-  override def fromResult(result: Result, way: TWay): TWay = {
-    way.id = Bytes.toInt(result.getValue(getCF, ID))
+  override def fromResult(result: Result, way: TWay = new Way): TWay = {
+    way.id = Bytes.toLong(result.getValue(getCF, ID))
     way.linestring = wkbReader.read(result.getValue(getCF, GEOM))
     way
   }

@@ -9,15 +9,12 @@ import org.apache.hadoop.hbase.KeyValue
 import org.apache.hadoop.hbase.client.HTable
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.mapreduce.HFileOutputFormat2
-import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.hadoop.mapreduce.lib.input.{FileInputFormat, TextInputFormat}
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.apache.hadoop.mapreduce.{Job, Mapper}
 
-import scala.util.Random
-
-object OSMLoaderMR {
+object OSMExtractMR {
 
   def main(args: Array[String]) {
 
@@ -94,26 +91,14 @@ CREATE TABLE public.ways
     override def map(key: LongWritable, value: Text, context: Mapper[LongWritable, Text, ImmutableBytesWritable, KeyValue]#Context): Unit = {
 
       val fields = value.toString.split("\t")
-      val id = fields(0).toLong
 
-      val nextBytes = new Array[Byte](4)
-      Random.nextBytes(nextBytes)
-      hKey.set(nextBytes ++ Bytes.toBytes(id))
+      val tags = getTags(fields(5))
+      val hex = fields(7)
 
-      val tags = getMetaTags(fields)
-      val osmTags = getTags(tags.get("tags").get)
-      val hex = tags.get("hex").get
+      if (tags.isDefinedAt("railway") && hex != null && !hex.isEmpty && !hex.equals("\\N")) {
 
-      val transportTag = osmTags.isDefinedAt("highway") || osmTags.isDefinedAt("railway") || osmTags.isDefinedAt("waterway")
-      if (transportTag && hex != null && !hex.isEmpty && !hex.equals("\\N")) {
-//      if (osmTags.isDefinedAt("highway") && hex != null && !hex.isEmpty && !hex.equals("\\N")) {
 
-//        writeMetaData(context, fields)
-
-        val metaTags = tags.filter(f => f._1 != "hex").filter(f => f._1 != "tags").filter(f => f._1 != "default")
-        writeTags(context, metaTags)
-        writeTags(context, osmTags)
-
+        writeTags(context, tags)
 
         val bytes = hexToBytes(hex)
         val kv = new KeyValue(hKey.get(), CFV, WayDAO.GEOM, bytes)

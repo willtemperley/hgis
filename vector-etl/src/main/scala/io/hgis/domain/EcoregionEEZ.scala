@@ -3,7 +3,7 @@ package io.hgis.domain
 import javax.persistence._
 
 import com.esri.core.geometry.Geometry
-import com.vividsolutions.jts.geom.MultiPolygon
+import io.hgis.vector.domain.gen.AnalysisUnit
 import org.hibernate.annotations.Type
 
 /**
@@ -12,15 +12,15 @@ import org.hibernate.annotations.Type
  */
 @Entity
 @Table(schema = "habitats_and_biotopes", name = "ecoregion_eez")
-class EcoregionEEZ {
+class EcoregionEEZ extends AnalysisUnit {
 
   @Id
   @Column(name = "id")
-  var id: Int = _
+  var analysisUnitId: Int = _
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")
-  var jtsGeom: MultiPolygon = _
+  var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
 
   @Transient
   var geom: Geometry = _

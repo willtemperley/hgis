@@ -12,14 +12,14 @@ trait TAdminUnit extends HasRowKey {
 
   var geom: Geometry
 
-  var siteId: Int
+  var analysisUnitId: Int
 
   var gridCells: Array[String]
 
   var gridIdList: Array[String]
 
   override def getRowKey: Array[Byte] = {
-    getRandomByteArray ++ Bytes.toBytes(siteId)
+    getRandomByteArray ++ Bytes.toBytes(analysisUnitId)
   }
 
 }

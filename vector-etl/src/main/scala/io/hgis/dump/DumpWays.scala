@@ -3,6 +3,7 @@ package io.hgis.dump
 import com.vividsolutions.jts.io.WKBReader
 import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
+import io.hgis.osmdomain.WayDAO
 import io.hgis.scanutil.TableIterator
 import org.apache.hadoop.hbase.client.{Scan, HTable}
 
@@ -23,15 +24,23 @@ object DumpWays extends TableIterator {
     val scan = new Scan
     scan.addFamily("cfv".getBytes)
     scan.addColumn("cfv".getBytes, "geom".getBytes)
+    scan.addColumn("cfv".getBytes, "id".getBytes)
+
     val scanner = htable.getScanner(scan)
 
     val ways = getIterator(scanner)
 
-    val sw = new ShapeWriter("LineString", 4326)
 
-    ways.foreach(f => sw.addFeature(getGeom(f), Seq(0,0)))
+    for (r <- ways) {
+      val w = WayDAO.fromResult(r)
+      println(w.id)
+    }
 
-    sw.write("target/extracted_ways.shp")
+//    val sw = new ShapeWriter("LineString", 4326)
+
+//    ways.foreach(f => sw.addFeature(getGeom(f), Seq(0,0)))
+//
+//    sw.write("target/extracted_ways.shp")
 
 
   }

@@ -16,11 +16,13 @@ package io.hgis.vector.mr
 
 import com.esri.core.geometry.{Geometry, OperatorImportFromWkt, WktImportFlags}
 import io.hgis.op.IntersectUtil
+import io.hgis.vector.domain.SiteGridDAO.SiteGrid
+import io.hgis.vector.domain.gen.GriddedEntity
 import io.hgis.vector.domain.{SiteDAO, SiteGridDAO}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.client.{Put, Result, Scan}
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
-import org.apache.hadoop.hbase.mapreduce.{TableMapReduceUtil, TableMapper}
+import org.apache.hadoop.hbase.mapreduce.{TableMapper, TableMapReduceUtil}
 import org.apache.hadoop.mapreduce.{Job, Mapper}
 
 /*
@@ -54,6 +56,14 @@ object GridLoaderMR {
 
   }
 
+  def siteGrid(e: GriddedEntity): SiteGrid = {
+    val siteGrid = new SiteGrid
+    siteGrid.jtsGeom = e.jtsGeom
+    siteGrid.geom = e.geom
+    siteGrid.gridId = e.gridId
+    siteGrid
+  }
+
   class GridIXMapper extends TableMapper[ImmutableBytesWritable, Put] {
 
     val wktImportOp = OperatorImportFromWkt.local()
@@ -66,7 +76,9 @@ object GridLoaderMR {
 
       //Get the grids and id lists
       val gridGeoms = site.gridCells.map(f => wktImportOp.execute(WktImportFlags.wktImportDefaults, Geometry.Type.Polygon, f, null))
-      val siteGrids = IntersectUtil.executeIntersect(site.geom, gridGeoms, site.gridIdList.map(_.toInt))
+      val griddedEntities = IntersectUtil.executeIntersect(site.geom, gridGeoms, site.gridIdList.map(_.toInt))
+
+      val siteGrids = griddedEntities.map(siteGrid)
 
       siteGrids.foreach(_.siteId = site.siteId)
       siteGrids.foreach(_.iucnCat = site.iucnCat)

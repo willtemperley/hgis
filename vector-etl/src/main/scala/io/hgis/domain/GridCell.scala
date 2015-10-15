@@ -27,9 +27,6 @@ class GridCell extends TGridCell {
    @Column(name = "geom")
    var jtsGeom: Polygon = _
 
-   @Column
-   var geohash: String = _
-
    @Transient
    override var geom: Geometry = _
 

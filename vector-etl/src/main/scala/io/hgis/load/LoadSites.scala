@@ -31,8 +31,8 @@ object LoadSites {
   var wkbReader = OperatorImportFromWkb.local()
 
   def getHGrid(em: EntityManager, pa: Site): util.ArrayList[GridCell] = {
-    val q = em.createNativeQuery("SELECT id, geom, geohash " +
-      "FROM gridgis.h_grid where geom && (select w.geom from protected_sites.wdpa_latest_all w where w.id  = " + pa.siteId + ")", classOf[GridCell])
+    val q = em.createNativeQuery("SELECT id, geom " +
+      "FROM hgrid.h_grid where geom && (select w.geom from protected_sites.wdpa_latest_all w where w.id  = " + pa.siteId + ")", classOf[GridCell])
     q.getResultList.asInstanceOf[util.ArrayList[GridCell]]
   }
 

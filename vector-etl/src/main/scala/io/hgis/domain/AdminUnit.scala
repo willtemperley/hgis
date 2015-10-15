@@ -5,6 +5,7 @@ import javax.persistence._
 import com.esri.core.geometry.Geometry
 import com.vividsolutions.jts.geom.MultiPolygon
 import io.hgis.vector.domain.TAdminUnit
+import io.hgis.vector.domain.gen.AnalysisUnit
 import org.hibernate.annotations.Type
 
 /**
@@ -14,12 +15,11 @@ import org.hibernate.annotations.Type
  */
 @Entity
 @Table(schema = "administrative_units", name = "country")
-class AdminUnit extends TAdminUnit {
-
+class AdminUnit extends TAdminUnit with AnalysisUnit {
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")
-  var jtsGeom: MultiPolygon = _
+  var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
 
   @Transient
   override var geom: Geometry = _
@@ -29,7 +29,7 @@ class AdminUnit extends TAdminUnit {
 
   @Id
   @Column(name = "id")
-  override var siteId: Int = _
+  override var analysisUnitId: Int = _
 
   @Transient
   override var gridCells: Array[String] = _

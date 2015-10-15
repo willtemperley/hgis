@@ -67,7 +67,7 @@ object Sparkle2 {
 
   def getScans: String = {
     val s1 = new Scan()
-    s1.setAttribute(Scan.SCAN_ATTRIBUTES_TABLE_NAME, "pa_grid".getBytes())
+    s1.setAttribute(Scan.SCAN_ATTRIBUTES_TABLE_NAME, "pa_grid".getBytes)
     s1.addFamily("cfv".getBytes)
     s1.addColumn("cfv".getBytes, "site_id".getBytes)
     s1.addColumn("cfv".getBytes, "geom".getBytes)

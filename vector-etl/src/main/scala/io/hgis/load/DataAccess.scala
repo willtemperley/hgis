@@ -17,12 +17,4 @@ object DataAccess {
   val em = injector.getInstance(classOf[EntityManager])
 
 
-  @deprecated
-  def getSite(id: Int): Site = {
-    em.createQuery("from Site where wdpaId = " + id, classOf[Site]).getSingleResult
-  }
-
-  def getAdminUnit(id: Int): Unit = {
-    em.createQuery("from Site where wdpaId = " + id, classOf[Site]).getSingleResult
-  }
 }

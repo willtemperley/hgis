@@ -1,8 +1,10 @@
 package io.hgis.op
 
 import com.esri.core.geometry._
+import com.vividsolutions.jts.geom
 import io.hgis.vector.domain.SiteGridDAO
 import SiteGridDAO.SiteGrid
+import io.hgis.vector.domain.gen.GriddedEntity
 
 import scala.collection.mutable.ListBuffer
 
@@ -45,7 +47,7 @@ object IntersectUtil {
    * @param gridIds the ids of the intersectors
    * @return
    */
-  def executeIntersect(poly: Geometry, geomList: Array[Geometry], gridIds: Array[Int]): List[SiteGrid] = {
+  def executeIntersect(poly: Geometry, geomList: Array[Geometry], gridIds: Array[Int]): List[GriddedEntity] = {
 
     val bigPoly = new SimpleGeometryCursor(poly)
     val inGeoms = new SimpleGeometryCursor(geomList)
@@ -56,13 +58,18 @@ object IntersectUtil {
 
     Iterator.continually(outGeoms.next).takeWhile(_ != null).map((f: Geometry) => f)
 
-    val sgs = new ListBuffer[SiteGrid]
+    val sgs = new ListBuffer[GriddedEntity]
     var result = outGeoms.next
     var geomId = outGeoms.getGeometryID
     while (result != null) {
       if (result.calculateArea2D() > 0) {
 
-        val sg = new SiteGrid
+        //FIXME just move to class
+        val sg = new GriddedEntity {
+          override var geom: Geometry = _
+          override var gridId: Int = _
+          override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
+        }
         sg.geom = result
         sg.gridId = gridIds(geomId)
         sgs.append(sg)

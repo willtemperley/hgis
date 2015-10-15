@@ -1,8 +1,6 @@
 package io.hgis.rasterize
 
-import java.awt.Point
 import java.awt.image.{BufferedImage, WritableRaster}
-import java.io.IOException
 import java.lang.Iterable
 import javax.imageio.ImageIO
 
@@ -11,17 +9,14 @@ import com.vividsolutions.jts.io.{WKBReader, WKTReader}
 import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
 import io.hgis.hgrid.GlobalGrid
-import io.hgis.rasterize.Plotter
 import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.hadoop.hbase.client.{Mutation, Put, Result, Scan}
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
-import org.apache.hadoop.hbase.mapreduce.{TableReducer, TableMapReduceUtil, TableMapper}
+import org.apache.hadoop.hbase.mapreduce.{TableMapReduceUtil, TableMapper, TableReducer}
 import org.apache.hadoop.hbase.util.Bytes
-import org.apache.hadoop.io.IntWritable
 import org.apache.hadoop.mapreduce.{Job, Mapper, Reducer}
 
 import scala.collection.JavaConversions._
-import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 /*
@@ -39,18 +34,19 @@ object RasterizeMR {
   val highwayMap = Map(
     "motorway" -> 1,
     "trunk" -> 2,
-    "primary" -> 3,
-    "secondary" -> 4,
-    "tertiary" -> 5,
-    "motorway link" -> 6,
-    "primary link" -> 7,
-    "unclassified" -> 8,
-    "road" -> 9,
-    "residential" -> 10,
-    "service" -> 11,
-    "track" -> 12,
-    "pedestrian" -> 13
-  ).withDefaultValue(14)
+    "railway" -> 3, //placeholder
+    "primary" -> 4,
+    "secondary" -> 5,
+    "tertiary" -> 6,
+    "motorway link" -> 7,
+    "primary link" -> 8,
+    "unclassified" -> 9,
+    "road" -> 10,
+    "residential" -> 11,
+    "service" -> 12,
+    "track" -> 13,
+    "pedestrian" -> 14
+  ).withDefaultValue(15)
 
   @throws(classOf[Exception])
   def main(args: Array[String]) {
@@ -65,7 +61,7 @@ object RasterizeMR {
     job.setJarByClass(this.getClass)
     TableMapReduceUtil.addDependencyJars(job)
 
-    TableMapReduceUtil.initTableMapperJob("ways", scan,
+    TableMapReduceUtil.initTableMapperJob("transport", scan,
       classOf[WayRasterMapper], classOf[ImmutableBytesWritable], classOf[ImmutableBytesWritable], job)
 
 //    job.setCombinerClass(classOf[MyTableCombiner])
@@ -124,17 +120,28 @@ object RasterizeMR {
     val grid = new GlobalGrid(width, height, tileSize)
 
     val highwayColumn = AccessUtil.stringColumn("cft", "highway") _
+    val railwayColumn = AccessUtil.stringColumn("cft", "railway") _
+    val waterwayColumn = AccessUtil.stringColumn("cft", "waterway") _
 
     // Keeping these constant prevents continunal re-evaluation of getBytes
     val GEOM = "geom".getBytes
     val CFV = "cfv".getBytes
     val CFT = "cft".getBytes
 
+//    def toRadians(d: Double) = (d * Math.PI) / 180
+//    def toDegrees(r: Double) = (r * 180) / Math.PI
+//    def transform(x: Double, y: Double) = toDegrees(toRadians(x) * Math.cos(toRadians(y)))
+
     override def map(key: ImmutableBytesWritable, result: Result,
                      context: Mapper[ImmutableBytesWritable, Result, ImmutableBytesWritable, ImmutableBytesWritable]#Context): Unit = {
 
       val wkb = result.getValue(CFV, GEOM)
       val hwy = highwayColumn(result)
+      val rwy = railwayColumn(result)
+      val wwy = waterwayColumn(result)
+
+      //not interested in water at the mo
+      if (wwy != null) return
 
       //Send the pixel info to a grid id
       val plotter = new  Plotter {
@@ -146,7 +153,12 @@ object RasterizeMR {
           gridKey.set(grid.gridId(x, y))
           val bytes = grid.toBytes(x, y)
 
-          pixel.set(bytes ++ Bytes.toBytes(highwayMap(hwy)))
+          //FIXME getting messy
+          if (rwy != null) {
+            pixel.set(bytes ++ Bytes.toBytes(3))
+          } else {
+            pixel.set(bytes ++ Bytes.toBytes(highwayMap(hwy)))
+          }
           context.write(gridKey, pixel)
 
         }
@@ -178,7 +190,6 @@ object RasterizeMR {
       }
     }
   }
-
 
 
   /**
@@ -214,7 +225,7 @@ object RasterizeMR {
     def plot(x: Int, y: Int) {
 
       raster.getPixel(x, y, p1)
-      if (p2(0) > p1(0)) {
+      if (p1(0) == 0d || (p2(0) < p1(0))) {
         raster.setPixel(x, y, p2)
       }
 
@@ -222,7 +233,6 @@ object RasterizeMR {
 
     override def setValue(v: Int): Unit = p2(0) = v
   }
-
 
 
   /**

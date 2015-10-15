@@ -21,6 +21,6 @@ class Way extends TWay {
 
   @Id
   @Column(name = "id")
-  var id: Int = _
+  var id: Long = _
 
 }

@@ -1,3 +1,5 @@
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter
+
 //package io.hgis.ui
 
 //import com.google.inject.Guice
@@ -13,6 +15,7 @@
 //import org.apache.hadoop.hbase.mapreduce.TableInputFormat
 //import org.apache.spark.rdd.RDD
 //import org.apache.spark.{SparkConf, SparkContext}
+
 
 //class SparkUI extends UI{
 //

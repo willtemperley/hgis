@@ -11,7 +11,7 @@ import org.apache.hadoop.hbase.util.Bytes
  */
 trait TWay extends HasRowKey {
 
-  var id: Int
+  var id: Long
 
   var linestring: Geometry
 

@@ -4,6 +4,7 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, DataInputStream, Da
 import java.nio.ByteBuffer
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb}
+import io.hgis.accessutil.AccessUtil
 import io.hgis.hdomain.HSerializable
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
@@ -18,7 +19,7 @@ object AdminUnitDAO extends HSerializable[TAdminUnit]{
 
   class AdminUnit extends TAdminUnit {
 
-    override var siteId: Int = _
+    override var analysisUnitId: Int = _
     override var geom: Geometry = _
 
     override var gridCells: Array[String] = _
@@ -39,35 +40,21 @@ object AdminUnitDAO extends HSerializable[TAdminUnit]{
 
   override def toPut(obj: TAdminUnit, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.siteId))
-    put.add(getCF, GRID_GEOMS, serializeStringArray(obj.gridCells))
-    put.add(getCF, GRID_ID_LIST, serializeStringArray(obj.gridIdList))
+    put.add(getCF, SITE_ID, Bytes.toBytes(obj.analysisUnitId))
+    put.add(getCF, GRID_GEOMS, AccessUtil.serializeStringArray(obj.gridCells))
+    put.add(getCF, GRID_ID_LIST, AccessUtil.serializeStringArray(obj.gridIdList))
     val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.geom, null).array()
     put.add(getCF, GEOM, bytes)
   }
 
-  def serializeStringArray(strings: Array[String]): Array[Byte] = {
-    val byteArrayOutputStream: ByteArrayOutputStream = new ByteArrayOutputStream()
-    val dOut = new DataOutputStream(byteArrayOutputStream)
-    WritableUtils.writeStringArray(dOut, strings.toArray)
-    val encoded = byteArrayOutputStream.toByteArray
-    encoded
-  }
-
-  def deserializeStringArray(bytes: Array[Byte]): Array[String] = {
-    val bis = new ByteArrayInputStream(bytes)
-    val inputStream: DataInputStream = new DataInputStream(bis)
-    val strings = WritableUtils.readStringArray(inputStream)
-    strings
-  }
 
   override def fromResult(result: Result, site: TAdminUnit = new AdminUnit): TAdminUnit = {
 
-    site.siteId = Bytes.toInt(result.getValue(getCF, SITE_ID))
+    site.analysisUnitId = Bytes.toInt(result.getValue(getCF, SITE_ID))
     val bytes: Array[Byte] = result.getValue(getCF, GEOM)
     site.geom = operatorImportFromWkb.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(bytes), null)
-    site.gridCells = deserializeStringArray(result.getValue(getCF, GRID_GEOMS))
-    site.gridIdList = deserializeStringArray(result.getValue(getCF, GRID_ID_LIST))
+    site.gridCells = AccessUtil.deserializeStringArray(result.getValue(getCF, GRID_GEOMS))
+    site.gridIdList = AccessUtil.deserializeStringArray(result.getValue(getCF, GRID_ID_LIST))
 
     //TODO: Remove return value
 

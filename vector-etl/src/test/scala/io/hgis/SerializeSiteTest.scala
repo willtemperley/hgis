@@ -2,7 +2,7 @@ package io.hgis
 
 import java.util
 
-import com.vividsolutions.jts.geom.MultiPolygon
+import com.vividsolutions.jts.geom.{Geometry, MultiPolygon}
 import com.vividsolutions.jts.{geom => jts}
 import io.hgis.domain.{GridCell, Site}
 import io.hgis.load.{ConvertsGeometry, DataAccess, LoadSites}
@@ -45,7 +45,7 @@ class SerializeSiteTest  extends ConvertsGeometry {
       println(pa.name)
       val hGrid: util.ArrayList[GridCell] = LoadSites.getHGrid(em, pa)
 
-      val jtsGeom: MultiPolygon = pa.jtsGeom
+      val jtsGeom: Geometry = pa.jtsGeom
       pa.geom = jtsToEsri(jtsGeom)
       pa.gridCells = hGrid.map(f => jtsWktWriter.write(f.jtsGeom)).toArray
       pa.gridIdList = hGrid.map(f => f.gridId.toString).toArray

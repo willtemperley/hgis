@@ -1,9 +1,13 @@
 package io.hgis.accessutil
 
+import java.io.{DataInputStream, ByteArrayInputStream, DataOutputStream}
+
 import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.io.{WKTReader, WKBReader}
+import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.hadoop.hbase.client.Result
 import org.apache.hadoop.hbase.util.Bytes
+import org.apache.hadoop.io.WritableUtils
 
 /**
  * Some functions to make accessing hbase columns simpler
@@ -12,19 +16,38 @@ import org.apache.hadoop.hbase.util.Bytes
  */
 object AccessUtil {
 
+  def serializeStringArray(strings: Array[String]): Array[Byte] = {
+    val byteArrayOutputStream: ByteArrayOutputStream = new ByteArrayOutputStream()
+    val dOut = new DataOutputStream(byteArrayOutputStream)
+    WritableUtils.writeStringArray(dOut, strings.toArray)
+    val encoded = byteArrayOutputStream.toByteArray
+    encoded
+  }
+
+  def deserializeStringArray(bytes: Array[Byte]): Array[String] = {
+    val bis = new ByteArrayInputStream(bytes)
+    val inputStream: DataInputStream = new DataInputStream(bis)
+    val strings = WritableUtils.readStringArray(inputStream)
+    strings
+  }
+
   /**
     */
   def booleanColumn(cf: String, col: String)(v: Result): Boolean = {
     Bytes.toBoolean(v.getValue(cf.getBytes, col.getBytes))
   }
 
-  def stringColumn(cf: String, col: String)(v: Result): String = {
-    val bytes = v.getValue(cf.getBytes, col.getBytes)
+  def stringColumn(cf: String, col: String)(v: Result): String = stringColumn(cf.getBytes, col)(v: Result)
+
+  def stringColumn(cf: Array[Byte], col: String)(v: Result): String = {
+    val bytes = v.getValue(cf, col.getBytes)
     if (bytes == null) null else Bytes.toString(bytes)
   }
 
-  def intColumn(cf: String, col: String)(v: Result): Int = {
-    Bytes.toInt(v.getValue(cf.getBytes, col.getBytes))
+  def intColumn(cf: String, col: String)(v: Result): Int = intColumn(cf.getBytes, col)(v: Result)
+
+  def intColumn(cf: Array[Byte], col: String)(v: Result): Int = {
+    Bytes.toInt(v.getValue(cf, col.getBytes))
   }
 
   def geomColumn(wkbReader: WKBReader, cf: String, col: String = "geom")(v: Result): Geometry = {
