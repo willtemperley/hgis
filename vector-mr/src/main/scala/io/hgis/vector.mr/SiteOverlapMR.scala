@@ -93,7 +93,7 @@ object SiteOverlapMR {
 
       for (sG1 <- sGs) {
         for (sG2 <- sGs) {
-          if (sG1.siteId < sG2.siteId) {
+          if (sG1.entityId < sG2.entityId) {
             val iXn: Iterator[Geometry] = IntersectUtil.executeIntersect(sG1.geom, sG2.geom)
 
             val area = iXn.map(_.calculateArea2D()).foldLeft(0d)((r,c) => r + c)
@@ -102,8 +102,8 @@ object SiteOverlapMR {
             if (area > 0) {
               //Rowkey should just be the same as the grid id ... as we're flattening the world
               val sO = new SiteOverlap
-              sO.siteId1 = sG1.siteId
-              sO.siteId2 = sG2.siteId
+              sO.siteId1 = sG1.entityId
+              sO.siteId2 = sG2.entityId
               sO.area = area
               val put = SiteOverlapDAO.toPut(sO, key.get())
               context.write(null, put)

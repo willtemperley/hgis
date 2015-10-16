@@ -177,12 +177,12 @@ object EcoregionProtectionMR {
 
         val nextBytes = new Array[Byte](4)
         Random.nextBytes(nextBytes)
-        val suffix = Bytes.toBytes(cG.gridId) ++ Bytes.toBytes(cG.siteId)
+        val suffix = Bytes.toBytes(cG.gridId) ++ Bytes.toBytes(cG.entityId)
         //a put with a very paranoid key
         val put = new Put(nextBytes ++ suffix)
 
         //This is quite confusing, because country_id and site_id are both actually ee_id
-        put.add(CF, "country_id".getBytes, Bytes.toBytes(cG.siteId))
+        put.add(CF, "country_id".getBytes, Bytes.toBytes(cG.entityId))
         put.add(CF, "grid_id".getBytes, Bytes.toBytes(cG.gridId))
 
         val wkb = wkbExport.execute(WkbExportFlags.wkbExportDefaults, diff, null).array()

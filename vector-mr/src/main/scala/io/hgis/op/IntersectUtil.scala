@@ -2,9 +2,8 @@ package io.hgis.op
 
 import com.esri.core.geometry._
 import com.vividsolutions.jts.geom
-import io.hgis.vector.domain.SiteGridDAO
+import io.hgis.vector.domain.{GriddedEntity, SiteGridDAO}
 import SiteGridDAO.SiteGrid
-import io.hgis.vector.domain.gen.GriddedEntity
 
 import scala.collection.mutable.ListBuffer
 
@@ -47,7 +46,7 @@ object IntersectUtil {
    * @param gridIds the ids of the intersectors
    * @return
    */
-  def executeIntersect(poly: Geometry, geomList: Array[Geometry], gridIds: Array[Int]): List[GriddedEntity] = {
+  def executeIntersect(poly: Geometry, analysisUnitId: Int, geomList: Array[Geometry], gridIds: Array[Int]): List[GriddedEntity] = {
 
     val bigPoly = new SimpleGeometryCursor(poly)
     val inGeoms = new SimpleGeometryCursor(geomList)
@@ -69,9 +68,11 @@ object IntersectUtil {
           override var geom: Geometry = _
           override var gridId: Int = _
           override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
+          override var entityId: Int = _
         }
         sg.geom = result
         sg.gridId = gridIds(geomId)
+        sg.entityId = analysisUnitId
         sgs.append(sg)
       }
       result = outGeoms.next

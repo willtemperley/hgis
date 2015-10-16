@@ -24,7 +24,7 @@ class SiteGrid extends TSiteGrid {
 
    @NotNull
    @Column(name = "site_id")
-   override var siteId: Int = _
+   override var entityId: Int = _
 
    @NotNull
    @Column(name = "grid_id")

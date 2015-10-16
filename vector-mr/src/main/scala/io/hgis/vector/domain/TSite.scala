@@ -8,11 +8,9 @@ import org.apache.hadoop.hbase.util.Bytes
 /**
  * Created by willtemperley@gmail.com on 19-Nov-14.
  */
-trait TSite extends HasRowKey {
+trait TSite extends HasRowKey with AnalysisUnit {
 
-  var geom: Geometry
   var isDesignated: Boolean;
-  var siteId: Int
   var name: String
   var iucnCat: String
 
@@ -20,7 +18,7 @@ trait TSite extends HasRowKey {
   var gridIdList: Array[String]
 
   override def getRowKey: Array[Byte] = {
-    getRandomByteArray ++ Bytes.toBytes(siteId)
+    getRandomByteArray ++ Bytes.toBytes(entityId)
   }
 
 }

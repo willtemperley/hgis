@@ -14,16 +14,24 @@ import scala.collection.JavaConversions._
  *
  * Created by willtemperley@gmail.com on 21-Nov-14.
  */
-object DirectLoadSite extends ObjectProvider[Site] {
+object LoadPAs extends ObjectProvider[Site] {
 
   val em = DataAccess.em
 
   val clazz = classOf[Site]
 
-  override def getIds: Iterable[Any] = {
+  def main(args: Array[String]) {
 
-    val q = em.createNativeQuery("select site_id from hgrid.worst_100").setMaxResults(2)// where wdpa_id = 20615")
-    q.getResultList
+    val hTable = new HTable(ConfigurationFactory.get, "pa_grid")
+    execute(hTable)
 
   }
+
+  override def getIds: Iterable[Any] = {
+    //    val worst = "select site_id from hgrid.worst_100"
+    val all = "SELECT id FROM protected_sites.wdpa_latest_all where is_designated"
+    val q = em.createNativeQuery(all)
+    q.getResultList
+  }
+
 }

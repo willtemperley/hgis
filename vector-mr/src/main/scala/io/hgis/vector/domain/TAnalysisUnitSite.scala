@@ -2,7 +2,6 @@ package io.hgis.vector.domain
 
 import com.esri.core.geometry.Geometry
 import io.hgis.hdomain.HasRowKey
-import io.hgis.vector.domain.gen.AnalysisUnit
 import org.apache.hadoop.hbase.util.Bytes
 
 /**
@@ -15,6 +14,6 @@ trait TAnalysisUnitSite extends HasRowKey with AnalysisUnit {
 
   //Very paranoid rowkey generation!
   override def getRowKey: Array[Byte] = {
-    getRandomByteArray ++ Bytes.toBytes(siteId) ++ Bytes.toBytes(analysisUnitId)
+    getRandomByteArray ++ Bytes.toBytes(siteId) ++ Bytes.toBytes(entityId)
   }
 }

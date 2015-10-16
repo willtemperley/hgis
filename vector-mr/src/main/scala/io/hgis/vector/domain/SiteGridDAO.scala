@@ -17,13 +17,14 @@ import org.apache.hadoop.hbase.util.Bytes
 object SiteGridDAO extends HSerializable[TSiteGrid] {
 
   class SiteGrid extends TSiteGrid {
-    override var siteId: Int = _
+
     override var gridId: Int = _
     override var geom: Geometry = _
     override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
     override var iucnCat: String = _
     override var isDesignated: Boolean = _
     override var catId: Int = _
+    override var entityId: Int = _
   }
 
   override def getCF: Array[Byte] = "cfv".getBytes
@@ -52,7 +53,7 @@ object SiteGridDAO extends HSerializable[TSiteGrid] {
 
     put.add(getCF, GRID_ID, Bytes.toBytes(obj.gridId))
     put.add(getCF, CAT_ID, Bytes.toBytes(obj.gridId))
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.siteId))
+    put.add(getCF, SITE_ID, Bytes.toBytes(obj.entityId))
     put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
     put.add(getCF, IS_DESIGNATED, Bytes.toBytes(obj.isDesignated))
 
@@ -64,7 +65,7 @@ object SiteGridDAO extends HSerializable[TSiteGrid] {
     val put = new Put(rowKey)
 
     put.add(getCF, GRID_ID, Bytes.toBytes(obj.gridId))
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.siteId))
+    put.add(getCF, SITE_ID, Bytes.toBytes(obj.entityId))
     put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
     put.add(getCF, IS_DESIGNATED, Bytes.toBytes(obj.isDesignated))
 
@@ -73,7 +74,7 @@ object SiteGridDAO extends HSerializable[TSiteGrid] {
   override def fromResult(result: Result, siteGrid: TSiteGrid = new SiteGrid): TSiteGrid = {
 
     siteGrid.gridId = Bytes.toInt(result.getValue(getCF, GRID_ID))
-    siteGrid.siteId = Bytes.toInt(result.getValue(getCF, SITE_ID))
+    siteGrid.entityId = Bytes.toInt(result.getValue(getCF, SITE_ID))
     siteGrid.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
 
     val v = result.getValue(getCF, CAT_ID)

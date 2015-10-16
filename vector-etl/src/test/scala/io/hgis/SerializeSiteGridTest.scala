@@ -58,7 +58,7 @@ class SerializeSiteGridTest extends ConvertsGeometry {
 
        if (!s1.gridId.equals(s2.gridId)) return false
 
-       if (!s1.siteId.equals(s2.siteId)) return false
+       if (!s1.entityId.equals(s2.entityId)) return false
 
        true
      }

@@ -57,8 +57,8 @@ object LoadAdminUnits {
 
       i += 1
 
-      println(au.analysisUnitId)
-      val hGrid: util.ArrayList[GridCell] = getHGrid(em, au.analysisUnitId)
+      println(au.entityId)
+      val hGrid: util.ArrayList[GridCell] = getHGrid(em, au.entityId)
       c += hGrid.size()
 
       au.geom = wkbReader.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(wkbWriter.write(au.jtsGeom)), null)

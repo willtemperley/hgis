@@ -5,8 +5,7 @@ import javax.persistence._
 import com.esri.core.geometry.Geometry
 import com.vividsolutions.jts.geom.MultiPolygon
 import io.hgis.hdomain.HasRowKey
-import io.hgis.vector.domain.TSite
-import io.hgis.vector.domain.gen.AnalysisUnit
+import io.hgis.vector.domain.{AnalysisUnit, TSite}
 import org.apache.hadoop.hbase.util.Bytes
 import org.hibernate.annotations.Type
 
@@ -20,7 +19,7 @@ class Site extends HasRowKey with TSite with AnalysisUnit {
 
   @Id
   @Column(name = "id")
-  override var siteId: Int = _
+  override var entityId: Int = _
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")
@@ -46,10 +45,10 @@ class Site extends HasRowKey with TSite with AnalysisUnit {
 
   @Transient
   override def getRowKey: Array[Byte] = {
-    getRandomByteArray ++ Bytes.toBytes(siteId)
+    getRandomByteArray ++ Bytes.toBytes(entityId)
   }
 
   //FIXME
-  @Transient
-  override var analysisUnitId: Int = _
+//  @Transient
+//  override var entityId: Int = _
 }

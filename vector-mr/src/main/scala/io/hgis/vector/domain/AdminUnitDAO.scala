@@ -4,6 +4,7 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, DataInputStream, Da
 import java.nio.ByteBuffer
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb}
+import com.vividsolutions.jts.geom
 import io.hgis.accessutil.AccessUtil
 import io.hgis.hdomain.HSerializable
 import org.apache.hadoop.hbase.client.{Put, Result}
@@ -19,19 +20,19 @@ object AdminUnitDAO extends HSerializable[TAdminUnit]{
 
   class AdminUnit extends TAdminUnit {
 
-    override var analysisUnitId: Int = _
+    override var entityId: Int = _
     override var geom: Geometry = _
 
     override var gridCells: Array[String] = _
     override var gridIdList: Array[String] = _
-
+    override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
   }
 
   override val getCF: Array[Byte] = "cfv".getBytes
 
   val GEOM: Array[Byte] = "geom".getBytes
   val GRID_GEOMS: Array[Byte] = "grid".getBytes
-  val SITE_ID: Array[Byte] = "site_id".getBytes
+  val ENTITY_ID: Array[Byte] = "entity_id".getBytes
   val GRID_ID_LIST: Array[Byte] = "grid_id".getBytes
 
 
@@ -40,7 +41,7 @@ object AdminUnitDAO extends HSerializable[TAdminUnit]{
 
   override def toPut(obj: TAdminUnit, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.analysisUnitId))
+    put.add(getCF, ENTITY_ID, Bytes.toBytes(obj.entityId))
     put.add(getCF, GRID_GEOMS, AccessUtil.serializeStringArray(obj.gridCells))
     put.add(getCF, GRID_ID_LIST, AccessUtil.serializeStringArray(obj.gridIdList))
     val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.geom, null).array()
@@ -50,7 +51,7 @@ object AdminUnitDAO extends HSerializable[TAdminUnit]{
 
   override def fromResult(result: Result, site: TAdminUnit = new AdminUnit): TAdminUnit = {
 
-    site.analysisUnitId = Bytes.toInt(result.getValue(getCF, SITE_ID))
+    site.entityId= Bytes.toInt(result.getValue(getCF, ENTITY_ID))
     val bytes: Array[Byte] = result.getValue(getCF, GEOM)
     site.geom = operatorImportFromWkb.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(bytes), null)
     site.gridCells = AccessUtil.deserializeStringArray(result.getValue(getCF, GRID_GEOMS))

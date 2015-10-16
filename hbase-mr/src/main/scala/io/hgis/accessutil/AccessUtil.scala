@@ -50,8 +50,10 @@ object AccessUtil {
     Bytes.toInt(v.getValue(cf, col.getBytes))
   }
 
-  def geomColumn(wkbReader: WKBReader, cf: String, col: String = "geom")(v: Result): Geometry = {
-    val bytes: Array[Byte] = v.getValue(cf.getBytes, col.getBytes)
+  def geomColumn(wkbReader: WKBReader, cf: String, col: String = "geom")(v: Result): Geometry = geomColumn(wkbReader, cf.getBytes, col)(v:Result)
+
+  def geomColumn(wkbReader: WKBReader, cf: Array[Byte], col: String)(v: Result): Geometry = {
+    val bytes: Array[Byte] = v.getValue(cf, col.getBytes)
     if (bytes == null) null else wkbReader.read(bytes)
   }
 

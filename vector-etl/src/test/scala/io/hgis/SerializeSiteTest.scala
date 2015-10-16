@@ -78,9 +78,9 @@ class SerializeSiteTest  extends ConvertsGeometry {
 
       if (!s1.gridIdList.sameElements(s2.gridIdList)) return false
 
-      //      if (s2.siteId.equals(null.asInstanceOf[Int])) return false
+      //      if (s2.entityId.equals(null.asInstanceOf[Int])) return false
 
-      if (!s1.siteId.equals(s2.siteId)) return false
+      if (!s1.entityId.equals(s2.entityId)) return false
 
       if (!s1.isDesignated.equals(s2.isDesignated)) return false
 

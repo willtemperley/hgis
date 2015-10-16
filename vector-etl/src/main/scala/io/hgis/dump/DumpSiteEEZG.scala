@@ -66,7 +66,7 @@ object DumpSiteEEZG {
     val x = new SiteEcoregionEEZ
 //    x.jtsGeom = wkbReader.read(res.getValue("cfv".getBytes, "geom".getBytes))
     x.siteId = siteId(res)
-    x.analysisUnitId = eeId(res)
+    x.entityId = eeId(res)
 
     em.persist(x)
   }

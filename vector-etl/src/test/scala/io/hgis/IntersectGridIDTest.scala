@@ -35,7 +35,7 @@ class IntersectGridIDTest extends  ConvertsGeometry {
     val gridGeoms: Array[Geometry] = gridCells.map(f => jtsToEsri(f.jtsGeom)).toArray
     val gridIds: Array[Int] = gridCells.map(f => f.gridId.toInt).toArray
 
-    val sgs = IntersectUtil.executeIntersect(site.geom, gridGeoms, gridIds)
+    val sgs = IntersectUtil.executeIntersect(site.geom, site.entityId, gridGeoms, gridIds)
 
     //map of original grid ids vs geoms
     val gridIdToGeom = gridCells.map(f => f.gridId -> f.jtsGeom).toMap

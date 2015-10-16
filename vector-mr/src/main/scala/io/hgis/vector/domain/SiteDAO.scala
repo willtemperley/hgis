@@ -4,6 +4,7 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, DataInputStream, Da
 import java.nio.ByteBuffer
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb}
+import com.vividsolutions.jts.geom
 import io.hgis.hdomain.HSerializable
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
@@ -18,7 +19,6 @@ object SiteDAO extends HSerializable[TSite]{
 
   class Site extends TSite {
 
-    override var siteId: Int = _
     override var geom: Geometry = _
     override var iucnCat: String = _
     override var name: String = _
@@ -26,6 +26,8 @@ object SiteDAO extends HSerializable[TSite]{
     override var gridCells: Array[String] = _
     override var gridIdList: Array[String] = _
     override var isDesignated: Boolean = _
+    override var entityId: Int = _
+    override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
   }
 
   override val getCF: Array[Byte] = "cfv".getBytes
@@ -43,7 +45,7 @@ object SiteDAO extends HSerializable[TSite]{
 
   override def toPut(obj: TSite, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.siteId))
+    put.add(getCF, SITE_ID, Bytes.toBytes(obj.entityId))
     put.add(getCF, IS_DESIGNATED, Bytes.toBytes(obj.isDesignated))
     put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
     put.add(getCF, GRID_GEOMS, serializeStringArray(obj.gridCells))
@@ -69,7 +71,7 @@ object SiteDAO extends HSerializable[TSite]{
 
   override def fromResult(result: Result, site: TSite = new Site): TSite = {
 
-    site.siteId = Bytes.toInt(result.getValue(getCF, SITE_ID))
+    site.entityId = Bytes.toInt(result.getValue(getCF, SITE_ID))
     site.isDesignated = Bytes.toBoolean(result.getValue(getCF, IS_DESIGNATED))
     site.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
     val bytes: Array[Byte] = result.getValue(getCF, GEOM)

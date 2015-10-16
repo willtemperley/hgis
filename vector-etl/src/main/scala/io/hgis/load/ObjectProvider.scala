@@ -7,8 +7,7 @@ import com.vividsolutions.jts.geom.Envelope
 import io.hgis.domain.GridCell
 import io.hgis.op.IntersectUtil
 import io.hgis.vector.domain.SiteGridDAO.SiteGrid
-import io.hgis.vector.domain.SiteGridDAO
-import io.hgis.vector.domain.gen.{GriddedEntity, AnalysisUnit}
+import io.hgis.vector.domain.{GriddedEntity, AnalysisUnit, SiteGridDAO}
 import org.apache.hadoop.hbase.client.{Put, HTableInterface}
 import org.apache.hadoop.hbase.util.Bytes
 
@@ -66,14 +65,14 @@ trait ObjectProvider[E <: AnalysisUnit] extends ConvertsGeometry {
     val gridGeoms = gridCells.map(f => jtsToEsri(f.jtsGeom)).toArray
     val gridIds = gridCells.map(f => f.gridId).toArray
 
-    val griddedEntities: List[GriddedEntity] = IntersectUtil.executeIntersect(site.geom, gridGeoms, gridIds)
+    val griddedEntities: List[GriddedEntity] = IntersectUtil.executeIntersect(site.geom, site.entityId, gridGeoms, gridIds)
 
     for (sg <- griddedEntities) {
 
-      val put = new Put(getRowKey(site.analysisUnitId, sg.gridId))
+      val put = new Put(getRowKey(site.entityId, sg.gridId))
       val ixPaGrid: Array[Byte] = wkbExportOp.execute(WkbExportFlags.wkbExportDefaults, sg.geom, null).array()
       put.add(CF, GRID_ID, Bytes.toBytes(sg.gridId))
-      put.add(CF, ENTITY_ID, Bytes.toBytes(site.analysisUnitId))
+      put.add(CF, ENTITY_ID, Bytes.toBytes(site.entityId))
       put.add(CF, GEOM, ixPaGrid)
 
       hTable.put(put)

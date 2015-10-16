@@ -22,7 +22,7 @@ class SiteEcoregionEEZ extends TAnalysisUnitSite {
    var id: Integer = _
 
    @Column(name = "analysis_unit_id")
-   override var analysisUnitId: Int = _
+   override var entityId: Int = _
 
    @Column(name = "site_id")
    var siteId: Int = _
