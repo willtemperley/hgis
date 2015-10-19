@@ -6,7 +6,7 @@ import io.hgis.domain.EcoregionEEZ
 import io.hgis.op.IntersectUtil
 import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.hbase.client.HTable
+import org.apache.hadoop.hbase.client.{Put, HTable}
 
 import scala.collection.JavaConversions._
 
@@ -15,10 +15,8 @@ import scala.collection.JavaConversions._
  *
  * Created by willtemperley@gmail.com on 21-Nov-14.
  */
-object DirectLoadEEZ extends ObjectProvider[EcoregionEEZ] {
+class DirectLoadEEZ extends GridLoader[EcoregionEEZ](classOf[EcoregionEEZ]) {
 
-  val em = DataAccess.em
-  val clazz = classOf[EcoregionEEZ]
 
   override def getIds: Iterable[Any] = {
     val q = em.createQuery("select id from EcoregionEEZ")
@@ -29,8 +27,11 @@ object DirectLoadEEZ extends ObjectProvider[EcoregionEEZ] {
   def main(args: Array[String]) {
 
     val hTable = new HTable(ConfigurationFactory.get, "ee_grid")
-    execute(hTable)
+    executeLoad(hTable)
 
   }
 
+  override def addColumns(put: Put, obj: EcoregionEEZ): Unit = {
+
+  }
 }

@@ -20,7 +20,7 @@ object SiteDAO extends HSerializable[TSite]{
   class Site extends TSite {
 
     override var geom: Geometry = _
-    override var iucnCat: String = _
+//    override var iucnCat: String = _
     override var name: String = _
 
     override var gridCells: Array[String] = _
@@ -47,7 +47,7 @@ object SiteDAO extends HSerializable[TSite]{
     val put = new Put(rowKey)
     put.add(getCF, SITE_ID, Bytes.toBytes(obj.entityId))
     put.add(getCF, IS_DESIGNATED, Bytes.toBytes(obj.isDesignated))
-    put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
+//    put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
     put.add(getCF, GRID_GEOMS, serializeStringArray(obj.gridCells))
     put.add(getCF, GRID_ID_LIST, serializeStringArray(obj.gridIdList))
     val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.geom, null).array()
@@ -73,7 +73,7 @@ object SiteDAO extends HSerializable[TSite]{
 
     site.entityId = Bytes.toInt(result.getValue(getCF, SITE_ID))
     site.isDesignated = Bytes.toBoolean(result.getValue(getCF, IS_DESIGNATED))
-    site.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
+//    site.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
     val bytes: Array[Byte] = result.getValue(getCF, GEOM)
     site.geom = operatorImportFromWkb.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(bytes), null)
     site.gridCells = deserializeStringArray(result.getValue(getCF, GRID_GEOMS))

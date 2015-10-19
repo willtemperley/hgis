@@ -16,6 +16,6 @@ class EcoregionEEZProtection  extends EEPro {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq")
   @SequenceGenerator(allocationSize = 1, name = "seq", sequenceName = "hgrid.ecoregion_eez_protection_c_id_seq")
-  var id: Int = _
+  override var entityId: Int = _
 
 }

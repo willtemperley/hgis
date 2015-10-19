@@ -35,4 +35,5 @@ class AdminUnit extends TAdminUnit with AnalysisUnit {
 
   @Transient
   override var gridIdList: Array[String] = _
+
 }

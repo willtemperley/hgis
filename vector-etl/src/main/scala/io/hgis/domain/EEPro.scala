@@ -2,12 +2,15 @@ package io.hgis.domain
 import javax.persistence._
 
 import com.esri.core.geometry.Geometry
+import io.hgis.vector.domain.GriddedEntity
 import org.hibernate.annotations.Type
 
 /**
+ *
  * Created by willtemperley@gmail.com on 05-Feb-15.
+ *
  */
-trait EEPro {
+trait EEPro extends GriddedEntity {
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")

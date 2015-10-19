@@ -105,8 +105,8 @@ object EcoregionProtectionMR {
 
     val filters =
       List(
-        new SingleColumnValueFilter(SiteGridDAO.getCF, "cat_id".getBytes, op, new BinaryComparator(Bytes.toBytes(catId))),
-        new SingleColumnValueFilter(SiteGridDAO.getCF, "is_designated".getBytes, CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes(true)))
+        new SingleColumnValueFilter(SiteGridDAO.getCF, "cat_id".getBytes, op, new BinaryComparator(Bytes.toBytes(catId)))
+//        new SingleColumnValueFilter(SiteGridDAO.getCF, "is_designated".getBytes, CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes(true)))
       )
 
     val filterList = new FilterList(filters)

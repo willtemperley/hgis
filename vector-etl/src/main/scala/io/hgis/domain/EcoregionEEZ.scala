@@ -25,5 +25,4 @@ class EcoregionEEZ extends AnalysisUnit {
   @Transient
   var geom: Geometry = _
 
-
 }

@@ -12,7 +12,7 @@ trait TSite extends HasRowKey with AnalysisUnit {
 
   var isDesignated: Boolean;
   var name: String
-  var iucnCat: String
+//  var iucnCat: String
 
   var gridCells: Array[String]
   var gridIdList: Array[String]

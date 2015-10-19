@@ -8,8 +8,6 @@ import org.hibernate.annotations.Type
 
 /**
  *
- * The mapping between sites and PAs
- *
  * Created by will on 24/10/2014.
  */
 @Entity

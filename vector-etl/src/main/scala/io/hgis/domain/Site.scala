@@ -25,11 +25,15 @@ class Site extends HasRowKey with TSite with AnalysisUnit {
   @Column(name = "geom")
   var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
 
+  @ManyToOne
+  @JoinColumn(name = "iucn_cat")
+  var iucnCategory: IUCNCat = _
+
   @Column
   override var name: String = _
 
-  @Column(name = "iucn_cat")
-  override var iucnCat: String = _
+//  @Column(name = "iucn_cat")
+//  override var iucnCat: String = _
 
   @Column(name = "is_designated")
   override var isDesignated: Boolean = _
@@ -48,7 +52,4 @@ class Site extends HasRowKey with TSite with AnalysisUnit {
     getRandomByteArray ++ Bytes.toBytes(entityId)
   }
 
-  //FIXME
-//  @Transient
-//  override var entityId: Int = _
 }

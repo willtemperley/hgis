@@ -208,7 +208,7 @@
                     <dependency>
                         <groupId>com.mysema.querydsl</groupId>
                         <artifactId>querydsl-jpa</artifactId>
-                        <classifier>apt</classifier>
+                        <!--<classId>apt</classId>-->
                         <version>${querydsl.version}</version>
                     </dependency>
                 </dependencies>

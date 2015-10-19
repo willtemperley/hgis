@@ -44,7 +44,7 @@ import org.apache.hadoop.hbase.filter.SingleColumnValueFilter
 //
 //    val configuration = injector.getInstance(classOf[Configuration])
 //
-//    configuration.addResource("hbase-site-local.xml")
+//    configuration.addResource("hbase-analysisUnit-local.xml")
 //    configuration.reloadConfiguration()
 //
 //    val tableName = "pa"

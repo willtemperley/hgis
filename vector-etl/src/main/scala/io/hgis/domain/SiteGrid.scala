@@ -48,5 +48,5 @@ class SiteGrid extends TSiteGrid {
 
    @NotNull
    @Column(name = "cat_id")
-   override var catId: Int = _
+   var catId: Int = _
 }

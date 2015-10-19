@@ -8,6 +8,8 @@ import com.vividsolutions.jts.io.{WKBReader, WKBWriter, WKTWriter}
 import org.apache.hadoop.hbase.client.HTable
 
 /**
+ * Basic operations to convert between JTS and ESRI geometries
+ *
  * Created by willtemperley@gmail.com on 21-Nov-14.
  */
 trait ConvertsGeometry {

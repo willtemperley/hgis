@@ -14,7 +14,7 @@ import org.apache.hadoop.hbase.client.HTable
 import scala.collection.JavaConversions._
 
 /**
- * Re loads all site grids ...
+ * Re loads all analysisUnit grids ...
  *
  * Created by will on 24/10/2014.
  */
@@ -52,7 +52,7 @@ object LoadSiteGrids {
     }
 
     hTable.flushCommits()
-    println("Loaded " + i + " site grids.")
+    println("Loaded " + i + " analysisUnit grids.")
   }
 
 }

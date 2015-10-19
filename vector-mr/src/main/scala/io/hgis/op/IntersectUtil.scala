@@ -2,7 +2,7 @@ package io.hgis.op
 
 import com.esri.core.geometry._
 import com.vividsolutions.jts.geom
-import io.hgis.vector.domain.{GriddedEntity, SiteGridDAO}
+import io.hgis.vector.domain.{AnalysisUnit, GriddedEntity, SiteGridDAO}
 import SiteGridDAO.SiteGrid
 
 import scala.collection.mutable.ListBuffer
@@ -41,18 +41,18 @@ object IntersectUtil {
   /**
    * Populates a list of SiteGrids with their geom and grid id, ignoring all zero area outputs
    *
-   * @param poly the big polygon to intersect
+   * @param analysisUnit the AnalysisUnit to cut up
    * @param geomList the intersectors (e.g. a grid)
    * @param gridIds the ids of the intersectors
    * @return
    */
-  def executeIntersect(poly: Geometry, analysisUnitId: Int, geomList: Array[Geometry], gridIds: Array[Int]): List[GriddedEntity] = {
+  def executeIntersect(analysisUnit: AnalysisUnit, geomList: Array[Geometry], gridIds: Array[Int]): List[GriddedEntity] = {
 
-    val bigPoly = new SimpleGeometryCursor(poly)
+    val bigPoly = new SimpleGeometryCursor(analysisUnit.geom)
     val inGeoms = new SimpleGeometryCursor(geomList)
 
     val localOp = OperatorIntersection.local()
-    localOp.accelerateGeometry(poly, sr, Geometry.GeometryAccelerationDegree.enumMedium)
+    localOp.accelerateGeometry(analysisUnit.geom, sr, Geometry.GeometryAccelerationDegree.enumMedium)
     val outGeoms = localOp.execute(inGeoms, bigPoly, sr, null, 4)
 
     Iterator.continually(outGeoms.next).takeWhile(_ != null).map((f: Geometry) => f)
@@ -72,7 +72,7 @@ object IntersectUtil {
         }
         sg.geom = result
         sg.gridId = gridIds(geomId)
-        sg.entityId = analysisUnitId
+        sg.entityId = analysisUnit.entityId
         sgs.append(sg)
       }
       result = outGeoms.next

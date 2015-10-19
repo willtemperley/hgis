@@ -19,12 +19,14 @@ import scala.collection.JavaConversions._
  *
  * Created by willtemperley@gmail.com on 13-Oct-15.
  */
-trait ObjectProvider[E <: AnalysisUnit] extends ConvertsGeometry {
+abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E]) extends ConvertsGeometry {
 
-  val em: EntityManager
-  val clazz: Class[E]
+  object GridLoader {
+    val CF = "cfv".getBytes
+  }
 
-  val CF = "cfv".getBytes
+  val em: EntityManager = DataAccess.em
+
   val GEOM = "geom".getBytes
   val GRID_ID = "grid_id".getBytes
   val ENTITY_ID = "entity_id".getBytes
@@ -33,17 +35,35 @@ trait ObjectProvider[E <: AnalysisUnit] extends ConvertsGeometry {
 
   def getIds: Iterable[Any]
 
+  /*
+  Subclasses can override this to specialise their hbase rows
+   */
+  def addColumns(put: Put, obj: E): Unit
+
   def getEntity(id: Any): E = {
     em.find(clazz, id)
   }
 
-  def execute(table: HTableInterface) {
+  def executeLoad(table: HTableInterface) {
 
-    for (siteId <- getIds) {
+    val ids = getIds.toList
+    val sz = ids.size
+    var pcDone = 0
 
-      println(siteId)
-      val site = getEntity(siteId)
-      insertGridCells(table, site)
+    for (analysisUnitId <- ids.zipWithIndex) {
+
+      val analysisUnit = getEntity(analysisUnitId._1)
+      if(analysisUnit == null) {
+        throw new RuntimeException(clazz.getSimpleName + " was not found with id: " + analysisUnitId)
+      }
+      insertGridCells(table, analysisUnit)
+
+      val pc = ((analysisUnitId._2 * 100) / sz.asInstanceOf[Double]).floor.toInt
+
+      if (pc > pcDone) {
+        pcDone = pc
+        println("%s%% complete".format(pcDone))
+      }
 
     }
   }
@@ -57,30 +77,34 @@ trait ObjectProvider[E <: AnalysisUnit] extends ConvertsGeometry {
     q.getResultList.asInstanceOf[java.util.ArrayList[GridCell]]
   }
 
-  def insertGridCells(hTable: HTableInterface, site: E): Unit = {
+  def insertGridCells(hTable: HTableInterface, analysisUnit: E): Unit = {
 
     //Still messy!
-    site.geom = jtsToEsri(site.jtsGeom)
-    val gridCells = getHGrid(site.jtsGeom.getEnvelopeInternal)
+    analysisUnit.geom = jtsToEsri(analysisUnit.jtsGeom)
+    val gridCells = getHGrid(analysisUnit.jtsGeom.getEnvelopeInternal)
     val gridGeoms = gridCells.map(f => jtsToEsri(f.jtsGeom)).toArray
     val gridIds = gridCells.map(f => f.gridId).toArray
 
-    val griddedEntities: List[GriddedEntity] = IntersectUtil.executeIntersect(site.geom, site.entityId, gridGeoms, gridIds)
+    val griddedEntities: List[GriddedEntity] = IntersectUtil.executeIntersect(analysisUnit, gridGeoms, gridIds)
 
     for (sg <- griddedEntities) {
 
-      val put = new Put(getRowKey(site.entityId, sg.gridId))
+      val put = new Put(getRowKey(analysisUnit.entityId, sg.gridId))
       val ixPaGrid: Array[Byte] = wkbExportOp.execute(WkbExportFlags.wkbExportDefaults, sg.geom, null).array()
-      put.add(CF, GRID_ID, Bytes.toBytes(sg.gridId))
-      put.add(CF, ENTITY_ID, Bytes.toBytes(site.entityId))
-      put.add(CF, GEOM, ixPaGrid)
+      put.add(GridLoader.CF, GRID_ID, Bytes.toBytes(sg.gridId))
+      put.add(GridLoader.CF, ENTITY_ID, Bytes.toBytes(analysisUnit.entityId))
+      put.add(GridLoader.CF, GEOM, ixPaGrid)
+      //Flag completely covered
+
+      //More specialised classes can add extra columns
+      addColumns(put, analysisUnit)
 
       hTable.put(put)
     }
 
     hTable.flushCommits()
 
-//    println(site.name + " done.")
+//    println(analysisUnit.name + " done.")
   }
 
   def getRowKey(wdpaId: Int, gridId: Int): Array[Byte] = {
