@@ -50,6 +50,12 @@ object AccessUtil {
     Bytes.toInt(v.getValue(cf, col.getBytes))
   }
 
+  def longColumn(cf: String, col: String)(v: Result): Long = longColumn(cf.getBytes, col)(v: Result)
+
+  def longColumn(cf: Array[Byte], col: String)(v: Result): Long = {
+    Bytes.toLong(v.getValue(cf, col.getBytes))
+  }
+
   def geomColumn(wkbReader: WKBReader, cf: String, col: String = "geom")(v: Result): Geometry = geomColumn(wkbReader, cf.getBytes, col)(v:Result)
 
   def geomColumn(wkbReader: WKBReader, cf: Array[Byte], col: String)(v: Result): Geometry = {

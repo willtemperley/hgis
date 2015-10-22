@@ -7,6 +7,7 @@ import com.esri.core.geometry.Geometry
 import io.hgis.vector.domain.TSiteGrid
 import org.hibernate.annotations.Type
 
+
 /**
  *
  * The mapping between sites and PAs
@@ -24,7 +25,7 @@ class SiteGrid extends TSiteGrid {
 
    @NotNull
    @Column(name = "site_id")
-   override var entityId: Int = _
+   override var entityId: Long = _
 
    @NotNull
    @Column(name = "grid_id")
@@ -46,7 +47,9 @@ class SiteGrid extends TSiteGrid {
    @Column(name = "is_designated")
    override var isDesignated: Boolean = _
 
-   @NotNull
-   @Column(name = "cat_id")
+//   @NotNull
+//   @Column(name = "cat_id")
+
+   @Transient
    var catId: Int = _
 }

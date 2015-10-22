@@ -3,7 +3,7 @@ package io.hgis.domain
 import javax.persistence._
 
 import com.esri.core.geometry.Geometry
-import io.hgis.vector.domain.AnalysisUnit
+import io.hgis.hdomain.AnalysisUnit
 import org.hibernate.annotations.Type
 
 /**
@@ -15,8 +15,8 @@ import org.hibernate.annotations.Type
 class EcoregionEEZ extends AnalysisUnit {
 
   @Id
-  @Column(name = "id")
-  var entityId: Int = _
+    @Column(name = "id")
+    var entityId: Long = _
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")

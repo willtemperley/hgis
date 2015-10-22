@@ -2,12 +2,13 @@ package io.hgis.load
 
 import javax.persistence.EntityManager
 
-import com.esri.core.geometry.{OperatorExportToWkb, WkbExportFlags}
+import com.esri.core.geometry.{Geometry, OperatorExportToWkb, WkbExportFlags}
 import com.vividsolutions.jts.geom.Envelope
 import io.hgis.domain.GridCell
+import io.hgis.hdomain.{GriddedObjectDAO, ConvertsGeometry, GriddedEntity, AnalysisUnit}
 import io.hgis.op.IntersectUtil
 import io.hgis.vector.domain.SiteGridDAO.SiteGrid
-import io.hgis.vector.domain.{GriddedEntity, AnalysisUnit, SiteGridDAO}
+import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.hbase.client.{Put, HTableInterface}
 import org.apache.hadoop.hbase.util.Bytes
 
@@ -19,10 +20,18 @@ import scala.collection.JavaConversions._
  *
  * Created by willtemperley@gmail.com on 13-Oct-15.
  */
-abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E]) extends ConvertsGeometry {
+abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geometry.Type = Geometry.Type.Polygon) extends ConvertsGeometry {
 
   object GridLoader {
     val CF = "cfv".getBytes
+  }
+
+  /*
+  Defines what intersection will be retrained, default being only polygon features (4)
+   */
+  var dimensionMask = geomType match {
+    case Geometry.Type.Polyline => 3
+    case _ => 4
   }
 
   val em: EntityManager = DataAccess.em
@@ -77,23 +86,33 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E]) extends ConvertsGe
     q.getResultList.asInstanceOf[java.util.ArrayList[GridCell]]
   }
 
-  def insertGridCells(hTable: HTableInterface, analysisUnit: E): Unit = {
+  def insertGridCells(hTable: HTableInterface, analysisUnit: E): Int = {
 
     //Still messy!
-    analysisUnit.geom = jtsToEsri(analysisUnit.jtsGeom)
+    if (analysisUnit.geom == null) {
+      analysisUnit.geom = jtsToEsri(analysisUnit.jtsGeom, geomType)
+    }
+    if (analysisUnit.jtsGeom == null) {
+      analysisUnit.jtsGeom = esriToJTS(analysisUnit.geom)
+    }
     val gridCells = getHGrid(analysisUnit.jtsGeom.getEnvelopeInternal)
     val gridGeoms = gridCells.map(f => jtsToEsri(f.jtsGeom)).toArray
     val gridIds = gridCells.map(f => f.gridId).toArray
 
-    val griddedEntities: List[GriddedEntity] = IntersectUtil.executeIntersect(analysisUnit, gridGeoms, gridIds)
+//    if(gridIds.length > 0) println("grids: " + gridIds.length)
+
+
+    val griddedEntities: List[GriddedEntity] = IntersectUtil.executeIntersect(analysisUnit, gridGeoms, gridIds, dimensionMask)
 
     for (sg <- griddedEntities) {
 
-      val put = new Put(getRowKey(analysisUnit.entityId, sg.gridId))
-      val ixPaGrid: Array[Byte] = wkbExportOp.execute(WkbExportFlags.wkbExportDefaults, sg.geom, null).array()
-      put.add(GridLoader.CF, GRID_ID, Bytes.toBytes(sg.gridId))
-      put.add(GridLoader.CF, ENTITY_ID, Bytes.toBytes(analysisUnit.entityId))
-      put.add(GridLoader.CF, GEOM, ixPaGrid)
+
+      val put = GriddedObjectDAO.toPut(sg, getRowKey(analysisUnit.entityId, sg.gridId))
+      //new Put(getRowKey(analysisUnit.entityId, sg.gridId))
+//      val ixPaGrid: Array[Byte] = wkbExportOp.execute(WkbExportFlags.wkbExportDefaults, sg.geom, null).array()
+//      put.add(GridLoader.CF, GRID_ID, Bytes.toBytes(sg.gridId))
+//      put.add(GridLoader.CF, ENTITY_ID, Bytes.toBytes(analysisUnit.entityId))
+//      put.add(GridLoader.CF, GEOM, ixPaGrid)
       //Flag completely covered
 
       //More specialised classes can add extra columns
@@ -103,11 +122,12 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E]) extends ConvertsGe
     }
 
     hTable.flushCommits()
+    griddedEntities.size
 
 //    println(analysisUnit.name + " done.")
   }
 
-  def getRowKey(wdpaId: Int, gridId: Int): Array[Byte] = {
+  def getRowKey(wdpaId: Long, gridId: Int): Array[Byte] = {
     Bytes.toBytes(wdpaId).reverse.++(Bytes.toBytes(gridId).reverse)
   }
 

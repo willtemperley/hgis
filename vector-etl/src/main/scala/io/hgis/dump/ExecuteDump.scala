@@ -1,19 +1,18 @@
-package io.hgis.load
+package io.hgis.dump
 
 import io.hgis.ConfigurationFactory
+import io.hgis.load._
 import org.apache.hadoop.hbase.client.HTable
 
 /**
  * Created by willtemperley@gmail.com on 19-Oct-15.
  */
-object ExecuteLoad {
+object ExecuteDump {
 
-  val configuredTables = Map[String, GridLoader[_]](
+  val configuredTables = Map[String, ExtractionBase[_]](
 
-    "pa_grid" -> new LoadPAs,
-    "ee_grid" -> new LoadEEZs,
-    "osm_grid" -> new LoadWayGrids,
-    "pa" -> new LoadSites
+    "ee_protection" -> new DumpEcoregionProtection,
+    "osm_grid" -> new DumpWayGrid
 
   )
 
@@ -25,10 +24,11 @@ object ExecuteLoad {
       return
     }
     val arg = args(0)
-    val loader = configuredTables.get(arg).get
+    val dumper = configuredTables.get(arg).get
 
     val hTable = new HTable(ConfigurationFactory.get, arg)
-    loader.executeLoad(hTable)
+
+    dumper.executeExtract(hTable)
 
   }
 

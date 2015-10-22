@@ -1,6 +1,4 @@
-package io.hgis.vector.domain
-
-import com.esri.core.geometry.Geometry
+package io.hgis.hdomain
 
 /**
  * Created by willtemperley@gmail.com on 15-Oct-15.

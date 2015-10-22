@@ -1,7 +1,9 @@
 package io.hgis.vector.domain
 
+import com.esri.core.geometry
 import com.esri.core.geometry.{OperatorExportToWkb, OperatorImportFromWkb}
-import io.hgis.hdomain.HSerializable
+import com.vividsolutions.jts.geom.Geometry
+import io.hgis.hdomain.SerializableAnalysisUnit
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
 
@@ -10,14 +12,16 @@ import org.apache.hadoop.hbase.util.Bytes
  *
  * Created by willtemperley@gmail.com on 18-Nov-14.
  */
-object SiteOverlapDAO extends HSerializable[TSiteOverlap]{
+object SiteOverlapDAO extends SerializableAnalysisUnit[TSiteOverlap]{
 
   class SiteOverlap extends TSiteOverlap {
 
-    override var siteId1: Int = _
-    override var siteId2: Int = _
+    override var siteId1: Long = _
+    override var siteId2: Long = _
     override var area: Double = _
-
+    override var entityId: Long = _
+    override var geom: geometry.Geometry = _
+    override var jtsGeom: Geometry = _
   }
 
   override def getCF: Array[Byte] = "cfv".getBytes

@@ -5,22 +5,16 @@ package io.hgis.dump
  * Created by willtemperley@gmail.com on 18-Nov-14.
  */
 
-import javax.persistence.EntityManager
-
-import com.esri.core.geometry.OperatorExportToWkb
 import com.google.inject.Guice
-import com.vividsolutions.jts.io.WKBReader
-import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
 import io.hgis.domain.{EEPro, EcoregionEEZProtection}
 import io.hgis.inject.JPAModule
-import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp
 import org.apache.hadoop.hbase.filter.{BinaryComparator, SingleColumnValueFilter}
 import org.apache.hadoop.hbase.util.Bytes
 
-class DumpEcoregionProtection extends ExtractionBase[EEPro]  {
+object DumpWayGrids extends ExtractionBase[EEPro]  {
 
   val COLFAM: Array[Byte] = "cfv".getBytes
 

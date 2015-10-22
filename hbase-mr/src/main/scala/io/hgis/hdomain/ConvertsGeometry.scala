@@ -1,11 +1,10 @@
-package io.hgis.load
+package io.hgis.hdomain
 
 import java.nio.ByteBuffer
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb, OperatorImportFromWkt}
 import com.vividsolutions.jts.geom
 import com.vividsolutions.jts.io.{WKBReader, WKBWriter, WKTWriter}
-import org.apache.hadoop.hbase.client.HTable
 
 /**
  * Basic operations to convert between JTS and ESRI geometries

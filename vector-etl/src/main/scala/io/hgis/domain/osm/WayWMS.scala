@@ -1,10 +1,13 @@
 package io.hgis.domain.osm
 
+
 import javax.persistence._
 
+import com.esri.core.geometry
 import com.vividsolutions.jts.geom.Geometry
 import io.hgis.osmdomain.TWay
 import org.hibernate.annotations.Type
+
 
 /**
  * Maps the country table
@@ -17,7 +20,7 @@ class WayWMS extends TWay {
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column
-  var linestring: Geometry = _
+  var geom: geometry.Geometry = _
 
   @Column
   var ref: String = _
@@ -39,6 +42,7 @@ class WayWMS extends TWay {
 
   @Id
   @Column(name = "id")
-  var id: Long = _
+  override var entityId: Long = _
 
+  override var jtsGeom: Geometry = _
 }

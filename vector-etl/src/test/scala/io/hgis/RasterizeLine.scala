@@ -37,7 +37,7 @@ class RasterizeLine {
 
     for ( way <- ways ) {
 
-//      val pts = way.linestring.getCoordinates.map(f => grid.snap(f.getOrdinate(0), f.getOrdinate(1))).toSet
+//      val pts = way.geom.getCoordinates.map(f => grid.snap(f.getOrdinate(0), f.getOrdinate(1))).toSet
 //
 //
 //      for (pt <- pts) {
@@ -84,7 +84,7 @@ class RasterizeLine {
     val gf = new GeometryFactory
     val g = gf.toGeometry(referencedEnvelope)
     g.setSRID(4326)
-    val q =em.createQuery("from Way w where intersects(w.linestring, :filter) = true", classOf[Way]).setParameter("filter", g)
+    val q =em.createQuery("from Way w where intersects(w.geom, :filter) = true", classOf[Way]).setParameter("filter", g)
     q.getResultList.toList
   }
 

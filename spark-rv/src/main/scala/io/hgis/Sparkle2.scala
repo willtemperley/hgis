@@ -30,7 +30,7 @@ object Sparkle2 {
 
     val conf: Configuration = ConfigurationFactory.get
 
-//    siteGrid.geom = wkbImportOp.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(result.getValue(getCF, GEOM)), null)
+//    griddedEntity.geom = wkbImportOp.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(result.getValue(getCF, GEOM)), null)
     val tableName = "country_protection"
     println("Table " + tableName)
 

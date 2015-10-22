@@ -4,7 +4,8 @@ import javax.persistence._
 
 import com.esri.core.geometry.Geometry
 import com.vividsolutions.jts.geom.MultiPolygon
-import io.hgis.vector.domain.{AnalysisUnit, TAdminUnit}
+import io.hgis.hdomain.AnalysisUnit
+import io.hgis.vector.domain.TAdminUnit
 import org.hibernate.annotations.Type
 
 /**
@@ -27,8 +28,8 @@ class AdminUnit extends TAdminUnit with AnalysisUnit {
   var name: String = _
 
   @Id
-  @Column(name = "id")
-  override var entityId: Int = _
+    @Column(name = "id")
+    override var entityId: Long = _
 
   @Transient
   override var gridCells: Array[String] = _

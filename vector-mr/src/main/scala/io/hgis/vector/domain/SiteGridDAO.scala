@@ -4,7 +4,7 @@ import java.nio.ByteBuffer
 
 import com.esri.core.geometry._
 import com.vividsolutions.jts.io.{WKBReader, WKBWriter}
-import io.hgis.hdomain.HSerializable
+import io.hgis.hdomain.SerializableAnalysisUnit
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
 
@@ -14,7 +14,7 @@ import org.apache.hadoop.hbase.util.Bytes
  *
  * Created by willtemperley@gmail.com on 18-Nov-14.
  */
-object SiteGridDAO extends HSerializable[TSiteGrid] {
+object SiteGridDAO extends SerializableAnalysisUnit[TSiteGrid] {
 
   class SiteGrid extends TSiteGrid {
 
@@ -24,7 +24,7 @@ object SiteGridDAO extends HSerializable[TSiteGrid] {
     override var iucnCat: String = _
     override var isDesignated: Boolean = _
     override var catId: Int = _
-    override var entityId: Int = _
+    override var entityId: Long = _
   }
 
   override def getCF: Array[Byte] = "cfv".getBytes
@@ -75,7 +75,6 @@ object SiteGridDAO extends HSerializable[TSiteGrid] {
 
     siteGrid.gridId = Bytes.toInt(result.getValue(getCF, GRID_ID))
     siteGrid.entityId = Bytes.toInt(result.getValue(getCF, SITE_ID))
-    siteGrid.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
 
     val v = result.getValue(getCF, CAT_ID)
     if (v != null) {
@@ -85,7 +84,7 @@ object SiteGridDAO extends HSerializable[TSiteGrid] {
     siteGrid.isDesignated = Bytes.toBoolean(result.getValue(getCF, IS_DESIGNATED))
 
     siteGrid.geom = wkbImportOp.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(result.getValue(getCF, GEOM)), null)
-//    siteGrid.jtsGeom = wkbReader.read(result.getValue(getCF, GEOM))
+//    griddedEntity.jtsGeom = wkbReader.read(result.getValue(getCF, GEOM))
 
     siteGrid
   }

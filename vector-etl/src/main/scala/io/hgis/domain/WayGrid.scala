@@ -1,4 +1,5 @@
 package io.hgis.domain
+
 import javax.persistence._
 
 import com.esri.core.geometry.Geometry
@@ -6,11 +7,16 @@ import io.hgis.hdomain.GriddedEntity
 import org.hibernate.annotations.Type
 
 /**
- *
- * Created by willtemperley@gmail.com on 05-Feb-15.
- *
+ * Created by willtemperley@gmail.com on 22-Oct-15.
  */
-trait EEPro extends GriddedEntity {
+@Entity
+@Table(schema = "hgrid", name = "way_grid")
+class WayGrid extends GriddedEntity{
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq")
+  @SequenceGenerator(allocationSize = 1, name = "seq", sequenceName = "hgrid.way_grid_id_seq")
+  var id: Integer = _
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")
@@ -22,10 +28,7 @@ trait EEPro extends GriddedEntity {
   @Column(name = "grid_id")
   var gridId: Int = _
 
-  @Column(name = "ecoregion_eez_id")
+  @Column(name = "entity_id")
   var entityId: Long = _
-
-  @Column(name = "cat_id")
-  var catId: Int = _
 
 }

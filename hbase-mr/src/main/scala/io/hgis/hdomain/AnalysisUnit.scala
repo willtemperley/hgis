@@ -1,4 +1,4 @@
-package io.hgis.vector.domain
+package io.hgis.hdomain
 
 import com.esri.core.geometry.Geometry
 
@@ -9,7 +9,7 @@ import com.esri.core.geometry.Geometry
  */
 trait AnalysisUnit  {
 
-  var entityId: Int
+  var entityId: Long
 
   var geom: Geometry
 

@@ -1,7 +1,7 @@
 package io.hgis.vector.domain
 
 import com.esri.core.geometry.Geometry
-import io.hgis.hdomain.HasRowKey
+import io.hgis.hdomain.{AnalysisUnit, HasRowKey}
 import org.apache.hadoop.hbase.util.Bytes
 
 /**

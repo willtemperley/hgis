@@ -2,7 +2,8 @@ package io.hgis.op
 
 import com.esri.core.geometry._
 import com.vividsolutions.jts.geom
-import io.hgis.vector.domain.{AnalysisUnit, GriddedEntity, SiteGridDAO}
+import io.hgis.hdomain.{GriddedEntity, AnalysisUnit}
+import io.hgis.vector.domain.SiteGridDAO
 import SiteGridDAO.SiteGrid
 
 import scala.collection.mutable.ListBuffer
@@ -38,6 +39,15 @@ object IntersectUtil {
     Iterator.continually(outGeoms.next).takeWhile(_ != null)
   }
 
+  //FIXME just move to class
+  class GriddedEntityX extends GriddedEntity{
+    override var geom: Geometry = _
+    override var gridId: Int = _
+    override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
+    override var entityId: Long = _
+  }
+
+
   /**
    * Populates a list of SiteGrids with their geom and grid id, ignoring all zero area outputs
    *
@@ -46,38 +56,44 @@ object IntersectUtil {
    * @param gridIds the ids of the intersectors
    * @return
    */
-  def executeIntersect(analysisUnit: AnalysisUnit, geomList: Array[Geometry], gridIds: Array[Int]): List[GriddedEntity] = {
+  def executeIntersect(analysisUnit: AnalysisUnit, geomList: Array[Geometry], gridIds: Array[Int], dimensionMask: Int): List[GriddedEntity] = {
 
-    val bigPoly = new SimpleGeometryCursor(analysisUnit.geom)
-    val inGeoms = new SimpleGeometryCursor(geomList)
+    try {
+      val bigPoly = new SimpleGeometryCursor(analysisUnit.geom)
+      val inGeoms = new SimpleGeometryCursor(geomList)
 
-    val localOp = OperatorIntersection.local()
-    localOp.accelerateGeometry(analysisUnit.geom, sr, Geometry.GeometryAccelerationDegree.enumMedium)
-    val outGeoms = localOp.execute(inGeoms, bigPoly, sr, null, 4)
+      val localOp = OperatorIntersection.local()
+      localOp.accelerateGeometry(analysisUnit.geom, sr, Geometry.GeometryAccelerationDegree.enumMedium)
 
-    Iterator.continually(outGeoms.next).takeWhile(_ != null).map((f: Geometry) => f)
 
-    val sgs = new ListBuffer[GriddedEntity]
-    var result = outGeoms.next
-    var geomId = outGeoms.getGeometryID
-    while (result != null) {
-      if (result.calculateArea2D() > 0) {
+      val outGeoms = localOp.execute(inGeoms, bigPoly, sr, null, dimensionMask)
 
-        //FIXME just move to class
-        val sg = new GriddedEntity {
-          override var geom: Geometry = _
-          override var gridId: Int = _
-          override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
-          override var entityId: Int = _
+      Iterator.continually(outGeoms.next).takeWhile(_ != null).map((f: Geometry) => f)
+
+
+      val sgs = new ListBuffer[GriddedEntity]
+      var result = outGeoms.next
+      var geomId = outGeoms.getGeometryID
+      while (result != null) {
+        if (result.calculateArea2D() > 0 || result.calculateLength2D() > 0) {
+
+          val sg = new GriddedEntityX
+
+          sg.geom = result
+          sg.gridId = gridIds(geomId)
+          sg.entityId = analysisUnit.entityId
+          sgs.append(sg)
         }
-        sg.geom = result
-        sg.gridId = gridIds(geomId)
-        sg.entityId = analysisUnit.entityId
-        sgs.append(sg)
+        result = outGeoms.next
+        geomId = outGeoms.getGeometryID
       }
-      result = outGeoms.next
-      geomId = outGeoms.getGeometryID
+      sgs.toList
+    } catch {
+      case e: Exception => {
+        e.printStackTrace()
+        println("Failed on : " + analysisUnit.entityId)
+      }
+      null
     }
-    sgs.toList
   }
 }

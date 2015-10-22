@@ -1,6 +1,8 @@
 package io.hgis.vector.mr
 
+//FIXME can we make this configurable to generically change a table??
 /**
+ *
  *
  * Changing structure of site-grid table slightly
  *
@@ -12,7 +14,7 @@ package io.hgis.vector.mr
  */
 
 import com.esri.core.geometry.OperatorImportFromWkt
-import io.hgis.vector.domain.{SiteGridDAO, SiteDAO}
+import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.client.{Put, Result, Scan}
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
@@ -32,7 +34,7 @@ object SiteGridMutatorMR {
     conf.set("hbase.master", "hadoop-m1")
 
     val scan: Scan = new Scan
-    scan.addFamily(SiteDAO.getCF)
+    scan.addFamily(SiteGridDAO.getCF)
 
     val job: Job = Job.getInstance(conf)
 

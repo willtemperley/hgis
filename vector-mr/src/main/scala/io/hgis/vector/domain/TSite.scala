@@ -1,7 +1,7 @@
 package io.hgis.vector.domain
 
 import com.esri.core.geometry.Geometry
-import io.hgis.hdomain.HasRowKey
+import io.hgis.hdomain.{AnalysisUnit, HasRowKey}
 import org.apache.hadoop.hbase.util.Bytes
 
 
@@ -10,12 +10,15 @@ import org.apache.hadoop.hbase.util.Bytes
  */
 trait TSite extends HasRowKey with AnalysisUnit {
 
-  var isDesignated: Boolean;
-  var name: String
-//  var iucnCat: String
-
   var gridCells: Array[String]
+
   var gridIdList: Array[String]
+
+  var catId: Int
+
+  var isDesignated: Boolean
+
+  var isPoint: Boolean
 
   override def getRowKey: Array[Byte] = {
     getRandomByteArray ++ Bytes.toBytes(entityId)

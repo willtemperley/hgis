@@ -1,14 +1,14 @@
 package io.hgis.vector.domain
 
-import io.hgis.hdomain.HasRowKey
+import io.hgis.hdomain.{AnalysisUnit, HasRowKey}
 
 /**
  * Created by willtemperley@gmail.com on 19-Nov-14.
  */
-trait TSiteOverlap extends HasRowKey {
+trait TSiteOverlap extends HasRowKey with AnalysisUnit {
 
-  var siteId1: Int
-  var siteId2: Int
+  var siteId1: Long
+  var siteId2: Long
   var area: Double
 
 

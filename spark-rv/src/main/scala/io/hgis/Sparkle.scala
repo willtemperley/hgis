@@ -62,7 +62,7 @@ object Sparkle {
     conf.set("hbase.zookeeper.clientPort", "2181")
     conf.set("hbase.master", "hadoop-m1")
 
-//    siteGrid.geom = wkbImportOp.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(result.getValue(getCF, GEOM)), null)
+//    griddedEntity.geom = wkbImportOp.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(result.getValue(getCF, GEOM)), null)
 //    val tableName = "pa_grid"
 //    println("Table " + tableName)
 

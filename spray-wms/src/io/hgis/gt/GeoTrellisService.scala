@@ -61,7 +61,7 @@ trait GeoTrellisService extends HttpService {
     val gf = new GeometryFactory
     val g = gf.toGeometry(referencedEnvelope)
     g.setSRID(4326)
-    val q =em.createQuery("from WayWMS w where intersects(w.linestring, :filter) = true", classOf[WayWMS]).setParameter("filter", g)
+    val q =em.createQuery("from WayWMS w where intersects(w.geom, :filter) = true", classOf[WayWMS]).setParameter("filter", g)
     q.getResultList.toList
   }
 
@@ -77,10 +77,10 @@ trait GeoTrellisService extends HttpService {
     builder.add(way.amenity)
     builder.add(way.tunnel)
     builder.add(way.railway)
-    builder.add(way.linestring)
+    builder.add(way.geom)
 
     //build the feature with provided ID
-    val x = builder.buildFeature("fid." + way.id)
+    val x = builder.buildFeature("fid." + way.entityId)
 
 
     x

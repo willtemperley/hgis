@@ -1,8 +1,9 @@
 package io.hgis.osmdomain
 
+import com.esri.core.geometry
 import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.io.{WKBReader, WKBWriter}
-import io.hgis.hdomain.HSerializable
+import io.hgis.hdomain.SerializableAnalysisUnit
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
 
@@ -10,20 +11,21 @@ import org.apache.hadoop.hbase.util.Bytes
  *
  * Created by tempehu on 23-Apr-15.
  */
-object WayDAO extends HSerializable[TWay] {
+object WayDAO extends SerializableAnalysisUnit[TWay] {
 
   class Way extends TWay {
 
-    override var id: Long = _
-    override var linestring: Geometry = _
+    override var entityId: Long = _
+    override var geom: geometry.Geometry = _
+    override var jtsGeom: Geometry = _
   }
   
   override def toPut(obj: TWay, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
 
-    put.add(getCF, ID, Bytes.toBytes(obj.id))
-    put.add(getCF, GEOM, wkbWriter.write(obj.linestring))
-//    val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.linestring, null).array()
+    put.add(getCF, ID, Bytes.toBytes(obj.entityId))
+    put.add(getCF, GEOM, wkbWriter.write(obj.jtsGeom))
+//    val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.geom, null).array()
   }
 
   /**
@@ -56,8 +58,8 @@ object WayDAO extends HSerializable[TWay] {
    * @return A domain object of type T
    */
   override def fromResult(result: Result, way: TWay = new Way): TWay = {
-    way.id = Bytes.toLong(result.getValue(getCF, ID))
-    way.linestring = wkbReader.read(result.getValue(getCF, GEOM))
+    way.entityId = Bytes.toInt(result.getValue(getCF, ID))
+    way.jtsGeom = wkbReader.read(result.getValue(getCF, GEOM))
     way
   }
 }

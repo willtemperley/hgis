@@ -7,7 +7,7 @@ import org.apache.hadoop.hbase.client.{Put, Result}
  *
  * Created by willtemperley@gmail.com on 19-Nov-14.
  */
-trait HSerializable[T] {
+trait SerializableAnalysisUnit[T <: AnalysisUnit] {
 
   /**
    * Generates a Put from a domain object

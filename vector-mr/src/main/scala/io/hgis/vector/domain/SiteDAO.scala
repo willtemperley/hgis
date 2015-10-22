@@ -5,7 +5,7 @@ import java.nio.ByteBuffer
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb}
 import com.vividsolutions.jts.geom
-import io.hgis.hdomain.HSerializable
+import io.hgis.hdomain.SerializableAnalysisUnit
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.io.WritableUtils
@@ -15,28 +15,28 @@ import org.apache.hadoop.io.WritableUtils
  *
  * Created by willtemperley@gmail.com on 18-Nov-14.
  */
-object SiteDAO extends HSerializable[TSite]{
+object SiteDAO extends SerializableAnalysisUnit[TSite]{
 
   class Site extends TSite {
 
     override var geom: Geometry = _
-//    override var iucnCat: String = _
-    override var name: String = _
-
+    override var catId: Int = _
     override var gridCells: Array[String] = _
     override var gridIdList: Array[String] = _
-    override var isDesignated: Boolean = _
-    override var entityId: Int = _
+    override var entityId: Long = _
     override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
+    override var isDesignated: Boolean = _
+    override var isPoint: Boolean = _
   }
 
   override val getCF: Array[Byte] = "cfv".getBytes
 
   val GEOM: Array[Byte] = "geom".getBytes
   val GRID_GEOMS: Array[Byte] = "grid".getBytes
-  val IS_DESIGNATED: Array[Byte] = "wdpa_id".getBytes
-  val SITE_ID: Array[Byte] = "site_id".getBytes
-  val IUCN_CAT: Array[Byte] = "iucn_cat".getBytes
+  val IS_DESIGNATED: Array[Byte] = "is_designated".getBytes
+  val IS_POINT: Array[Byte] = "is_point".getBytes
+  val ENTITY_ID: Array[Byte] = "entity_id".getBytes
+  val CAT_ID: Array[Byte] = "cat_id".getBytes
   val GRID_ID_LIST: Array[Byte] = "grid_id".getBytes
 
 
@@ -45,9 +45,10 @@ object SiteDAO extends HSerializable[TSite]{
 
   override def toPut(obj: TSite, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.entityId))
+    put.add(getCF, ENTITY_ID, Bytes.toBytes(obj.entityId))
+    put.add(getCF, IS_POINT, Bytes.toBytes(obj.isPoint))
     put.add(getCF, IS_DESIGNATED, Bytes.toBytes(obj.isDesignated))
-//    put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
+    put.add(getCF, CAT_ID, Bytes.toBytes(obj.catId))
     put.add(getCF, GRID_GEOMS, serializeStringArray(obj.gridCells))
     put.add(getCF, GRID_ID_LIST, serializeStringArray(obj.gridIdList))
     val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.geom, null).array()
@@ -71,9 +72,10 @@ object SiteDAO extends HSerializable[TSite]{
 
   override def fromResult(result: Result, site: TSite = new Site): TSite = {
 
-    site.entityId = Bytes.toInt(result.getValue(getCF, SITE_ID))
+    site.entityId = Bytes.toInt(result.getValue(getCF, ENTITY_ID))
     site.isDesignated = Bytes.toBoolean(result.getValue(getCF, IS_DESIGNATED))
-//    site.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
+    site.isPoint = Bytes.toBoolean(result.getValue(getCF, IS_POINT))
+    //    site.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
     val bytes: Array[Byte] = result.getValue(getCF, GEOM)
     site.geom = operatorImportFromWkb.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(bytes), null)
     site.gridCells = deserializeStringArray(result.getValue(getCF, GRID_GEOMS))

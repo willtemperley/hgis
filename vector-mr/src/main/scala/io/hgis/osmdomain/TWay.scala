@@ -1,7 +1,7 @@
 package io.hgis.osmdomain
 
 import com.vividsolutions.jts.geom.Geometry
-import io.hgis.hdomain.HasRowKey
+import io.hgis.hdomain.{AnalysisUnit, HasRowKey}
 import org.apache.hadoop.hbase.util.Bytes
 
 
@@ -9,14 +9,10 @@ import org.apache.hadoop.hbase.util.Bytes
  *
  * Created by willtemperley@gmail.com on 19-Nov-14.
  */
-trait TWay extends HasRowKey {
-
-  var id: Long
-
-  var linestring: Geometry
+trait TWay extends HasRowKey with AnalysisUnit {
 
   override def getRowKey: Array[Byte] = {
-    getRandomByteArray ++ Bytes.toBytes(id)
+    getRandomByteArray ++ Bytes.toBytes(entityId)
   }
 
 }

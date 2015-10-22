@@ -79,7 +79,7 @@ CREATE TABLE public.ways
   changeset_id bigint NOT NULL,4
   tags hstore,5
   nodes bigint[],6
-  linestring geometry(Geometry,4326),8
+  geom geometry(Geometry,4326),8
 )
    */
   class WayMapper extends Mapper[LongWritable, Text, ImmutableBytesWritable, KeyValue] with OsmMapper {

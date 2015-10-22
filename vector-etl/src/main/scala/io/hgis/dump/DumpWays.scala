@@ -33,7 +33,7 @@ object DumpWays extends TableIterator {
 
     for (r <- ways) {
       val w = WayDAO.fromResult(r)
-      println(w.id)
+      println(w.entityId)
     }
 
 //    val sw = new ShapeWriter("LineString", 4326)

@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb}
 import com.vividsolutions.jts.geom
 import io.hgis.accessutil.AccessUtil
-import io.hgis.hdomain.HSerializable
+import io.hgis.hdomain.SerializableAnalysisUnit
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.io.WritableUtils
@@ -16,11 +16,11 @@ import org.apache.hadoop.io.WritableUtils
  *
  * Created by willtemperley@gmail.com on 18-Nov-14.
  */
-object AdminUnitDAO extends HSerializable[TAdminUnit]{
+object AdminUnitDAO extends SerializableAnalysisUnit[TAdminUnit]{
 
   class AdminUnit extends TAdminUnit {
 
-    override var entityId: Int = _
+    override var entityId: Long = _
     override var geom: Geometry = _
 
     override var gridCells: Array[String] = _

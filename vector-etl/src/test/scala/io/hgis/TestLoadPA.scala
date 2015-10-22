@@ -17,7 +17,7 @@ class TestLoadPA extends TableIterator {
   val CF = "cfv".getBytes
 
   val lpas = new LoadPAs {
-    override def getIds = Array(2978149, 2815932)
+    override def getIds = Array(2978149l, 2815932l)
   }
 
   @Test
@@ -34,7 +34,7 @@ class TestLoadPA extends TableIterator {
 
   }
 
-  def getEntityId = AccessUtil.intColumn(CF, "entity_id") _
+  def getEntityId = AccessUtil.longColumn(CF, "entity_id") _
   def getCatId = AccessUtil.intColumn(CF, "cat_id") _
   def getGeom = AccessUtil.geomColumn(new WKBReader, CF, "geom") _
 
