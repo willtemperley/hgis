@@ -10,10 +10,6 @@ import org.apache.hadoop.hbase.util.Bytes
  */
 trait TAdminUnit extends AnalysisUnit with HasRowKey {
 
-  var gridCells: Array[String]
-
-  var gridIdList: Array[String]
-
   override def getRowKey: Array[Byte] = {
     getRandomByteArray ++ Bytes.toBytes(entityId)
   }

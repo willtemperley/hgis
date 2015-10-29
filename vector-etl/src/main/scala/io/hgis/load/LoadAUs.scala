@@ -12,11 +12,11 @@ import org.apache.hadoop.hbase.client.{Put, HTable}
 
 import java.util.ArrayList
 
+import org.apache.hadoop.hbase.util.Bytes
+
 import scala.collection.JavaConversions._
 
 /**
- * It's not obvious how the ESRI geometry API preserves ids of intersectors
- *
  * Created by willtemperley@gmail.com on 21-Nov-14.
  */
 class LoadAUs extends GridLoader[AdminUnit](classOf[AdminUnit]) {
@@ -27,7 +27,7 @@ class LoadAUs extends GridLoader[AdminUnit](classOf[AdminUnit]) {
   }
 
   override def addColumns(put: Put, obj: AdminUnit): Unit = {
-
+    put.add("cfv".getBytes, "country_id".getBytes, Bytes.toBytes(obj.iso3))
   }
 
 }

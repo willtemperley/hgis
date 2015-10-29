@@ -21,20 +21,20 @@ object SiteGridDAO extends SerializableAnalysisUnit[TSiteGrid] {
     override var gridId: Int = _
     override var geom: Geometry = _
     override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
-    override var iucnCat: String = _
     override var isDesignated: Boolean = _
     override var catId: Int = _
     override var entityId: Long = _
+    override var isPoint: Boolean = _
   }
 
   override def getCF: Array[Byte] = "cfv".getBytes
 
   val GEOM: Array[Byte] = "geom".getBytes
   val GRID_ID: Array[Byte] = "grid_id".getBytes
-  val SITE_ID: Array[Byte] = "site_id".getBytes
-  val IUCN_CAT: Array[Byte] = "iucn_cat".getBytes
+  val ENTITY_ID: Array[Byte] = "entity_id".getBytes
   val CAT_ID: Array[Byte] = "cat_id".getBytes
   val IS_DESIGNATED: Array[Byte] = "is_designated".getBytes
+  val IS_POINT: Array[Byte] = "is_point".getBytes
 
   def getRowKey(wdpaId: Int, gridId: Int): Array[Byte] = {
     Bytes.toBytes(wdpaId).reverse.++(Bytes.toBytes(gridId).reverse)
@@ -53,20 +53,22 @@ object SiteGridDAO extends SerializableAnalysisUnit[TSiteGrid] {
 
     put.add(getCF, GRID_ID, Bytes.toBytes(obj.gridId))
     put.add(getCF, CAT_ID, Bytes.toBytes(obj.gridId))
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.entityId))
-    put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
+    put.add(getCF, ENTITY_ID, Bytes.toBytes(obj.entityId))
+    put.add(getCF, IS_POINT, Bytes.toBytes(obj.isPoint))
     put.add(getCF, IS_DESIGNATED, Bytes.toBytes(obj.isDesignated))
 
     val ixPaGrid: Array[Byte] = wkbExportOp.execute(WkbExportFlags.wkbExportDefaults, obj.geom, null).array()
     put.add(getCF, GEOM, ixPaGrid)
+    put
   }
 
   def toPutJTS(obj: TSiteGrid, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
 
     put.add(getCF, GRID_ID, Bytes.toBytes(obj.gridId))
-    put.add(getCF, SITE_ID, Bytes.toBytes(obj.entityId))
-    put.add(getCF, IUCN_CAT, Bytes.toBytes(obj.iucnCat))
+    put.add(getCF, CAT_ID, Bytes.toBytes(obj.catId))
+    put.add(getCF, ENTITY_ID, Bytes.toBytes(obj.entityId))
+    put.add(getCF, IS_POINT, Bytes.toBytes(obj.isPoint))
     put.add(getCF, IS_DESIGNATED, Bytes.toBytes(obj.isDesignated))
 
   }
@@ -74,14 +76,21 @@ object SiteGridDAO extends SerializableAnalysisUnit[TSiteGrid] {
   override def fromResult(result: Result, siteGrid: TSiteGrid = new SiteGrid): TSiteGrid = {
 
     siteGrid.gridId = Bytes.toInt(result.getValue(getCF, GRID_ID))
-    siteGrid.entityId = Bytes.toInt(result.getValue(getCF, SITE_ID))
+    siteGrid.entityId = Bytes.toLong(result.getValue(getCF, ENTITY_ID))
+
+    val value = result.getValue(getCF, IS_POINT)
+    if(value != null) siteGrid.isPoint = Bytes.toBoolean(value)
+
+    val value1 = result.getValue(getCF, IS_DESIGNATED)
+    if(value1 != null) siteGrid.isDesignated = Bytes.toBoolean(value1)
 
     val v = result.getValue(getCF, CAT_ID)
     if (v != null) {
       siteGrid.catId = Bytes.toInt(v)
+    } else {
+      siteGrid.catId = -1
     }
 
-    siteGrid.isDesignated = Bytes.toBoolean(result.getValue(getCF, IS_DESIGNATED))
 
     siteGrid.geom = wkbImportOp.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(result.getValue(getCF, GEOM)), null)
 //    griddedEntity.jtsGeom = wkbReader.read(result.getValue(getCF, GEOM))

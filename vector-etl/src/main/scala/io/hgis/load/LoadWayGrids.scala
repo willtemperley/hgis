@@ -37,7 +37,7 @@ class LoadWayGrids extends GridLoader[Way](classOf[Way], Geometry.Type.Polyline)
 
   val HIGHWAY = "highway".getBytes
   val RAILWAY = "railway".getBytes
-  val SPEED = "speed".getBytes
+  val SPEED = "maxspeed".getBytes
   val ID = "id".getBytes
 
   override def executeLoad(table: HTableInterface) {
@@ -107,10 +107,14 @@ class LoadWayGrids extends GridLoader[Way](classOf[Way], Geometry.Type.Polyline)
             put.add(CFV, GEOM, wkb)
             put.add(CFV, GRID_ID, Bytes.toBytes(g.gridId))
 
-            put.add(CFT, ID, Bytes.toBytes(g.gridId))
-            put.add(CFT, HIGHWAY, hWay.getValue(CFT, HIGHWAY))
-            put.add(CFT, RAILWAY, hWay.getValue(CFT, RAILWAY))
-            put.add(CFT, SPEED, hWay.getValue(CFT, SPEED))
+            //UNTESTED
+            def transferCell = AccessUtil.transferCell(hWay, put, CFT) _
+            Array(ID,HIGHWAY,RAILWAY,SPEED).foreach(transferCell)
+
+//            put.add(CFT, ID, hWay.getValue(CFT, ID))
+//            put.add(CFT, HIGHWAY, hWay.getValue(CFT, HIGHWAY))
+//            put.add(CFT, RAILWAY, hWay.getValue(CFT, RAILWAY))
+//            put.add(CFT, SPEED, hWay.getValue(CFT, SPEED))
 
             table.put(put)
 
@@ -143,12 +147,8 @@ class LoadWayGrids extends GridLoader[Way](classOf[Way], Geometry.Type.Polyline)
 
   }
 
-
   override def getIds: Iterable[Any] = {
     null
   }
-
-
-
 
 }

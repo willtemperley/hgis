@@ -14,7 +14,7 @@ import org.hibernate.annotations.Type
  * Created by tempehu on 01-Dec-14.
  */
 @Entity
-@Table(schema = "administrative_units", name = "country")
+@Table(schema = "public", name = "admin0")
 class AdminUnit extends TAdminUnit with AnalysisUnit {
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
@@ -27,14 +27,12 @@ class AdminUnit extends TAdminUnit with AnalysisUnit {
   @Column
   var name: String = _
 
+  @Column(name = "country_id")
+  var iso3: String = _
+
   @Id
-    @Column(name = "id")
-    override var entityId: Long = _
+  @Column(name = "id")
+  override var entityId: Long = _
 
-  @Transient
-  override var gridCells: Array[String] = _
-
-  @Transient
-  override var gridIdList: Array[String] = _
 
 }

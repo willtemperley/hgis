@@ -105,8 +105,8 @@ object EcoregionProtectionMR {
 
     val filters =
       List(
-        new SingleColumnValueFilter(SiteGridDAO.getCF, "cat_id".getBytes, op, new BinaryComparator(Bytes.toBytes(catId)))
-//        new SingleColumnValueFilter(SiteGridDAO.getCF, "is_designated".getBytes, CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes(true)))
+        new SingleColumnValueFilter(SiteGridDAO.getCF, "cat_id".getBytes, op, new BinaryComparator(Bytes.toBytes(catId))),
+        new SingleColumnValueFilter(SiteGridDAO.getCF, "is_designated".getBytes, CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes(true)))
       )
 
     val filterList = new FilterList(filters)
@@ -157,7 +157,7 @@ object EcoregionProtectionMR {
 
       val (cGrids, sGrids) =
         values.map(r => SiteGridDAO.fromResult(r))
-          .partition(f => f.iucnCat.equals(DISCRIMINATOR))
+          .partition(f => f.catId == -1)
 
       val inGeoms = sGrids.map(_.geom).toList
       val diffOp = OperatorDifference.local()
@@ -181,8 +181,8 @@ object EcoregionProtectionMR {
         //a put with a very paranoid key
         val put = new Put(nextBytes ++ suffix)
 
-        //This is quite confusing, because country_id and site_id are both actually ee_id
-        put.add(CF, "country_id".getBytes, Bytes.toBytes(cG.entityId))
+
+        put.add(CF, "entity_id".getBytes, Bytes.toBytes(cG.entityId))
         put.add(CF, "grid_id".getBytes, Bytes.toBytes(cG.gridId))
 
         val wkb = wkbExport.execute(WkbExportFlags.wkbExportDefaults, diff, null).array()

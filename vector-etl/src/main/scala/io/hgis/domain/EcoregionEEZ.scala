@@ -15,8 +15,8 @@ import org.hibernate.annotations.Type
 class EcoregionEEZ extends AnalysisUnit {
 
   @Id
-    @Column(name = "id")
-    var entityId: Long = _
+  @Column(name = "id")
+  var entityId: Long = _
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")

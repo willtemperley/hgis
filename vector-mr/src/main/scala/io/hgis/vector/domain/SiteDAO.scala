@@ -1,10 +1,9 @@
 package io.hgis.vector.domain
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, DataInputStream, DataOutputStream}
+import java.io._
 import java.nio.ByteBuffer
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, OperatorImportFromWkb}
-import com.vividsolutions.jts.geom
 import io.hgis.hdomain.SerializableAnalysisUnit
 import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
@@ -53,6 +52,7 @@ object SiteDAO extends SerializableAnalysisUnit[TSite]{
     put.add(getCF, GRID_ID_LIST, serializeStringArray(obj.gridIdList))
     val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.geom, null).array()
     put.add(getCF, GEOM, bytes)
+    put
   }
 
   def serializeStringArray(strings: Array[String]): Array[Byte] = {
@@ -72,16 +72,14 @@ object SiteDAO extends SerializableAnalysisUnit[TSite]{
 
   override def fromResult(result: Result, site: TSite = new Site): TSite = {
 
-    site.entityId = Bytes.toInt(result.getValue(getCF, ENTITY_ID))
+    site.entityId = Bytes.toLong(result.getValue(getCF, ENTITY_ID))
     site.isDesignated = Bytes.toBoolean(result.getValue(getCF, IS_DESIGNATED))
     site.isPoint = Bytes.toBoolean(result.getValue(getCF, IS_POINT))
-    //    site.iucnCat = Bytes.toString(result.getValue(getCF, IUCN_CAT))
     val bytes: Array[Byte] = result.getValue(getCF, GEOM)
     site.geom = operatorImportFromWkb.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(bytes), null)
     site.gridCells = deserializeStringArray(result.getValue(getCF, GRID_GEOMS))
     site.gridIdList = deserializeStringArray(result.getValue(getCF, GRID_ID_LIST))
-
-    //TODO: Remove return value
+    site.catId = Bytes.toInt(result.getValue(getCF, CAT_ID))
 
     site
   }

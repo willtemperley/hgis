@@ -9,24 +9,29 @@ import org.apache.hadoop.hbase.client.HTable
  */
 object ExecuteDump {
 
-  val configuredTables = Map[String, ExtractionBase[_]](
+  val configuredTables = Map[String, ExtractionBase] (
 
     "ee_protection" -> new DumpEcoregionProtection,
-    "osm_grid" -> new DumpWayGrid
+    "osm_grid" -> new DumpWayGrid,
+    "pa_grid" -> new DumpSiteGrid,
+    "pa" -> new TestPA //FIXME just printing for now
 
   )
 
-
   def main(args: Array[String]) {
 
-    if (args.length == 0) {
+    classOf[DumpEcoregionProtection].newInstance()
+
+    if (args.length < 0) {
       println("Please provide a table")
       return
     }
-    val arg = args(0)
-    val dumper = configuredTables.get(arg).get
+    val (arg, others) = args.splitAt(1)
 
-    val hTable = new HTable(ConfigurationFactory.get, arg)
+    val tableName = arg(0)
+    val dumper = configuredTables.get(tableName).get.withArguments(others)
+
+    val hTable = new HTable(ConfigurationFactory.get, tableName)
 
     dumper.executeExtract(hTable)
 

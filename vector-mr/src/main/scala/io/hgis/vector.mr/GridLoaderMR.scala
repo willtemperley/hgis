@@ -73,7 +73,10 @@ object GridLoaderMR {
       for (sg: GriddedEntity <- siteGrids) {
 
         val put = GriddedObjectDAO.toPut(sg, GriddedObjectDAO.getRowKey(site.entityId.toInt, sg.gridId))
+
         put.add(GriddedObjectDAO.getCF, "cat_id".getBytes, Bytes.toBytes(site.catId))
+        put.add(GriddedObjectDAO.getCF, "is_designated".getBytes, Bytes.toBytes(site.isDesignated))
+        put.add(GriddedObjectDAO.getCF, "is_point".getBytes, Bytes.toBytes(site.isPoint))
 
         outputKey.set(put.getRow)
         context.write(outputKey, put)

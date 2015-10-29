@@ -2,7 +2,7 @@ package io.hgis
 
 import com.vividsolutions.jts.io.WKBReader
 import io.hgis.accessutil.AccessUtil
-import io.hgis.load.LoadPAs
+import io.hgis.load.DirectLoadPAs
 import io.hgis.scanutil.TableIterator
 import org.apache.hadoop.hbase.client.{Result, ResultScanner, Scan}
 import org.junit.{Assert, Test}
@@ -11,12 +11,12 @@ import org.junit.{Assert, Test}
  *
  * Created by willtemperley@gmail.com on 14-Oct-15.
  */
-class TestLoadPA extends TableIterator {
+class TestLoadBigPAs extends TableIterator {
 
   val hTable = MockHTable.create()
   val CF = "cfv".getBytes
 
-  val lpas = new LoadPAs {
+  val lpas = new DirectLoadPAs {
     override def getIds = Array(2978149l, 2815932l)
   }
 

@@ -23,6 +23,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: io.hgis:vector-mr:0.1-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="hbase-mr" />
     <orderEntry type="module" module-name="vector-mr" />
     <orderEntry type="module" module-name="hbase-mr" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-core_2.10:1.2.0" level="project" />

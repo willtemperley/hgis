@@ -20,18 +20,23 @@ import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp
 import org.apache.hadoop.hbase.filter.{BinaryComparator, SingleColumnValueFilter}
 import org.apache.hadoop.hbase.util.Bytes
 
-class DumpEcoregionProtection extends ExtractionBase[EEPro]  {
+class DumpEcoregionProtection extends ExtractionBase  {
 
   val COLFAM: Array[Byte] = "cfv".getBytes
 
   val injector = Guice.createInjector(new JPAModule)
-  
-// = new HTable(ConfigurationFactory.get, "ee_protection")
-  val catID = 1
+
+  var catID: Int = _
+
+  override def withArguments(args: Array[String]) = {
+    catID = args(0).toInt
+    println("extracting category %s".format(catID))
+    this
+  }
 
   def gridId = AccessUtil.intColumn(COLFAM, "grid_id") _
   def analysisUnitId = AccessUtil.longColumn(COLFAM, "entity_id") _
-  def catId = AccessUtil.intColumn(COLFAM, "cat_id") _
+  def catIdCol = AccessUtil.intColumn(COLFAM, "cat_id") _
 
   def getScan: Scan = {
     val scan: Scan = new Scan
@@ -41,18 +46,16 @@ class DumpEcoregionProtection extends ExtractionBase[EEPro]  {
     scan
   }
 
-  override def persistEntity(res: Result, x: EEPro): Unit = {
-
+  override def buildEntity(res: Result): Unit = {
+    val x = new EcoregionEEZProtection
     x.jtsGeom = jtsWkbReader.read(res.getValue("cfv".getBytes, "geom".getBytes))
     x.gridId = gridId(res)
     x.entityId = analysisUnitId(res)
-    x.catId = catId(res)
+    x.catId = catIdCol(res)
 
     em.persist(x)
 
   }
-
-  override def createEntity: EEPro = new EcoregionEEZProtection
 
 }
 

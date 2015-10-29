@@ -50,6 +50,9 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
   def addColumns(put: Put, obj: E): Unit
 
   def getEntity(id: Any): E = {
+    print("\b\b\b\b\b\b\b\b\b\b\b")
+    println()
+    print("%10d".format(id.toString.toInt))
     em.find(clazz, id)
   }
 
@@ -71,6 +74,7 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
 
       if (pc > pcDone) {
         pcDone = pc
+        print("\b\b\b\b\b\b\b\b\b\b")
         println("%s%% complete".format(pcDone))
       }
 
@@ -85,6 +89,11 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
       "FROM hgrid.h_grid where geom && " + envString , classOf[GridCell])
     q.getResultList.asInstanceOf[java.util.ArrayList[GridCell]]
   }
+
+  /*
+  Called on completion of flush to hbase table
+   */
+  def notifyComplete(analysisUnit: E): Unit = {}
 
   def insertGridCells(hTable: HTableInterface, analysisUnit: E): Int = {
 
@@ -108,9 +117,9 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
 
 
       val put = GriddedObjectDAO.toPut(sg, getRowKey(analysisUnit.entityId, sg.gridId))
-      //new Put(getRowKey(analysisUnit.entityId, sg.gridId))
+      //new Put(getRowKey(analysisUnit.entityId, sg.gridIdCol))
 //      val ixPaGrid: Array[Byte] = wkbExportOp.execute(WkbExportFlags.wkbExportDefaults, sg.geom, null).array()
-//      put.add(GridLoader.CF, GRID_ID, Bytes.toBytes(sg.gridId))
+//      put.add(GridLoader.CF, GRID_ID, Bytes.toBytes(sg.gridIdCol))
 //      put.add(GridLoader.CF, ENTITY_ID, Bytes.toBytes(analysisUnit.entityId))
 //      put.add(GridLoader.CF, GEOM, ixPaGrid)
       //Flag completely covered
@@ -122,6 +131,7 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
     }
 
     hTable.flushCommits()
+    notifyComplete(analysisUnit)
     griddedEntities.size
 
 //    println(analysisUnit.name + " done.")

@@ -16,5 +16,4 @@ object DataAccess {
   val injector = Guice.createInjector(new JPAModule)
   val em = injector.getInstance(classOf[EntityManager])
 
-
 }

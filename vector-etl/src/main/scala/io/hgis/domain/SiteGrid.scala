@@ -15,7 +15,7 @@ import org.hibernate.annotations.Type
  * Created by will on 24/10/2014.
  */
 @Entity
-@Table(schema = "hgrid", name = "site_grid")
+@Table(schema = "hgrid", name = "site_grid2")
 class SiteGrid extends TSiteGrid {
 
    @Id
@@ -36,20 +36,18 @@ class SiteGrid extends TSiteGrid {
 
    @Type(`type` = "org.hibernate.spatial.GeometryType")
    @NotNull
-   @Column(name = "site_geom")
+   @Column(name = "geom")
    var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
-
-   @NotNull
-   @Column(name = "iucn_cat")
-   override var iucnCat: String = _
 
    @NotNull
    @Column(name = "is_designated")
    override var isDesignated: Boolean = _
 
-//   @NotNull
-//   @Column(name = "cat_id")
-
-   @Transient
+   @NotNull
+   @Column(name = "cat_id")
    var catId: Int = _
+
+   @NotNull
+   @Column(name = "is_point")
+   override var isPoint: Boolean = _
 }

@@ -23,8 +23,6 @@ object AdminUnitDAO extends SerializableAnalysisUnit[TAdminUnit]{
     override var entityId: Long = _
     override var geom: Geometry = _
 
-    override var gridCells: Array[String] = _
-    override var gridIdList: Array[String] = _
     override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
   }
 
@@ -42,10 +40,9 @@ object AdminUnitDAO extends SerializableAnalysisUnit[TAdminUnit]{
   override def toPut(obj: TAdminUnit, rowKey: Array[Byte]): Put = {
     val put = new Put(rowKey)
     put.add(getCF, ENTITY_ID, Bytes.toBytes(obj.entityId))
-    put.add(getCF, GRID_GEOMS, AccessUtil.serializeStringArray(obj.gridCells))
-    put.add(getCF, GRID_ID_LIST, AccessUtil.serializeStringArray(obj.gridIdList))
     val bytes: Array[Byte] = operatorExportToWkb.execute(0, obj.geom, null).array()
     put.add(getCF, GEOM, bytes)
+    put
   }
 
 
@@ -54,8 +51,6 @@ object AdminUnitDAO extends SerializableAnalysisUnit[TAdminUnit]{
     site.entityId= Bytes.toInt(result.getValue(getCF, ENTITY_ID))
     val bytes: Array[Byte] = result.getValue(getCF, GEOM)
     site.geom = operatorImportFromWkb.execute(0, Geometry.Type.Polygon, ByteBuffer.wrap(bytes), null)
-    site.gridCells = AccessUtil.deserializeStringArray(result.getValue(getCF, GRID_GEOMS))
-    site.gridIdList = AccessUtil.deserializeStringArray(result.getValue(getCF, GRID_ID_LIST))
 
     //TODO: Remove return value
 

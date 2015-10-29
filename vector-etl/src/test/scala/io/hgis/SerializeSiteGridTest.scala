@@ -64,7 +64,7 @@ class SerializeSiteGridTest extends SerializationTestBase[TSiteGrid] with Conver
   }
 
   override def areEqual(s1: TSiteGrid, s2: TSiteGrid): Boolean = {
-      if (!s1.iucnCat.equals(s2.iucnCat)) return false
+      if (!s1.isPoint.equals(s2.isPoint)) return false
       if (!s1.isDesignated.equals(s2.isDesignated)) return false
       if (!s1.gridId.equals(s2.gridId)) return false
       super.areEqual(s1, s2)

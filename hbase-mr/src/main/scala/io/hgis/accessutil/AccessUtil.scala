@@ -5,7 +5,7 @@ import java.io.{DataInputStream, ByteArrayInputStream, DataOutputStream}
 import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.io.{WKTReader, WKBReader}
 import org.apache.commons.io.output.ByteArrayOutputStream
-import org.apache.hadoop.hbase.client.Result
+import org.apache.hadoop.hbase.client.{Put, Result}
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.io.WritableUtils
 
@@ -15,6 +15,11 @@ import org.apache.hadoop.io.WritableUtils
  * Created by willtemperley@gmail.com on 12-Dec-14.
  */
 object AccessUtil {
+
+  def transferCell(result: Result, put: Put, cf: Array[Byte])(col: Array[Byte]): Unit = {
+    put.add(cf, col, result.getValue(cf, col))
+  }
+
 
   def serializeStringArray(strings: Array[String]): Array[Byte] = {
     val byteArrayOutputStream: ByteArrayOutputStream = new ByteArrayOutputStream()

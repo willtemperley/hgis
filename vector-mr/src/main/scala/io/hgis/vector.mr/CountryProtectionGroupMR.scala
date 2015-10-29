@@ -108,15 +108,15 @@ object CountryProtectionGroupMR {
                      context: Mapper[ImmutableBytesWritable, Result, ImmutableBytesWritable, Result]#Context): Unit = {
 
       //Don't even bother getting the int from bytes - just map the record directly
-//      val countryId = result.getValue(CFV, Bytes.toBytes("country_id"))
+//      val countryIdCol = result.getValue(CFV, Bytes.toBytes("country_id"))
       val iucnCats = result.getValue(CFV, Bytes.toBytes("iucn_cats"))
 
       //Emit either a country (not designated) or a designated area
-//      emittedKey.set(countryId ++ iucnCats)
+//      emittedKey.set(countryIdCol ++ iucnCats)
       emittedKey.set(iucnCats)
       context.write(emittedKey, result)
       
-//      val keys: List[(String, Array[Byte])] = List(("siteId", countryId), ("iucnCats", iucnCats))
+//      val keys: List[(String, Array[Byte])] = List(("siteId", countryIdCol), ("iucnCats", iucnCats))
     }
   }
 
@@ -139,14 +139,14 @@ object CountryProtectionGroupMR {
 //      val outGeom = localOp.execute(geoms, sr, null).next()
 //
       val inKey = key.get()
-//      val countryId = Bytes.toInt(inKey.slice(0, 4))
+//      val countryIdCol = Bytes.toInt(inKey.slice(0, 4))
 //      val iucnCats = Bytes.toString(inKey.slice(4, inKey.length))
 //
       val nextBytes = new Array[Byte](4)
       Random.nextBytes(nextBytes)
       val put = new Put(nextBytes ++ inKey)
 
-//      put.add(CF, "country_id".getBytes, Bytes.toBytes(countryId))
+//      put.add(CF, "country_id".getBytes, Bytes.toBytes(countryIdCol))
 //      put.add(CF, "iucn_cats".getBytes, Bytes.toBytes(iucnCats))
 //      val wkb = wkbExport.execute(WkbExportFlags.wkbExportDefaults, outGeom, null).array()
 //      put.add(CF, "geom".getBytes, wkb)

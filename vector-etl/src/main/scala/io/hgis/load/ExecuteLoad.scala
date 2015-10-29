@@ -10,13 +10,15 @@ object ExecuteLoad {
 
   val configuredTables = Map[String, GridLoader[_]](
 
-    "pa_grid" -> new LoadPAs,
+    "pa_grid" -> new DirectLoadPAs,
+    "au_grid" -> new LoadAUs,
     "ee_grid" -> new LoadEEZs,
     "osm_grid" -> new LoadWayGrids,
-    "pa" -> new LoadSites
+    "pa" -> new LoadPAs
 
   )
 
+  //TODO - add truncate option!
 
   def main(args: Array[String]) {
 

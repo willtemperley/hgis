@@ -10,11 +10,11 @@ import org.apache.hadoop.hbase.util.Bytes
  */
 trait TSiteGrid extends HasRowKey with GriddedEntity {
 
-  var iucnCat: String
-
   var catId: Int
 
   var isDesignated: Boolean
+
+  var isPoint: Boolean
 
   //Very paranoid rowkey generation!
   override def getRowKey: Array[Byte] = {

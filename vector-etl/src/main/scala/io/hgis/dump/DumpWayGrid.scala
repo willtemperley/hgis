@@ -14,26 +14,22 @@ import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp
 import org.apache.hadoop.hbase.filter.{BinaryComparator, SingleColumnValueFilter}
 import org.apache.hadoop.hbase.util.Bytes
 
-class DumpWayGrid extends ExtractionBase[WayGrid]  {
+class DumpWayGrid extends ExtractionBase  {
 
-  val COLFAM: Array[Byte] = "cfv".getBytes
+  val CF: Array[Byte] = "cfv".getBytes
 
-  val injector = Guice.createInjector(new JPAModule)
-  
-// = new HTable(ConfigurationFactory.get, "ee_protection")
-  val catID = 1
-
-  def gridId = AccessUtil.intColumn(COLFAM, "grid_id") _
-  def analysisUnitId = AccessUtil.longColumn(COLFAM, "entity_id") _
-  def catId = AccessUtil.intColumn(COLFAM, "cat_id") _
+  def gridId = AccessUtil.intColumn(CF, "grid_id") _
+  def analysisUnitId = AccessUtil.longColumn(CF, "entity_id") _
+  def catId = AccessUtil.intColumn(CF, "cat_id") _
 
   def getScan: Scan = {
     val scan: Scan = new Scan
     scan
   }
 
-  override def persistEntity(res: Result, x: WayGrid): Unit = {
+  override def buildEntity(res: Result): Unit = {
 
+    val x = new WayGrid
     x.jtsGeom = jtsWkbReader.read(res.getValue("cfv".getBytes, "geom".getBytes))
     x.gridId = gridId(res)
 //    x.entityId = analysisUnitId(res)
@@ -42,7 +38,6 @@ class DumpWayGrid extends ExtractionBase[WayGrid]  {
 
   }
 
-  override def createEntity: WayGrid = new WayGrid
 
 }
 

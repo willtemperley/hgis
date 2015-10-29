@@ -16,60 +16,28 @@ import io.hgis.inject.JPAModule
 import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.hbase.client._
 
-object DumpEEGrid {
+class DumpEEGrid extends ExtractionBase {
 
-  val injector = Guice.createInjector(new JPAModule)
-  val em = injector.getInstance(classOf[EntityManager])
-  val COLFAM: Array[Byte] = SiteGridDAO.getCF
+  val CF = "cfv".getBytes
 
-  val wkbReader = new WKBReader
-  val wkbExportOp = OperatorExportToWkb.local()
-  def main(args: Array[String]) {
-
-//    Preconditions.checkArgument(args.length == 3, "Table, CF and rowkey please!")
-
-    val htable: HTableInterface = new HTable(ConfigurationFactory.get, "ee_grid")
-    System.out.println("Processing table " + htable)
-
-    val scan: Scan = new Scan
-
-    scan.addFamily(COLFAM)
-
-    em.getTransaction.begin()
-    var i = 0
-    val scanner: ResultScanner = htable.getScanner(scan)
-      var result: Result = scanner.next
-      while (result != null) {
-        i += 1
-        persistEntity(result)
-        if (i % 1000 == 0) {
-          println(i)
-          em.getTransaction.commit()
-          em.getTransaction.begin()
-        }
-
-        result = scanner.next
-      }
-    em.getTransaction.commit()
-
-    htable.close()
-  }
-
+  def geomCol = AccessUtil.geomColumn(jtsWkbReader, CF, "geom") _
   def gridId = AccessUtil.intColumn("cfv", "grid_id") _
+  def entityId = AccessUtil.intColumn("cfv", "entity_id") _
 
-  //FIXME should be ee_id
-  def eeId = AccessUtil.intColumn("cfv", "site_id") _
 
-  def persistEntity(res: Result): Unit = {
-
-    val x = new EEGrid
-
-    x.geom = wkbReader.read(res.getValue("cfv".getBytes, "geom".getBytes))
-    x.gridId = gridId(res)
-    x.eeId = eeId(res)
-
-    em.persist(x)
-
+  override def getScan: Scan = {
+    val scan: Scan = new Scan
+    scan.addFamily(CF)
   }
+
+
+  override def buildEntity(result: Result): Unit = {
+    val obj = new EEGrid
+    obj.jtsGeom = geomCol(result)
+    obj.gridId = gridId(result)
+    obj.entityId = entityId(result)
+    em.persist(obj)
+  }
+
 }
 

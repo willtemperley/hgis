@@ -14,6 +14,7 @@ package io.hgis.vector.mr
  */
 
 import com.esri.core.geometry.OperatorImportFromWkt
+import io.hgis.ConfigurationFactory
 import io.hgis.vector.domain.SiteGridDAO
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.client.{Put, Result, Scan}
@@ -28,10 +29,7 @@ object SiteGridMutatorMR {
 
   def main(args: Array[String]) {
 
-    val conf: Configuration =  new Configuration
-    conf.set("hbase.zookeeper.quorum", "hadoop-m2,hadoop-02,hadoop-m1")
-    conf.set("hbase.zookeeper.clientPort", "2181")
-    conf.set("hbase.master", "hadoop-m1")
+    val conf= ConfigurationFactory.get
 
     val scan: Scan = new Scan
     scan.addFamily(SiteGridDAO.getCF)
@@ -62,11 +60,11 @@ object SiteGridMutatorMR {
       outputKey.set(key.get)
       val out = new Put(key.get)
 
-      val iucnCat = Bytes.toString(result.getValue("cfv".getBytes, SiteGridDAO.IUCN_CAT))
+//      val iucnCat = Bytes.toString(result.getValue("cfv".getBytes, SiteGridDAO.IUCN_CAT))
 
-      val catId = catIdMap(iucnCat)
+//      val catId = catIdMap(iucnCat)
 
-      out.add(SiteGridDAO.getCF, SiteGridDAO.CAT_ID, Bytes.toBytes(catId))
+//      out.add(SiteGridDAO.getCF, SiteGridDAO.CAT_ID, Bytes.toBytes(catId))
 
       context.write(outputKey, out)
 
