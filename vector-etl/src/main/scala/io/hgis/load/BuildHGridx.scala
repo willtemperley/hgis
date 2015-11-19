@@ -14,7 +14,7 @@ import io.hgis.domain.GridCell
  *
  * Created by willtemperley@gmail.com on 24/10/2014.
  */
-object BuildHGrid {
+object BuildHGridx {
 
   val writer = new WKBWriter
 

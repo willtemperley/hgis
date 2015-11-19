@@ -9,10 +9,10 @@ import SiteGridDAO.SiteGrid
 import scala.collection.mutable.ListBuffer
 
 /**
- * Polygon intersection utility
- *
- * Created by tempehu on 07-Nov-14.
- */
+  * Polygon intersection utility
+  *
+  * Created by tempehu on 07-Nov-14.
+  */
 object IntersectUtil {
 
   val sr = SpatialReference.create(4326)
@@ -39,8 +39,7 @@ object IntersectUtil {
     Iterator.continually(outGeoms.next).takeWhile(_ != null)
   }
 
-  //FIXME just move to class
-  class GriddedEntityX extends GriddedEntity{
+  class GriddedEntityX extends GriddedEntity {
     override var geom: Geometry = _
     override var gridId: Int = _
     override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
@@ -49,51 +48,41 @@ object IntersectUtil {
 
 
   /**
-   * Populates a list of SiteGrids with their geom and grid id, ignoring all zero area outputs
-   *
-   * @param analysisUnit the AnalysisUnit to cut up
-   * @param geomList the intersectors (e.g. a grid)
-   * @param gridIds the ids of the intersectors
-   * @return
-   */
+    * Populates a list of SiteGrids with their geom and grid id, ignoring all zero area outputs
+    *
+    * @param analysisUnit the AnalysisUnit to cut up
+    * @param geomList the intersectors (e.g. a grid)
+    * @param gridIds the ids of the intersectors
+    * @return
+    */
   def executeIntersect(analysisUnit: AnalysisUnit, geomList: Array[Geometry], gridIds: Array[Int], dimensionMask: Int): List[GriddedEntity] = {
 
-    try {
-      val bigPoly = new SimpleGeometryCursor(analysisUnit.geom)
-      val inGeoms = new SimpleGeometryCursor(geomList)
+    val bigPoly = new SimpleGeometryCursor(analysisUnit.geom)
+    val inGeoms = new SimpleGeometryCursor(geomList)
 
-      val localOp = OperatorIntersection.local()
-      localOp.accelerateGeometry(analysisUnit.geom, sr, Geometry.GeometryAccelerationDegree.enumMedium)
+    val localOp = OperatorIntersection.local()
+    localOp.accelerateGeometry(analysisUnit.geom, sr, Geometry.GeometryAccelerationDegree.enumMedium)
 
+    val outGeoms = localOp.execute(inGeoms, bigPoly, sr, null, dimensionMask)
 
-      val outGeoms = localOp.execute(inGeoms, bigPoly, sr, null, dimensionMask)
+//    Iterator.continually(outGeoms.next).takeWhile(_ != null).map((f: Geometry) => f)
 
-      Iterator.continually(outGeoms.next).takeWhile(_ != null).map((f: Geometry) => f)
+    val sgs = new ListBuffer[GriddedEntity]
+    var result = outGeoms.next
+    var geomId = outGeoms.getGeometryID
+    while (result != null) {
+      if (!result.isEmpty) {
 
+        val sg = new GriddedEntityX
 
-      val sgs = new ListBuffer[GriddedEntity]
-      var result = outGeoms.next
-      var geomId = outGeoms.getGeometryID
-      while (result != null) {
-        if (result.calculateArea2D() > 0 || result.calculateLength2D() > 0) {
-
-          val sg = new GriddedEntityX
-
-          sg.geom = result
-          sg.gridId = gridIds(geomId)
-          sg.entityId = analysisUnit.entityId
-          sgs.append(sg)
-        }
-        result = outGeoms.next
-        geomId = outGeoms.getGeometryID
+        sg.geom = result
+        sg.gridId = gridIds(geomId)
+        sg.entityId = analysisUnit.entityId
+        sgs.append(sg)
       }
-      sgs.toList
-    } catch {
-      case e: Exception => {
-        e.printStackTrace()
-        println("Failed on : " + analysisUnit.entityId)
-      }
-      null
+      result = outGeoms.next
+      geomId = outGeoms.getGeometryID
     }
+    sgs.toList
   }
 }

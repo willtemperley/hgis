@@ -1,5 +1,6 @@
 package io.hgis.load
 
+import java.util
 import javax.persistence.EntityManager
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, WkbExportFlags}
@@ -13,6 +14,7 @@ import org.apache.hadoop.hbase.client.{Put, HTableInterface}
 import org.apache.hadoop.hbase.util.Bytes
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
 
 /**
  * Only ids are provided as a list because the objects are so big.
@@ -20,10 +22,25 @@ import scala.collection.JavaConversions._
  *
  * Created by willtemperley@gmail.com on 13-Oct-15.
  */
-abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geometry.Type = Geometry.Type.Polygon) extends ConvertsGeometry {
+abstract class GridLoader[E <: AnalysisUnit](val clazz: Class[E], val geomType: Geometry.Type = Geometry.Type.Polygon) extends ConvertsGeometry {
 
   object GridLoader {
     val CF = "cfv".getBytes
+  }
+
+  class ProgressMonitor(initialSize: Int, var pcDone: Int = 0) {
+
+    def updateProgress(idx: Int): Unit = {
+
+      val pc = ((idx * 100) / initialSize.asInstanceOf[Double]).floor.toInt
+      if (pc > pcDone) {
+        pcDone = pc
+        print("\b\b\b\b\b\b\b\b\b\b")
+        println(s"$pcDone% complete")
+      }
+
+    }
+
   }
 
   /*
@@ -52,15 +69,16 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
   def getEntity(id: Any): E = {
     print("\b\b\b\b\b\b\b\b\b\b\b")
     println()
-    print("%10d".format(id.toString.toInt))
+    print(f"${id.toString.toInt}%10d")
     em.find(clazz, id)
   }
 
   def executeLoad(table: HTableInterface) {
 
     val ids = getIds.toList
-    val sz = ids.size
-    var pcDone = 0
+    val progressMonitor = new ProgressMonitor(ids.size)
+
+    table.setAutoFlushTo(false)
 
     for (analysisUnitId <- ids.zipWithIndex) {
 
@@ -68,26 +86,29 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
       if(analysisUnit == null) {
         throw new RuntimeException(clazz.getSimpleName + " was not found with id: " + analysisUnitId)
       }
-      insertGridCells(table, analysisUnit)
 
-      val pc = ((analysisUnitId._2 * 100) / sz.asInstanceOf[Double]).floor.toInt
+      val gridCells = getHGrid(analysisUnit.jtsGeom.getEnvelopeInternal)
 
-      if (pc > pcDone) {
-        pcDone = pc
-        print("\b\b\b\b\b\b\b\b\b\b")
-        println("%s%% complete".format(pcDone))
-      }
+      val gridCellPutList: Iterable[Put] =  executeGridding(analysisUnit, gridCells)
+      gridCellPutList.foreach(table.put)
+      table.flushCommits()
+      notifyComplete(analysisUnit)
+
+      progressMonitor.updateProgress(analysisUnitId._2)
+
 
     }
+    table.flushCommits()
   }
+
 
   def getHGrid(env: Envelope): java.util.ArrayList[GridCell] = {
 
-    val envString = "st_setsrid(st_makebox2d(st_makepoint(%s, %s), st_makepoint(%s, %s)), 4326)".format(env.getMinX, env.getMinY, env.getMaxX, env.getMaxY)
-
-    val q = em.createNativeQuery("SELECT id, geom " +
-      "FROM hgrid.h_grid where geom && " + envString , classOf[GridCell])
+    val envString = s"st_setsrid(st_makebox2d(st_makepoint(${env.getMinX}, ${env.getMinY}), st_makepoint(${env.getMaxX}, ${env.getMaxY})), 4326)"
+    val q = em.createNativeQuery("SELECT id, geom, is_leaf, parent_id " +
+      "FROM hgrid.h_grid_node where is_leaf and geom && " + envString , classOf[GridCell])
     q.getResultList.asInstanceOf[java.util.ArrayList[GridCell]]
+
   }
 
   /*
@@ -95,7 +116,7 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
    */
   def notifyComplete(analysisUnit: E): Unit = {}
 
-  def insertGridCells(hTable: HTableInterface, analysisUnit: E): Int = {
+  def executeGridding(analysisUnit: E, gridCells: util.List[GridCell], buffer: ListBuffer[Put] = new ListBuffer[Put]): ListBuffer[Put] = {
 
     //Still messy!
     if (analysisUnit.geom == null) {
@@ -104,37 +125,19 @@ abstract class GridLoader[E <: AnalysisUnit](clazz: Class[E], val geomType: Geom
     if (analysisUnit.jtsGeom == null) {
       analysisUnit.jtsGeom = esriToJTS(analysisUnit.geom)
     }
-    val gridCells = getHGrid(analysisUnit.jtsGeom.getEnvelopeInternal)
+
     val gridGeoms = gridCells.map(f => jtsToEsri(f.jtsGeom)).toArray
     val gridIds = gridCells.map(f => f.gridId).toArray
-
-//    if(gridIds.length > 0) println("grids: " + gridIds.length)
-
 
     val griddedEntities: List[GriddedEntity] = IntersectUtil.executeIntersect(analysisUnit, gridGeoms, gridIds, dimensionMask)
 
     for (sg <- griddedEntities) {
-
-
       val put = GriddedObjectDAO.toPut(sg, getRowKey(analysisUnit.entityId, sg.gridId))
-      //new Put(getRowKey(analysisUnit.entityId, sg.gridIdCol))
-//      val ixPaGrid: Array[Byte] = wkbExportOp.execute(WkbExportFlags.wkbExportDefaults, sg.geom, null).array()
-//      put.add(GridLoader.CF, GRID_ID, Bytes.toBytes(sg.gridIdCol))
-//      put.add(GridLoader.CF, ENTITY_ID, Bytes.toBytes(analysisUnit.entityId))
-//      put.add(GridLoader.CF, GEOM, ixPaGrid)
-      //Flag completely covered
-
       //More specialised classes can add extra columns
       addColumns(put, analysisUnit)
-
-      hTable.put(put)
+      buffer += put
     }
-
-    hTable.flushCommits()
-    notifyComplete(analysisUnit)
-    griddedEntities.size
-
-//    println(analysisUnit.name + " done.")
+    buffer
   }
 
   def getRowKey(wdpaId: Long, gridId: Int): Array[Byte] = {

@@ -1,6 +1,6 @@
 package io.hgis.load
 
-import io.hgis.domain.{PALoadLog, Site}
+import io.hgis.domain.{LoadQueue, Site}
 import org.apache.hadoop.hbase.client.Put
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec.SELECT
@@ -31,13 +31,19 @@ class DirectLoadPAs extends GridLoader[Site](classOf[Site]) {
   }
 
   override def notifyComplete(obj: Site): Unit = {
-    val paLoaded = new PALoadLog
-    paLoaded.isLoaded = true
-    paLoaded.siteId = obj.entityId
-
-    em.getTransaction.begin()
-    em.persist(paLoaded)
-    em.getTransaction.commit()
+//    val paLoaded = new LoadQueue
+//    paLoaded.isLoaded = true
+//
+//    //FIXME
+//    paLoaded.id = new paLoaded.LqId
+//    paLoaded.id.entityId = obj.entityId
+//    paLoaded.id.entityType = "pa"
+////    paLoaded.id
+////      = obj.entityId
+//
+//    em.getTransaction.begin()
+//    em.persist(paLoaded)
+//    em.getTransaction.commit()
   }
 
 

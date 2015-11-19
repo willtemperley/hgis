@@ -13,6 +13,8 @@ class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
 
   val geomFact = new GeometryFactory(new PrecisionModel(), 4326)
 
+  val step = 360d / w
+
   /**
    * Snaps a geographical coordinate to a grid coordinate
    *
@@ -24,6 +26,8 @@ class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
 
     val x1 = (((x + 180) * w) / 360).toInt
     val y1 = (((y + 90) * h)  / 180).toInt
+//        val x1 = Math.round(((x + 180) * w) / 360).toInt
+//        val y1 = Math.round(((y + 90) * h)  / 180).toInt
 
     (x1, y1)
   }

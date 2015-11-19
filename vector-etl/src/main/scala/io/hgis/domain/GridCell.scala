@@ -13,21 +13,31 @@ import org.hibernate.annotations.Type
  * An instance of a Hierarchical grid cell
  *
  */
+//@Entity
+//@Table(schema = "hgrid", name = "h_grid")
 @Entity
-@Table(schema = "hgrid", name = "h_grid")
+@Table(schema = "hgrid", name = "h_grid_node")
 class GridCell extends TGridCell {
 
    @Id
    @Column(name = "id")
-   @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq")
-   @SequenceGenerator(allocationSize = 1, name = "seq", sequenceName = "hgrid.h_grid_id_seq")
+//   @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq")
+//   @SequenceGenerator(allocationSize = 1, name = "seq", sequenceName = "hgrid.h_grid_id_seq")
    override var gridId: Int = _
 
    @Type(`type` = "org.hibernate.spatial.GeometryType")
    @Column(name = "geom")
-   var jtsGeom: Polygon = _
+   var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
 
    @Transient
    override var geom: Geometry = _
+
+   @Column(name = "parent_id")
+   var parentId: Int = _
+
+
+   @Column(name = "is_leaf")
+   var isLeaf: Boolean = false
+
 
 }

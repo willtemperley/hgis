@@ -14,6 +14,7 @@ object ExecuteDump {
     "ee_protection" -> new DumpEcoregionProtection,
     "osm_grid" -> new DumpWayGrid,
     "pa_grid" -> new DumpSiteGrid,
+    "sp_grid" -> new DumpSppGrid,
     "pa" -> new TestPA //FIXME just printing for now
 
   )

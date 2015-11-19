@@ -61,7 +61,7 @@ object RasterizeMR {
     job.setJarByClass(this.getClass)
     TableMapReduceUtil.addDependencyJars(job)
 
-    TableMapReduceUtil.initTableMapperJob("transport", scan,
+    TableMapReduceUtil.initTableMapperJob("speed_ways", scan,
       classOf[WayRasterMapper], classOf[ImmutableBytesWritable], classOf[ImmutableBytesWritable], job)
 
 //    job.setCombinerClass(classOf[MyTableCombiner])

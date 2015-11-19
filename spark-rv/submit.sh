@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+spark-submit --class io.hgis.Sparkle2 --jars target/dependency/hbase-mr-0.1-SNAPSHOT.jar,target/dependency/vector-mr-0.1-SNAPSHOT.jar,target/dependency/esri-geometry-api-1.2.jar --master yarn-client target/spark-rv-0.1-SNAPSHOT.jar

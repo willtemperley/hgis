@@ -4,6 +4,7 @@ import io.hgis.ConfigurationFactory
 import org.junit.{Assert, Test}
 
 /**
+ *
  * Created by willtemperley@gmail.com on 07-Jul-15.
  */
 class TestConf {

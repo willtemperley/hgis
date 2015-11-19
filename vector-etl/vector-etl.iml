@@ -23,7 +23,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: io.hgis:vector-mr:0.1-SNAPSHOT" level="project" />
-    <orderEntry type="module" module-name="hbase-mr" />
+    <orderEntry type="library" name="scala-sdk-2.10.4 (2)" level="application" />
     <orderEntry type="module" module-name="vector-mr" />
     <orderEntry type="module" module-name="hbase-mr" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-core_2.10:1.2.0" level="project" />
@@ -202,7 +202,7 @@
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-annotations:2.5.0-cdh5.3.3" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: jdk.tools:jdk.tools:1.7">
+      <library name="Maven: jdk.tools:jdk.tools:1.6">
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk1.7.0_75/lib/tools.jar!/" />
         </CLASSES>
