@@ -37,8 +37,8 @@
         <!-- Spark -->
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.10</artifactId>
-            <version>1.2.0</version>
+            <artifactId>spark-yarn_2.10</artifactId>
+            <version>1.2.0-cdh5.3.3</version>
         </dependency>
 
         <!-- Hibernate -->

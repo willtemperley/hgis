@@ -5,7 +5,7 @@ import javax.persistence.EntityManager
 
 import com.esri.core.geometry.{Geometry, OperatorExportToWkb, WkbExportFlags}
 import com.vividsolutions.jts.geom.Envelope
-import io.hgis.domain.GridCell
+import io.hgis.domain.GridNode
 import io.hgis.hdomain.{GriddedObjectDAO, ConvertsGeometry, GriddedEntity, AnalysisUnit}
 import io.hgis.op.IntersectUtil
 import io.hgis.vector.domain.SiteGridDAO.SiteGrid
@@ -22,7 +22,7 @@ import scala.collection.mutable.ListBuffer
  *
  * Created by willtemperley@gmail.com on 13-Oct-15.
  */
-abstract class GridLoader[E <: AnalysisUnit](val clazz: Class[E], val geomType: Geometry.Type = Geometry.Type.Polygon) extends ConvertsGeometry {
+abstract class GridLoader[E <: AnalysisUnit](val clazz: Class[E], val geomType: Geometry.Type = Geometry.Type.Polygon) extends ConvertsGeometry with GridLoaderX{
 
   object GridLoader {
     val CF = "cfv".getBytes
@@ -38,9 +38,7 @@ abstract class GridLoader[E <: AnalysisUnit](val clazz: Class[E], val geomType: 
         print("\b\b\b\b\b\b\b\b\b\b")
         println(s"$pcDone% complete")
       }
-
     }
-
   }
 
   /*
@@ -102,12 +100,12 @@ abstract class GridLoader[E <: AnalysisUnit](val clazz: Class[E], val geomType: 
   }
 
 
-  def getHGrid(env: Envelope): java.util.ArrayList[GridCell] = {
+  def getHGrid(env: Envelope): java.util.ArrayList[GridNode] = {
 
     val envString = s"st_setsrid(st_makebox2d(st_makepoint(${env.getMinX}, ${env.getMinY}), st_makepoint(${env.getMaxX}, ${env.getMaxY})), 4326)"
     val q = em.createNativeQuery("SELECT id, geom, is_leaf, parent_id " +
-      "FROM hgrid.h_grid_node where is_leaf and geom && " + envString , classOf[GridCell])
-    q.getResultList.asInstanceOf[java.util.ArrayList[GridCell]]
+      "FROM hgrid.h_grid_node where is_leaf and geom && " + envString , classOf[GridNode])
+    q.getResultList.asInstanceOf[java.util.ArrayList[GridNode]]
 
   }
 
@@ -116,7 +114,7 @@ abstract class GridLoader[E <: AnalysisUnit](val clazz: Class[E], val geomType: 
    */
   def notifyComplete(analysisUnit: E): Unit = {}
 
-  def executeGridding(analysisUnit: E, gridCells: util.List[GridCell], buffer: ListBuffer[Put] = new ListBuffer[Put]): ListBuffer[Put] = {
+  def executeGridding(analysisUnit: E, gridCells: util.List[GridNode], buffer: ListBuffer[Put] = new ListBuffer[Put]): ListBuffer[Put] = {
 
     //Still messy!
     if (analysisUnit.geom == null) {

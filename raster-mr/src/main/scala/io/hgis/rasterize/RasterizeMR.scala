@@ -61,15 +61,17 @@ object RasterizeMR {
     job.setJarByClass(this.getClass)
     TableMapReduceUtil.addDependencyJars(job)
 
-    TableMapReduceUtil.initTableMapperJob("speed_ways", scan,
+    TableMapReduceUtil.initTableMapperJob("transport", scan,
       classOf[WayRasterMapper], classOf[ImmutableBytesWritable], classOf[ImmutableBytesWritable], job)
 
 //    job.setCombinerClass(classOf[MyTableCombiner])
 
     val clazz =
 //    if (args.length > 1 && args(0).equals("precedence")) {
-      classOf[PrecedenceReducer]
-          println("Using Precedence")
+      classOf[PrecedenceReducer2]
+          println("Using Precedence 2")
+//          classOf[PrecedenceReducer]
+//              println("Using Precedence 1")
 //    } else {
 //      println("Using Additive")
 //      classOf[AdditiveReducer]
@@ -85,20 +87,22 @@ object RasterizeMR {
    *  A rasterizer with additive behaviour
    */
   class AdditiveReducer extends ImageTileReducer {
-    override def getPlotter(ras: WritableRaster): Plotter = {
-      new AdditivePlotter(ras)
-    }
+    override def getPlotter(ras: WritableRaster) = new AdditivePlotter(ras)
   }
 
   /*
-   *  A rasterizer which takes pixel with the highest precedence
+   *  A rasterizer which writes pixels with the highest precedence
    */
   class PrecedenceReducer extends ImageTileReducer {
-    override def getPlotter(ras: WritableRaster): Plotter = {
-      new PrecedencePlotter(ras)
-    }
+    override def getPlotter(ras: WritableRaster) = new PrecedencePlotter(ras)
   }
 
+  /*
+   *  A rasterizer which writes pixels with the highest precedence, which are remapped
+   */
+  class PrecedenceReducer2 extends ImageTileReducer {
+    override def getPlotter(ras: WritableRaster) = new PrecedencePlotter2(ras)
+  }
 
 
   /**
@@ -142,6 +146,9 @@ object RasterizeMR {
 
       //not interested in water at the mo
       if (wwy != null) return
+      //not interested in railways
+//      if (rwy == null) return
+
 
       //Send the pixel info to a grid id
       val plotter = new  Plotter {
@@ -223,12 +230,52 @@ object RasterizeMR {
     val p2 = new Array[Int](1)
 
     def plot(x: Int, y: Int) {
-
       raster.getPixel(x, y, p1)
-      if (p1(0) == 0d || (p2(0) < p1(0))) {
+      if (p1(0) == 0 || (p2(0) < p1(0))) {
         raster.setPixel(x, y, p2)
       }
+    }
 
+    override def setValue(v: Int): Unit = p2(0) = v
+  }
+
+  class PrecedencePlotter2(raster: WritableRaster) extends Plotter {
+
+    val p1 = new Array[Int](1)
+    val p2 = new Array[Int](1)
+
+    val classToPrecedenceMap = Map(
+      1 -> 1,//"motorway"
+      2 -> 1,//"trunk"
+      4 -> 2,//"primary"
+      5 -> 3,//"secondary"
+      6 -> 4,//"tertiary"
+      7 -> 1,//"motorway link"
+      8 -> 3,//"primary link"
+      9 -> 5,//"unclassified"
+      10 -> 5,//"road"
+      11 -> 6,//"residential"
+      12 -> 7,//"service"
+      13 -> 5,//"track"
+      14 -> 8,//"pedestrian"
+      15 -> 9//"Other"
+    ).withDefaultValue(9)
+
+    def plot(x: Int, y: Int) {
+
+      raster.getPixel(x, y, p1)
+
+      //CurrentVal and nextVal are the current raster val and the maybe value
+      val currentVal = classToPrecedenceMap.getOrElse(p1(0), 9)
+      val newVal = classToPrecedenceMap.getOrElse(p2(0), 9)
+
+      //zero maps to 9 by default, so
+
+      if (p2(0) != 3) {
+        if (p1(0) == 0 || newVal < currentVal) {
+          raster.setPixel(x, y, p2)
+       }
+      }
     }
 
     override def setValue(v: Int): Unit = p2(0) = v
@@ -299,23 +346,5 @@ object RasterizeMR {
 
   }
 
-  //  class MyTableCombiner extends Reducer[ImmutableBytesWritable, ImmutableBytesWritable, ImmutableBytesWritable, ImmutableBytesWritable] {
-  //
-  //    val pixel = new ImmutableBytesWritable()
-  //
-  ////    private final IntWritable iw = new IntWritable();
-  //    override def reduce(key: ImmutableBytesWritable,
-  //                    values: Iterable[ImmutableBytesWritable],
-  //                    context: Reducer[ImmutableBytesWritable, ImmutableBytesWritable, ImmutableBytesWritable, ImmutableBytesWritable]#Context): Unit = {
-  //
-  //        val x = values.map(_.get()).toList.distinct
-  //        for (y <- x) {
-  //          pixel.set(y)
-  //          context.write(key, pixel)
-  //        }
-  ////      values.toList.distinct.foreach(v => context.write(key, v))
-  //
-  //    }
-  //  }
 }
 

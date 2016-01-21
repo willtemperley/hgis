@@ -141,13 +141,6 @@ object AdminUnitIXMR {
         }
 
 
-//        //Calculate protection minus country
-//        val d = diffOp.execute(cG.geom, diff, sr, null)
-
-        //Do nothing if there's no area
-//        if (diff.calculateArea2D() == 0) return
-
-
       }
     }
   }

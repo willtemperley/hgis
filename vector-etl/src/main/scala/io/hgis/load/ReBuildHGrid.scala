@@ -7,7 +7,7 @@ import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.geom.util.AffineTransformation
 import com.vividsolutions.jts.io.{WKBWriter, WKTReader}
 import com.vividsolutions.jts.{geom => jts}
-import io.hgis.domain.GridCell
+import io.hgis.domain.GridNode
 
 /**
  * Builds a hierarchical grid based on the data density
@@ -18,10 +18,12 @@ object ReBuildHGrid {
 
   val writer = new WKBWriter
 
-  val westernHemisphere: String = "POLYGON((-180 -90,-180 90,0 90,0 -90,-180 -90))"
+//  val world: String = "POLYGON((-180 -90,-180 90,180 90,180 -90,-180 -90))"
   val easternHemisphere: String = "POLYGON((0 -90,0 90,180 90,180 -90,0 -90))"
+  val westernHemisphere: String = "POLYGON((-180 -90,-180 90,0 90,0 -90,-180 -90))"
 
-  var startVal = 1000000
+  var startVal = 0
+  val pointCountThreshold: Int = 1500
 
   def main(args: Array[String]) {
 
@@ -34,16 +36,17 @@ object ReBuildHGrid {
     em.getTransaction.begin()
     val geometry = geomFromText(hemisphere)
 
-    val startNode = new GridCell
+    val startNode = new GridNode
     startNode.jtsGeom = geometry
     startNode.gridId = startVal
+    startNode.parentId = 0
 
     divide(startNode, em)
     em.getTransaction.commit()
 
   }
 
-  def divide(g: GridCell, em: EntityManager) {
+  def divide(g: GridNode, em: EntityManager) {
 
     val env = g.jtsGeom.getEnvelopeInternal
 
@@ -88,30 +91,30 @@ object ReBuildHGrid {
     //Persisting everything, but NB base case is treated differently.
     em.persist(g)
 
-    /* Otherwise, split into 4 */
+    /* Split into 4 */
     val dX = (env.getMaxX - env.getMinX) / 2
     val dY = (env.getMaxY - env.getMinY) / 2
 
     startVal += 1
-    val ll = new GridCell
+    val ll = new GridNode
     ll.gridId = startVal
     ll.parentId = g.gridId
     ll.jtsGeom = AffineTransformation.scaleInstance(0.5, 0.5, env.getMinX, env.getMinY).transform(g.jtsGeom)
 
     startVal += 1
-    val lr = new GridCell
+    val lr = new GridNode
     lr.gridId = startVal
     lr.parentId = g.gridId
     lr.jtsGeom =  AffineTransformation.translationInstance(dX, 0).transform(ll.jtsGeom)
 
     startVal += 1
-    val ur = new GridCell
+    val ur = new GridNode
     ur.gridId = startVal
     ur.parentId = g.gridId
     ur.jtsGeom = AffineTransformation.translationInstance(dX, dY).transform(ll.jtsGeom)
 
     startVal += 1
-    val ul = new GridCell
+    val ul = new GridNode
     ul.gridId = startVal
     ul.parentId = g.gridId
     ul.jtsGeom = AffineTransformation.translationInstance(0, dY).transform(ll.jtsGeom)

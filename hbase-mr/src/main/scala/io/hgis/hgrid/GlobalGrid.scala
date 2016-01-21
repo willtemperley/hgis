@@ -45,7 +45,6 @@ class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
     val b = Math.floor(y / tileSize).toInt
 
     toBytes(a, b)
-
   }
 
   /**

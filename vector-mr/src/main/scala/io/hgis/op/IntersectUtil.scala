@@ -2,6 +2,7 @@ package io.hgis.op
 
 import com.esri.core.geometry._
 import com.vividsolutions.jts.geom
+import io.hgis.hdomain.GriddedObjectDAO.GriddedObject
 import io.hgis.hdomain.{GriddedEntity, AnalysisUnit}
 import io.hgis.vector.domain.SiteGridDAO
 import SiteGridDAO.SiteGrid
@@ -39,14 +40,6 @@ object IntersectUtil {
     Iterator.continually(outGeoms.next).takeWhile(_ != null)
   }
 
-  class GriddedEntityX extends GriddedEntity {
-    override var geom: Geometry = _
-    override var gridId: Int = _
-    override var jtsGeom: com.vividsolutions.jts.geom.Geometry = _
-    override var entityId: Long = _
-  }
-
-
   /**
     * Populates a list of SiteGrids with their geom and grid id, ignoring all zero area outputs
     *
@@ -73,7 +66,7 @@ object IntersectUtil {
     while (result != null) {
       if (!result.isEmpty) {
 
-        val sg = new GriddedEntityX
+        val sg = new GriddedObject
 
         sg.geom = result
         sg.gridId = gridIds(geomId)

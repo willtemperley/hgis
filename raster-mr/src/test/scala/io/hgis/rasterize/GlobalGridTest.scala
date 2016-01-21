@@ -15,7 +15,6 @@ class GlobalGridTest {
   @Test
   def serializeDeserialize(): Unit = {
 
-
     val key = grid.toBytes(500,1000)
 
     val pix = grid.keyToPixel(key)

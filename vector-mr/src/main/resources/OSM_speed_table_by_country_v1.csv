@@ -1,0 +1,791 @@
+Sort,GAUL,country_id,country_name,OSM Class,OSM_tag_name,OSM_speed KmPH,CT
+1,3,ALB,Albania,1,motorway,110,5
+2,3,ALB,Albania,2,trunk,120,5
+3,3,ALB,Albania,8,primary_link,40,15
+4,3,ALB,Albania,11,res_and_ls,20,30
+5,4,DZA,Algeria,1,motorway,100,6
+6,4,DZA,Algeria,2,trunk,100,6
+7,4,DZA,Algeria,5,secondary,100,6
+8,4,DZA,Algeria,7,motorway_link,100,6
+9,4,DZA,Algeria,11,res_and_ls,15,40
+10,6,SDN,Sudan,4,primary,50,12
+11,6,SDN,Sudan,5,secondary,40,15
+12,6,SDN,Sudan,6,tertiary,30,20
+13,6,SDN,Sudan,11,residential,30,20
+14,7,AND,Andorra,5,secondary,50,12
+15,7,AND,Andorra,6,tertiary,60,10
+16,7,AND,Andorra,11,residential,20,30
+17,8,AGO,Angola,1,motorway,100,6
+18,8,AGO,Angola,2,trunk,110,5
+19,8,AGO,Angola,4,primary,100,6
+20,8,AGO,Angola,5,secondary,100,6
+21,8,AGO,Angola,11,res_and_ls,25,24
+22,11,ATG,Antigua and Barbuda,6,tertiary,32,19
+23,11,ATG,Antigua and Barbuda,11,residential,32,19
+24,12,ARG,Argentina,1,motorway,100,6
+25,12,ARG,Argentina,2,trunk,100,6
+26,12,ARG,Argentina,4,primary,100,6
+27,12,ARG,Argentina,8,primary_link,100,6
+28,12,ARG,Argentina,11,residential,10,60
+29,13,ARM,Armenia,5,secondary,40,15
+30,13,ARM,Armenia,8,primary_link,40,15
+31,13,ARM,Armenia,11,res_and_ls,15,40
+32,14,ABW,Aruba,4,primary,60,10
+33,14,ABW,Aruba,5,secondary,40,15
+34,14,ABW,Aruba,11,residential,40,15
+35,17,AUS,Australia,1,motorway,100,6
+36,17,AUS,Australia,2,trunk,100,6
+37,17,AUS,Australia,4,primary,100,6
+38,17,AUS,Australia,5,secondary,100,6
+39,17,AUS,Australia,7,motorway_link,100,6
+40,17,AUS,Australia,8,primary_link,100,6
+41,17,AUS,Australia,11,residential,10,60
+42,18,AUT,Austria,1,motorway,100,6
+43,18,AUT,Austria,2,trunk,100,6
+44,18,AUT,Austria,7,motorway_link,100,6
+45,18,AUT,Austria,8,primary_link,100,6
+46,18,AUT,Austria,11,living_street,10,60
+47,19,AZE,Azerbaijan,1,motorway,110,5
+48,19,AZE,Azerbaijan,2,trunk,100,6
+49,19,AZE,Azerbaijan,4,primary,120,5
+50,19,AZE,Azerbaijan,6,tertiary,40,15
+51,19,AZE,Azerbaijan,8,primary_link,60,10
+52,19,AZE,Azerbaijan,11,residential,10,60
+53,20,BHS,Bahamas,6,tertiary,40,15
+54,20,BHS,Bahamas,11,residential,40,15
+55,21,BHR,Bahrain,2,trunk,100,6
+56,21,BHR,Bahrain,4,primary,100,6
+57,21,BHR,Bahrain,5,secondary,100,6
+58,21,BHR,Bahrain,6,tertiary,20,30
+59,21,BHR,Bahrain,8,primary_link,100,6
+60,21,BHR,Bahrain,11,residential,10,60
+61,23,BGD,Bangladesh,2,trunk,100,6
+62,23,BGD,Bangladesh,6,tertiary,20,30
+63,23,BGD,Bangladesh,8,primary_link,40,15
+64,23,BGD,Bangladesh,11,res_and_ls,15,40
+65,24,BRB,Barbados,4,primary,60,10
+66,24,BRB,Barbados,5,secondary,40,15
+67,24,BRB,Barbados,8,primary_link,40,15
+68,24,BRB,Barbados,11,residential,20,30
+69,26,BLR,Belarus,1,motorway,100,6
+70,26,BLR,Belarus,2,trunk,100,6
+71,26,BLR,Belarus,7,motorway_link,120,5
+72,26,BLR,Belarus,11,res_and_ls,15,40
+73,27,BEL,Belgium,1,motorway,100,6
+74,27,BEL,Belgium,2,trunk,100,6
+75,27,BEL,Belgium,4,primary,100,6
+76,27,BEL,Belgium,5,secondary,100,6
+77,27,BEL,Belgium,7,motorway_link,100,6
+78,27,BEL,Belgium,11,residential,10,60
+79,28,BLZ,Belize,4,primary,50,12
+80,28,BLZ,Belize,11,residential,20,30
+81,29,BEN,Benin,5,secondary,40,15
+82,30,BMU,Bermuda,11,residential,10,60
+83,31,BTN,Bhutan,6,tertiary,20,30
+84,31,BTN,Bhutan,11,residential,20,30
+85,33,BOL,Bolivia,11,residential,10,60
+86,34,BIH,Bosnia and Herzegovina,1,motorway,100,6
+87,34,BIH,Bosnia and Herzegovina,2,trunk,100,6
+88,34,BIH,Bosnia and Herzegovina,6,tertiary,20,30
+89,34,BIH,Bosnia and Herzegovina,7,motorway_link,100,6
+90,34,BIH,Bosnia and Herzegovina,11,residential,20,30
+91,35,BWA,Botswana,2,trunk,100,6
+92,35,BWA,Botswana,4,primary,100,6
+93,35,BWA,Botswana,5,secondary,40,15
+94,35,BWA,Botswana,6,tertiary,50,12
+95,35,BWA,Botswana,11,residential,20,30
+96,37,BRA,Brazil,1,motorway,100,6
+97,37,BRA,Brazil,2,trunk,100,6
+98,37,BRA,Brazil,4,primary,100,6
+99,37,BRA,Brazil,5,secondary,100,6
+100,37,BRA,Brazil,7,motorway_link,100,6
+101,37,BRA,Brazil,11,residential,10,60
+102,40,BRN,Brunei Darussalam,1,motorway,100,6
+103,40,BRN,Brunei Darussalam,2,trunk,100,6
+104,40,BRN,Brunei Darussalam,4,primary,50,12
+105,40,BRN,Brunei Darussalam,6,tertiary,25,24
+106,40,BRN,Brunei Darussalam,8,primary_link,50,12
+107,40,BRN,Brunei Darussalam,11,residential,20,30
+108,41,BGR,Bulgaria,1,motorway,100,6
+109,41,BGR,Bulgaria,2,trunk,100,6
+110,41,BGR,Bulgaria,11,residential,10,60
+111,42,BFA,Burkina Faso,4,primary,100,6
+112,42,BFA,Burkina Faso,5,secondary,100,6
+113,42,BFA,Burkina Faso,6,tertiary,30,20
+114,42,BFA,Burkina Faso,11,residential,20,30
+115,43,BDI,Burundi,4,primary,90,7
+116,44,KHM,Cambodia,4,primary,40,15
+117,44,KHM,Cambodia,5,secondary,50,12
+118,44,KHM,Cambodia,6,tertiary,30,20
+119,44,KHM,Cambodia,11,residential,20,30
+120,45,CMR,Cameroon,2,trunk,110,5
+121,45,CMR,Cameroon,4,primary,40,15
+122,45,CMR,Cameroon,6,tertiary,50,12
+123,45,CMR,Cameroon,11,residential,30,20
+124,46,CAN,Canada,1,motorway,100,6
+125,46,CAN,Canada,2,trunk,100,6
+126,46,CAN,Canada,4,primary,100,6
+127,46,CAN,Canada,5,secondary,100,6
+128,46,CAN,Canada,7,motorway_link,100,6
+129,46,CAN,Canada,11,res_and_ls,15,40
+130,47,CPV,Cape Verde,4,primary,90,7
+131,47,CPV,Cape Verde,5,secondary,40,15
+132,47,CPV,Cape Verde,6,tertiary,40,15
+133,48,CYM,Cayman Islands,5,secondary,80,7
+134,48,CYM,Cayman Islands,6,tertiary,30,20
+135,48,CYM,Cayman Islands,11,residential,20,30
+136,50,TCD,Chad,4,primary,50,12
+137,50,TCD,Chad,5,secondary,80,7
+138,51,CHL,Chile,1,motorway,100,6
+139,51,CHL,Chile,2,trunk,100,6
+140,51,CHL,Chile,4,primary,100,6
+141,51,CHL,Chile,5,secondary,100,6
+142,51,CHL,Chile,7,motorway_link,100,6
+143,51,CHL,Chile,8,primary_link,100,6
+144,51,CHL,Chile,11,residential,10,60
+145,53,CHN,China,1,motorway,100,6
+146,53,CHN,China,2,trunk,100,6
+147,53,CHN,China,4,primary,100,6
+148,53,CHN,China,7,motorway_link,100,6
+149,53,CHN,China,8,primary_link,100,6
+150,53,CHN,China,11,residential,10,60
+151,57,COL,Colombia,2,trunk,100,6
+152,57,COL,Colombia,6,tertiary,20,30
+153,57,COL,Colombia,11,residential,10,60
+154,59,COG,Congo,5,secondary,50,12
+155,59,COG,Congo,6,tertiary,50,12
+156,59,COG,Congo,11,residential,30,20
+157,60,COK,Cook Islands,5,secondary,40,15
+158,60,COK,Cook Islands,11,residential,20,30
+159,61,CRI,Costa Rica,2,trunk,100,6
+160,61,CRI,Costa Rica,6,tertiary,20,30
+161,61,CRI,Costa Rica,11,res_and_ls,15,40
+162,62,HRV,Croatia,1,motorway,100,6
+163,62,HRV,Croatia,2,trunk,100,6
+164,62,HRV,Croatia,4,primary,100,6
+165,62,HRV,Croatia,5,secondary,100,6
+166,62,HRV,Croatia,6,tertiary,20,30
+167,62,HRV,Croatia,7,motorway_link,100,6
+168,62,HRV,Croatia,11,res_and_ls,20,30
+169,63,CUB,Cuba,1,motorway,100,6
+170,63,CUB,Cuba,2,trunk,100,6
+171,63,CUB,Cuba,5,secondary,40,15
+172,63,CUB,Cuba,6,tertiary,30,20
+173,63,CUB,Cuba,7,motorway_link,100,6
+174,63,CUB,Cuba,11,residential,20,30
+175,64,CYP,Cyprus,1,motorway,100,6
+176,64,CYP,Cyprus,6,tertiary,30,20
+177,64,CYP,Cyprus,7,motorway_link,100,6
+178,64,CYP,Cyprus,8,primary_link,50,12
+179,64,CYP,Cyprus,11,residential,15,40
+180,65,CZE,Czech Republic,1,motorway,100,6
+181,65,CZE,Czech Republic,2,trunk,100,6
+182,65,CZE,Czech Republic,4,primary,110,5
+183,65,CZE,Czech Republic,7,motorway_link,100,6
+184,65,CZE,Czech Republic,11,res_and_ls,15,40
+185,66,CIV,Côte d'Ivoire,4,primary,110,5
+186,66,CIV,Côte d'Ivoire,5,secondary,100,6
+187,66,CIV,Côte d'Ivoire,8,primary_link,50,12
+188,66,CIV,Côte d'Ivoire,11,residential,20,30
+189,67,PRK,Dem People's Rep of Korea,4,primary,40,15
+190,67,PRK,Dem People's Rep of Korea,5,secondary,60,10
+191,68,COD,Democratic Republic of the Congo,11,res_and_ls,15,40
+192,69,DNK,Denmark,1,motorway,110,5
+193,69,DNK,Denmark,6,tertiary,20,30
+194,69,DNK,Denmark,7,motorway_link,110,5
+195,69,DNK,Denmark,8,primary_link,40,15
+196,69,DNK,Denmark,11,res_and_ls,13,48
+197,70,DJI,Djibouti,2,trunk,93,6
+198,72,DOM,Dominican Republic,1,motorway,100,6
+199,72,DOM,Dominican Republic,2,trunk,100,6
+200,72,DOM,Dominican Republic,4,primary,100,6
+201,72,DOM,Dominican Republic,5,secondary,40,15
+202,72,DOM,Dominican Republic,6,tertiary,20,30
+203,72,DOM,Dominican Republic,7,motorway_link,100,6
+204,72,DOM,Dominican Republic,11,residential,10,60
+205,73,ECU,Ecuador,1,motorway,100,6
+206,73,ECU,Ecuador,2,trunk,100,6
+207,73,ECU,Ecuador,4,primary,100,6
+208,73,ECU,Ecuador,5,secondary,100,6
+209,73,ECU,Ecuador,6,tertiary,20,30
+210,73,ECU,Ecuador,11,res_and_ls,15,40
+211,74,SSD,South Sudan,6,tertiary,30,20
+212,74,SSD,South Sudan,11,residential,20,30
+213,75,SLV,El Salvador,6,tertiary,20,30
+214,75,SLV,El Salvador,11,res_and_ls,18,34
+215,76,GNQ,Equatorial Guinea,6,tertiary,20,30
+216,78,EST,Estonia,4,primary,50,12
+217,78,EST,Estonia,6,tertiary,30,20
+218,78,EST,Estonia,11,res_and_ls,15,40
+219,79,ETH,Ethiopia,2,trunk,100,6
+220,79,ETH,Ethiopia,4,primary,100,6
+221,79,ETH,Ethiopia,5,secondary,40,15
+222,79,ETH,Ethiopia,6,tertiary,40,15
+223,79,ETH,Ethiopia,8,primary_link,50,12
+224,79,ETH,Ethiopia,11,residential,20,30
+225,82,FRO,Faroe Islands,4,primary,50,12
+226,82,FRO,Faroe Islands,6,tertiary,50,12
+227,82,FRO,Faroe Islands,8,primary_link,50,12
+228,82,FRO,Faroe Islands,11,residential,20,30
+229,83,FJI,Fiji,4,primary,50,12
+230,83,FJI,Fiji,5,secondary,50,12
+231,83,FJI,Fiji,6,tertiary,50,12
+232,83,FJI,Fiji,11,residential,20,30
+233,84,FIN,Finland,1,motorway,100,6
+234,84,FIN,Finland,2,trunk,100,6
+235,84,FIN,Finland,4,primary,100,6
+236,84,FIN,Finland,5,secondary,100,6
+237,84,FIN,Finland,7,motorway_link,100,6
+238,84,FIN,Finland,11,res_and_ls,13,48
+239,85,FRA,France,1,motorway,100,6
+240,85,FRA,France,2,trunk,110,5
+241,85,FRA,France,4,primary,110,5
+242,85,FRA,France,7,motorway_link,100,6
+243,85,FRA,France,8,primary_link,110,5
+244,85,FRA,France,11,living_street,10,60
+245,86,GUF,French Guiana,6,tertiary,30,20
+246,86,GUF,French Guiana,8,primary_link,90,7
+247,86,GUF,French Guiana,11,residential,20,30
+248,87,PYF,French Polynesia,4,primary,40,15
+249,87,PYF,French Polynesia,6,tertiary,50,12
+250,87,PYF,French Polynesia,11,residential,10,60
+251,92,GEO,Georgia,1,motorway,110,5
+252,92,GEO,Georgia,8,primary_link,40,15
+253,92,GEO,Georgia,11,residential,10,60
+254,93,DEU,Germany,2,trunk,100,6
+255,93,DEU,Germany,7,motorway_link,100,6
+256,93,DEU,Germany,8,primary_link,100,6
+257,94,GHA,Ghana,1,motorway,100,6
+258,94,GHA,Ghana,2,trunk,100,6
+259,94,GHA,Ghana,4,primary,50,12
+260,94,GHA,Ghana,11,residential,20,30
+261,95,GIB,Gibraltar,6,tertiary,30,20
+262,95,GIB,Gibraltar,11,residential,20,30
+263,97,GRC,Greece,2,trunk,100,6
+264,97,GRC,Greece,4,primary,100,6
+265,97,GRC,Greece,5,secondary,100,6
+266,97,GRC,Greece,8,primary_link,110,5
+267,97,GRC,Greece,11,residential,10,60
+268,98,GRL,Greenland,11,residential,15,40
+269,100,GLP,Guadeloupe,2,trunk,110,5
+270,100,GLP,Guadeloupe,4,primary,50,12
+271,100,GLP,Guadeloupe,5,secondary,50,12
+272,100,GLP,Guadeloupe,6,tertiary,50,12
+273,100,GLP,Guadeloupe,11,residential,20,30
+274,101,GUM,Guam,4,primary,56,11
+275,101,GUM,Guam,11,residential,16,38
+276,103,GTM,Guatemala,2,trunk,90,7
+277,103,GTM,Guatemala,6,tertiary,20,30
+278,103,GTM,Guatemala,11,residential,10,60
+279,104,GGY,Guernsey,4,primary,40,15
+280,104,GGY,Guernsey,5,secondary,32,19
+281,104,GGY,Guernsey,11,residential,24,25
+282,106,GIN,Guinea,4,primary,50,12
+283,106,GIN,Guinea,5,secondary,50,12
+284,106,GIN,Guinea,6,tertiary,20,30
+285,106,GIN,Guinea,11,residential,30,20
+286,107,GUY,Guyana,4,primary,60,10
+287,107,GUY,Guyana,5,secondary,40,15
+288,107,GUY,Guyana,6,tertiary,60,10
+289,107,GUY,Guyana,11,residential,20,30
+290,108,HTI,Haiti,6,tertiary,25,24
+291,108,HTI,Haiti,11,residential,20,30
+292,110,VAT,Holy See,6,tertiary,50,12
+293,110,VAT,Holy See,11,residential,30,20
+294,111,HND,Honduras,4,primary,80,7
+295,111,HND,Honduras,5,secondary,45,13
+296,111,HND,Honduras,6,tertiary,40,15
+297,111,HND,Honduras,11,residential,20,30
+298,113,HUN,Hungary,1,motorway,100,6
+299,113,HUN,Hungary,2,trunk,100,6
+300,113,HUN,Hungary,4,primary,100,6
+301,113,HUN,Hungary,6,tertiary,20,30
+302,113,HUN,Hungary,7,motorway_link,100,6
+303,113,HUN,Hungary,11,residential,10,60
+304,114,ISL,Iceland,6,tertiary,30,20
+305,114,ISL,Iceland,8,primary_link,50,12
+306,114,ISL,Iceland,11,residential,15,40
+307,115,IND,India,1,motorway,100,6
+308,115,IND,India,2,trunk,100,6
+309,115,IND,India,11,residential,10,60
+310,117,IRN,Iran  (Islamic Republic of),1,motorway,100,6
+311,117,IRN,Iran  (Islamic Republic of),2,trunk,100,6
+312,117,IRN,Iran  (Islamic Republic of),4,primary,100,6
+313,117,IRN,Iran  (Islamic Republic of),11,res_and_ls,15,40
+314,118,IRQ,Iraq,1,motorway,100,6
+315,118,IRQ,Iraq,2,trunk,100,6
+316,118,IRQ,Iraq,4,primary,100,6
+317,118,IRQ,Iraq,6,tertiary,30,20
+318,118,IRQ,Iraq,11,residential,20,30
+319,119,IRL,Ireland,1,motorway,100,6
+320,119,IRL,Ireland,2,trunk,100,6
+321,119,IRL,Ireland,4,primary,100,6
+322,119,IRL,Ireland,5,secondary,100,6
+323,119,IRL,Ireland,7,motorway_link,100,6
+324,119,IRL,Ireland,11,res_and_ls,15,40
+325,120,IMN,Isle of Man,5,secondary,32,19
+326,120,IMN,Isle of Man,6,tertiary,48,13
+327,120,IMN,Isle of Man,8,primary_link,48,13
+328,120,IMN,Isle of Man,11,residential,16,38
+329,121,ISR,Israel,1,motorway,100,6
+330,121,ISR,Israel,2,trunk,100,6
+331,121,ISR,Israel,5,secondary,100,6
+332,121,ISR,Israel,6,tertiary,20,30
+333,121,ISR,Israel,7,motorway_link,100,6
+334,121,ISR,Israel,11,residential,20,30
+335,122,ITA,Italy,1,motorway,100,6
+336,122,ITA,Italy,4,primary,100,6
+337,122,ITA,Italy,11,living_street,10,60
+338,123,JAM,Jamaica,1,motorway,110,5
+339,123,JAM,Jamaica,5,secondary,50,12
+340,123,JAM,Jamaica,6,tertiary,50,12
+341,123,JAM,Jamaica,8,primary_link,50,12
+342,123,JAM,Jamaica,11,residential,16,38
+343,126,JPN,Japan,1,motorway,100,6
+344,126,JPN,Japan,7,motorway_link,100,6
+345,126,JPN,Japan,11,residential,10,60
+346,128,JEY,Jersey,4,primary,48,13
+347,128,JEY,Jersey,5,secondary,32,19
+348,128,JEY,Jersey,11,residential,20,30
+349,130,JOR,Jordan,2,trunk,110,5
+350,130,JOR,Jordan,4,primary,60,10
+351,130,JOR,Jordan,5,secondary,60,10
+352,130,JOR,Jordan,6,tertiary,30,20
+353,130,JOR,Jordan,11,residential,30,20
+354,132,KAZ,Kazakhstan,2,trunk,100,6
+355,132,KAZ,Kazakhstan,4,primary,110,5
+356,132,KAZ,Kazakhstan,7,motorway_link,80,7
+357,132,KAZ,Kazakhstan,8,primary_link,110,5
+358,132,KAZ,Kazakhstan,11,living_street,10,60
+359,133,KEN,Kenya,2,trunk,100,6
+360,133,KEN,Kenya,4,primary,110,5
+361,133,KEN,Kenya,5,secondary,100,6
+362,133,KEN,Kenya,8,primary_link,50,12
+363,133,KEN,Kenya,11,residential,10,60
+364,137,KWT,Kuwait,1,motorway,100,6
+365,137,KWT,Kuwait,2,trunk,120,5
+366,137,KWT,Kuwait,4,primary,100,6
+367,137,KWT,Kuwait,5,secondary,45,13
+368,137,KWT,Kuwait,6,tertiary,20,30
+369,137,KWT,Kuwait,8,primary_link,70,9
+370,137,KWT,Kuwait,11,residential,20,30
+371,138,KGZ,Kyrgyzstan,5,secondary,40,15
+372,138,KGZ,Kyrgyzstan,6,tertiary,40,15
+373,138,KGZ,Kyrgyzstan,11,residential,10,60
+374,139,LAO,Lao People's Democratic Republic,11,residential,20,30
+375,140,LVA,Latvia,2,trunk,100,6
+376,140,LVA,Latvia,6,tertiary,20,30
+377,140,LVA,Latvia,8,primary_link,50,12
+378,140,LVA,Latvia,11,res_and_ls,15,40
+379,141,LBN,Lebanon,1,motorway,110,5
+380,141,LBN,Lebanon,2,trunk,100,6
+381,141,LBN,Lebanon,4,primary,40,15
+382,141,LBN,Lebanon,6,tertiary,20,30
+383,141,LBN,Lebanon,11,residential,15,40
+384,142,LSO,Lesotho,4,primary,60,10
+385,142,LSO,Lesotho,5,secondary,40,15
+386,142,LSO,Lesotho,6,tertiary,50,12
+387,142,LSO,Lesotho,11,residential,20,30
+388,145,LBY,Libya,5,secondary,100,6
+389,145,LBY,Libya,6,tertiary,50,12
+390,145,LBY,Libya,11,res_and_ls,25,24
+391,146,LIE,Liechtenstein,1,motorway,120,5
+392,146,LIE,Liechtenstein,6,tertiary,50,12
+393,146,LIE,Liechtenstein,8,primary_link,50,12
+394,146,LIE,Liechtenstein,11,residential,20,30
+395,147,LTU,Lithuania,1,motorway,100,6
+396,147,LTU,Lithuania,2,trunk,100,6
+397,147,LTU,Lithuania,6,tertiary,20,30
+398,147,LTU,Lithuania,11,res_and_ls,15,40
+399,148,LUX,Luxembourg,1,motorway,100,6
+400,148,LUX,Luxembourg,2,trunk,120,5
+401,148,LUX,Luxembourg,4,primary,100,6
+402,148,LUX,Luxembourg,6,tertiary,20,30
+403,148,LUX,Luxembourg,7,motorway_link,100,6
+404,148,LUX,Luxembourg,8,primary_link,50,12
+405,148,LUX,Luxembourg,11,res_and_ls,15,40
+406,149,MAC,Macau,4,primary,60,10
+407,149,MAC,Macau,5,secondary,40,15
+408,149,MAC,Macau,6,tertiary,40,15
+409,149,MAC,Macau,11,residential,40,15
+410,150,MDG,Madagascar,11,residential,20,30
+411,152,MWI,Malawi,2,trunk,100,6
+412,152,MWI,Malawi,6,tertiary,50,12
+413,152,MWI,Malawi,11,residential,30,20
+414,153,MYS,Malaysia,1,motorway,100,6
+415,153,MYS,Malaysia,2,trunk,110,5
+416,153,MYS,Malaysia,7,motorway_link,110,5
+417,153,MYS,Malaysia,11,res_and_ls,20,30
+418,155,MLI,Mali,5,secondary,50,12
+419,155,MLI,Mali,6,tertiary,60,10
+420,155,MLI,Mali,11,residential,20,30
+421,156,MLT,Malta,6,tertiary,25,24
+422,156,MLT,Malta,8,primary_link,40,15
+423,156,MLT,Malta,11,residential,15,40
+424,158,MTQ,Martinique,4,primary,50,12
+425,158,MTQ,Martinique,5,secondary,50,12
+426,158,MTQ,Martinique,6,tertiary,30,20
+427,158,MTQ,Martinique,8,primary_link,50,12
+428,158,MTQ,Martinique,11,residential,20,30
+429,159,MRT,Mauritania,2,trunk,100,6
+430,159,MRT,Mauritania,6,tertiary,60,10
+431,160,MUS,Mauritius,1,motorway,110,5
+432,160,MUS,Mauritius,2,trunk,110,5
+433,160,MUS,Mauritius,4,primary,40,15
+434,160,MUS,Mauritius,5,secondary,40,15
+435,160,MUS,Mauritius,6,tertiary,25,24
+436,160,MUS,Mauritius,11,residential,20,30
+437,161,MYT,Mayotte,5,secondary,50,12
+438,165,MDA,"Moldova, Republic of",6,tertiary,20,30
+439,165,MDA,"Moldova, Republic of",8,primary_link,40,15
+440,165,MDA,"Moldova, Republic of",11,res_and_ls,15,40
+441,166,MCO,Monaco,1,motorway,110,5
+442,167,MNG,Mongolia,2,trunk,120,5
+443,167,MNG,Mongolia,11,residential,20,30
+444,169,MAR,Morocco,1,motorway,100,6
+445,169,MAR,Morocco,2,trunk,100,6
+446,169,MAR,Morocco,4,primary,100,6
+447,169,MAR,Morocco,5,secondary,100,6
+448,169,MAR,Morocco,7,motorway_link,100,6
+449,169,MAR,Morocco,8,primary_link,40,15
+450,169,MAR,Morocco,11,residential,20,30
+451,170,MOZ,Mozambique,2,trunk,100,6
+452,170,MOZ,Mozambique,4,primary,120,5
+453,170,MOZ,Mozambique,5,secondary,40,15
+454,170,MOZ,Mozambique,6,tertiary,60,10
+455,170,MOZ,Mozambique,11,residential,20,30
+456,172,NAM,Namibia,2,trunk,100,6
+457,172,NAM,Namibia,4,primary,100,6
+458,172,NAM,Namibia,5,secondary,100,6
+459,172,NAM,Namibia,11,res_and_ls,25,24
+460,173,NRU,Nauru,4,primary,48,13
+461,173,NRU,Nauru,6,tertiary,48,13
+462,175,NPL,Nepal,6,tertiary,20,30
+463,175,NPL,Nepal,11,res_and_ls,15,40
+464,176,ANT,Netherlands Antilles,4,primary,40,15
+465,176,ANT,Netherlands Antilles,5,secondary,40,15
+466,176,ANT,Netherlands Antilles,6,tertiary,35,17
+467,176,ANT,Netherlands Antilles,8,primary_link,40,15
+468,176,ANT,Netherlands Antilles,11,residential,10,60
+469,177,NLD,Netherlands,1,motorway,100,6
+470,177,NLD,Netherlands,2,trunk,100,6
+471,177,NLD,Netherlands,4,primary,100,6
+472,177,NLD,Netherlands,5,secondary,100,6
+473,177,NLD,Netherlands,6,tertiary,20,30
+474,177,NLD,Netherlands,7,motorway_link,100,6
+475,177,NLD,Netherlands,8,primary_link,100,6
+476,177,NLD,Netherlands,11,living_street,10,60
+477,178,NCL,New Caledonia,1,motorway,110,5
+478,178,NCL,New Caledonia,4,primary,110,5
+479,178,NCL,New Caledonia,6,tertiary,30,20
+480,178,NCL,New Caledonia,8,primary_link,50,12
+481,178,NCL,New Caledonia,11,residential,10,60
+482,179,NZL,New Zealand,1,motorway,100,6
+483,179,NZL,New Zealand,2,trunk,100,6
+484,179,NZL,New Zealand,4,primary,100,6
+485,179,NZL,New Zealand,5,secondary,100,6
+486,179,NZL,New Zealand,7,motorway_link,100,6
+487,179,NZL,New Zealand,8,primary_link,100,6
+488,179,NZL,New Zealand,11,residential,10,60
+489,180,NIC,Nicaragua,2,trunk,80,7
+490,180,NIC,Nicaragua,4,primary,40,15
+491,180,NIC,Nicaragua,5,secondary,40,15
+492,180,NIC,Nicaragua,6,tertiary,25,24
+493,180,NIC,Nicaragua,11,residential,15,40
+494,181,NER,Niger,4,primary,80,7
+495,181,NER,Niger,5,secondary,60,10
+496,182,NGA,Nigeria,2,trunk,120,5
+497,182,NGA,Nigeria,4,primary,100,6
+498,182,NGA,Nigeria,5,secondary,80,7
+499,182,NGA,Nigeria,6,tertiary,30,20
+500,182,NGA,Nigeria,11,residential,10,60
+501,186,NOR,Norway,1,motorway,100,6
+502,186,NOR,Norway,2,trunk,110,5
+503,186,NOR,Norway,7,motorway_link,100,6
+504,186,NOR,Norway,11,res_and_ls,15,40
+505,187,OMN,Oman,1,motorway,100,6
+506,187,OMN,Oman,2,trunk,100,6
+507,187,OMN,Oman,4,primary,100,6
+508,187,OMN,Oman,5,secondary,100,6
+509,187,OMN,Oman,7,motorway_link,100,6
+510,187,OMN,Oman,8,primary_link,100,6
+511,187,OMN,Oman,11,residential,20,30
+512,188,PAK,Pakistan,1,motorway,100,6
+513,188,PAK,Pakistan,2,trunk,100,6
+514,188,PAK,Pakistan,4,primary,100,6
+515,188,PAK,Pakistan,5,secondary,100,6
+516,188,PAK,Pakistan,6,tertiary,20,30
+517,188,PAK,Pakistan,7,motorway_link,100,6
+518,188,PAK,Pakistan,8,primary_link,40,15
+519,188,PAK,Pakistan,11,residential,10,60
+520,191,PAN,Panama,1,motorway,110,5
+521,191,PAN,Panama,2,trunk,100,6
+522,191,PAN,Panama,4,primary,110,5
+523,191,PAN,Panama,5,secondary,110,5
+524,191,PAN,Panama,6,tertiary,30,20
+525,191,PAN,Panama,11,res_and_ls,25,24
+526,194,PRY,Paraguay,4,primary,110,5
+527,194,PRY,Paraguay,5,secondary,100,6
+528,194,PRY,Paraguay,8,primary_link,50,12
+529,194,PRY,Paraguay,11,residential,20,30
+530,196,PHL,Philippines,1,motorway,100,6
+531,196,PHL,Philippines,4,primary,100,6
+532,196,PHL,Philippines,7,motorway_link,100,6
+533,196,PHL,Philippines,11,res_and_ls,13,48
+534,198,POL,Poland,1,motorway,100,6
+535,198,POL,Poland,2,trunk,100,6
+536,198,POL,Poland,4,primary,100,6
+537,198,POL,Poland,5,secondary,100,6
+538,198,POL,Poland,7,motorway_link,100,6
+539,198,POL,Poland,8,primary_link,100,6
+540,198,POL,Poland,11,residential,10,60
+541,199,PRT,Portugal,1,motorway,100,6
+542,199,PRT,Portugal,2,trunk,100,6
+543,199,PRT,Portugal,6,tertiary,20,30
+544,199,PRT,Portugal,11,res_and_ls,15,40
+545,200,PRI,Puerto Rico,4,primary,50,12
+546,200,PRI,Puerto Rico,5,secondary,56,11
+547,200,PRI,Puerto Rico,6,tertiary,24,25
+548,200,PRI,Puerto Rico,11,res_and_ls,23,27
+549,201,QAT,Qatar,1,motorway,100,6
+550,201,QAT,Qatar,2,trunk,100,6
+551,201,QAT,Qatar,4,primary,100,6
+552,201,QAT,Qatar,5,secondary,100,6
+553,201,QAT,Qatar,6,tertiary,20,30
+554,201,QAT,Qatar,7,motorway_link,100,6
+555,201,QAT,Qatar,11,residential,20,30
+556,203,ROU,Romania,1,motorway,100,6
+557,203,ROU,Romania,7,motorway_link,100,6
+558,203,ROU,Romania,11,residential,10,60
+559,204,RUS,Russian Federation,11,residential,10,60
+560,205,RWA,Rwanda,6,tertiary,30,20
+561,205,RWA,Rwanda,11,residential,20,30
+562,206,REU,RÃ©union,2,trunk,100,6
+563,206,REU,RÃ©union,8,primary_link,50,12
+564,206,REU,RÃ©union,11,residential,10,60
+565,212,WSM,Samoa,11,residential,20,30
+566,213,SMR,San Marino,4,primary,50,12
+567,213,SMR,San Marino,6,tertiary,30,20
+568,213,SMR,San Marino,11,residential,30,20
+569,215,SAU,Saudi Arabia,1,motorway,100,6
+570,215,SAU,Saudi Arabia,2,trunk,110,5
+571,215,SAU,Saudi Arabia,4,primary,100,6
+572,215,SAU,Saudi Arabia,5,secondary,100,6
+573,215,SAU,Saudi Arabia,7,motorway_link,100,6
+574,215,SAU,Saudi Arabia,8,primary_link,100,6
+575,215,SAU,Saudi Arabia,11,residential,10,60
+576,217,SEN,Senegal,1,motorway,110,5
+577,217,SEN,Senegal,5,secondary,50,12
+578,220,SYC,Seychelles,2,trunk,80,7
+579,220,SYC,Seychelles,4,primary,65,9
+580,220,SYC,Seychelles,5,secondary,40,15
+581,220,SYC,Seychelles,6,tertiary,40,15
+582,221,SLE,Sierra Leone,2,trunk,80,7
+583,221,SLE,Sierra Leone,4,primary,50,12
+584,221,SLE,Sierra Leone,5,secondary,40,15
+585,222,SGP,Singapore,4,primary,50,12
+586,222,SGP,Singapore,6,tertiary,50,12
+587,222,SGP,Singapore,8,primary_link,50,12
+588,222,SGP,Singapore,11,residential,15,40
+589,223,SVK,Slovakia,1,motorway,100,6
+590,223,SVK,Slovakia,2,trunk,100,6
+591,223,SVK,Slovakia,4,primary,100,6
+592,223,SVK,Slovakia,6,tertiary,20,30
+593,223,SVK,Slovakia,7,motorway_link,100,6
+594,223,SVK,Slovakia,11,residential,10,60
+595,224,SVN,Slovenia,1,motorway,100,6
+596,224,SVN,Slovenia,2,trunk,110,5
+597,224,SVN,Slovenia,6,tertiary,30,20
+598,224,SVN,Slovenia,7,motorway_link,100,6
+599,224,SVN,Slovenia,8,primary_link,40,15
+600,224,SVN,Slovenia,11,residential,10,60
+601,226,SOM,Somalia,4,primary,56,11
+602,226,SOM,Somalia,5,secondary,40,15
+603,226,SOM,Somalia,6,tertiary,56,11
+604,226,SOM,Somalia,11,residential,20,30
+605,229,ESP,Spain,1,motorway,100,6
+606,229,ESP,Spain,4,primary,100,6
+607,229,ESP,Spain,7,motorway_link,100,6
+608,229,ESP,Spain,8,primary_link,100,6
+609,229,ESP,Spain,11,living_street,10,60
+610,231,LKA,Sri Lanka,1,motorway,100,6
+611,231,LKA,Sri Lanka,11,residential,10,60
+612,233,SUR,Suriname,6,tertiary,30,20
+613,233,SUR,Suriname,11,res_and_ls,25,24
+614,234,SJM,Svalbard and Jan Mayen Islands,6,tertiary,30,20
+615,235,SWZ,Swaziland,1,motorway,100,6
+616,235,SWZ,Swaziland,2,trunk,120,5
+617,235,SWZ,Swaziland,4,primary,60,10
+618,235,SWZ,Swaziland,5,secondary,60,10
+619,235,SWZ,Swaziland,6,tertiary,60,10
+620,236,SWE,Sweden,1,motorway,100,6
+621,236,SWE,Sweden,2,trunk,100,6
+622,236,SWE,Sweden,4,primary,100,6
+623,236,SWE,Sweden,5,secondary,100,6
+624,236,SWE,Sweden,7,motorway_link,100,6
+625,236,SWE,Sweden,8,primary_link,100,6
+626,236,SWE,Sweden,11,residential,10,60
+627,237,CHE,Switzerland,2,trunk,100,6
+628,237,CHE,Switzerland,7,motorway_link,100,6
+629,237,CHE,Switzerland,11,residential,10,60
+630,238,SYR,Syrian Arab Republic,1,motorway,100,6
+631,238,SYR,Syrian Arab Republic,2,trunk,100,6
+632,238,SYR,Syrian Arab Republic,4,primary,100,6
+633,238,SYR,Syrian Arab Republic,5,secondary,100,6
+634,238,SYR,Syrian Arab Republic,6,tertiary,25,24
+635,238,SYR,Syrian Arab Republic,8,primary_link,100,6
+636,238,SYR,Syrian Arab Republic,11,res_and_ls,25,24
+637,239,TJK,Tajikistan,4,primary,100,6
+638,239,TJK,Tajikistan,5,secondary,50,12
+639,239,TJK,Tajikistan,6,tertiary,30,20
+640,239,TJK,Tajikistan,11,residential,20,30
+641,240,THA,Thailand,1,motorway,120,5
+642,240,THA,Thailand,2,trunk,100,6
+643,240,THA,Thailand,4,primary,50,12
+644,240,THA,Thailand,7,motorway_link,120,5
+645,240,THA,Thailand,11,residential,10,60
+646,241,MKD,The former Yugoslav Republic of Macedonia,1,motorway,100,6
+647,241,MKD,The former Yugoslav Republic of Macedonia,2,trunk,80,7
+648,241,MKD,The former Yugoslav Republic of Macedonia,4,primary,100,6
+649,241,MKD,The former Yugoslav Republic of Macedonia,11,living_street,20,30
+650,243,TGO,Togo,4,primary,100,6
+651,243,TGO,Togo,6,tertiary,20,30
+652,243,TGO,Togo,11,residential,20,30
+653,245,TON,Tonga,11,residential,20,30
+654,246,TTO,Trinidad and Tobago,6,tertiary,20,30
+655,246,TTO,Trinidad and Tobago,8,primary_link,50,12
+656,246,TTO,Trinidad and Tobago,11,residential,10,60
+657,248,TUN,Tunisia,1,motorway,110,5
+658,248,TUN,Tunisia,2,trunk,110,5
+659,248,TUN,Tunisia,6,tertiary,30,20
+660,248,TUN,Tunisia,8,primary_link,50,12
+661,248,TUN,Tunisia,11,res_and_ls,15,40
+662,249,TUR,Turkey,1,motorway,100,6
+663,249,TUR,Turkey,2,trunk,110,5
+664,249,TUR,Turkey,7,motorway_link,110,5
+665,249,TUR,Turkey,11,residential,10,60
+666,250,TKM,Turkmenistan,4,primary,100,6
+667,250,TKM,Turkmenistan,6,tertiary,40,15
+668,250,TKM,Turkmenistan,11,residential,20,30
+669,251,TCA,Turks and Caicos islands,11,residential,30,20
+670,252,TUV,Tuvalu,4,primary,40,15
+671,253,UGA,Uganda,11,residential,10,60
+672,254,UKR,Ukraine,1,motorway,110,5
+673,254,UKR,Ukraine,2,trunk,100,6
+674,254,UKR,Ukraine,4,primary,110,5
+675,254,UKR,Ukraine,7,motorway_link,110,5
+676,254,UKR,Ukraine,8,primary_link,40,15
+677,254,UKR,Ukraine,11,residential,10,60
+678,255,ARE,United Arab Emirates,1,motorway,100,6
+679,255,ARE,United Arab Emirates,2,trunk,100,6
+680,255,ARE,United Arab Emirates,4,primary,100,6
+681,255,ARE,United Arab Emirates,7,motorway_link,100,6
+682,255,ARE,United Arab Emirates,11,residential,15,40
+683,256,GBR,U.K. of Great Britain and Northern Ireland,1,motorway,112,5
+684,256,GBR,U.K. of Great Britain and Northern Ireland,2,trunk,100,6
+685,256,GBR,U.K. of Great Britain and Northern Ireland,4,primary,100,6
+686,256,GBR,U.K. of Great Britain and Northern Ireland,5,secondary,100,6
+687,256,GBR,U.K. of Great Britain and Northern Ireland,7,motorway_link,112,5
+688,256,GBR,U.K. of Great Britain and Northern Ireland,8,primary_link,32,19
+689,256,GBR,U.K. of Great Britain and Northern Ireland,11,residential,10,60
+690,257,TZA,United Republic of Tanzania,11,residential,10,60
+691,258,VIR,United States Virgin Islands,5,secondary,48,13
+692,259,USA,United States of America,1,motorway,104,6
+693,259,USA,United States of America,2,trunk,104,6
+694,259,USA,United States of America,4,primary,104,6
+695,259,USA,United States of America,5,secondary,104,6
+696,259,USA,United States of America,7,motorway_link,100,6
+697,259,USA,United States of America,11,res_and_ls,15,40
+698,260,URY,Uruguay,4,primary,45,13
+699,260,URY,Uruguay,5,secondary,40,15
+700,260,URY,Uruguay,6,tertiary,30,20
+701,260,URY,Uruguay,8,primary_link,45,13
+702,260,URY,Uruguay,11,res_and_ls,15,40
+703,261,UZB,Uzbekistan,2,trunk,100,6
+704,261,UZB,Uzbekistan,4,primary,100,6
+705,261,UZB,Uzbekistan,5,secondary,50,12
+706,261,UZB,Uzbekistan,6,tertiary,40,15
+707,261,UZB,Uzbekistan,8,primary_link,70,9
+708,261,UZB,Uzbekistan,11,res_and_ls,15,40
+709,262,VUT,Vanuatu,6,tertiary,40,15
+710,263,VEN,Venezuela,1,motorway,100,6
+711,263,VEN,Venezuela,2,trunk,100,6
+712,263,VEN,Venezuela,4,primary,100,6
+713,263,VEN,Venezuela,5,secondary,100,6
+714,263,VEN,Venezuela,11,res_and_ls,15,40
+715,268,ESH,Western Sahara,4,primary,100,6
+716,268,ESH,Western Sahara,5,secondary,100,6
+717,269,YEM,Yemen,6,tertiary,50,12
+718,269,YEM,Yemen,11,residential,20,30
+719,270,ZMB,Zambia,2,trunk,100,6
+720,270,ZMB,Zambia,4,primary,100,6
+721,270,ZMB,Zambia,5,secondary,120,5
+722,270,ZMB,Zambia,6,tertiary,30,20
+723,270,ZMB,Zambia,11,residential,40,15
+724,271,ZWE,Zimbabwe,2,trunk,120,5
+725,271,ZWE,Zimbabwe,4,primary,120,5
+726,271,ZWE,Zimbabwe,5,secondary,120,5
+727,271,ZWE,Zimbabwe,6,tertiary,20,30
+728,271,ZWE,Zimbabwe,8,primary_link,60,10
+729,271,ZWE,Zimbabwe,11,residential,40,15
+730,2647,MNE,Montenegro,6,tertiary,30,20
+731,2647,MNE,Montenegro,11,res_and_ls,15,40
+732,2648,SRB,Serbia,1,motorway,100,6
+733,2648,SRB,Serbia,2,trunk,100,6
+734,2648,SRB,Serbia,4,primary,100,6
+735,2648,SRB,Serbia,5,secondary,100,6
+736,2648,SRB,Serbia,6,tertiary,20,30
+737,2648,SRB,Serbia,7,motorway_link,110,5
+738,2648,SRB,Serbia,8,primary_link,100,6
+739,2648,SRB,Serbia,11,res_and_ls,18,34
+740,33364,HKG,Hong Kong,1,motorway,100,6
+741,33364,HKG,Hong Kong,4,primary,50,12
+742,33364,HKG,Hong Kong,5,secondary,40,15
+743,33364,HKG,Hong Kong,6,tertiary,25,24
+744,33364,HKG,Hong Kong,8,primary_link,50,12
+745,33364,HKG,Hong Kong,11,residential,20,30
+746,40765,EGY,Egypt,1,motorway,100,6
+747,40765,EGY,Egypt,2,trunk,100,6
+748,40765,EGY,Egypt,6,tertiary,40,15
+749,40765,EGY,Egypt,7,motorway_link,100,6
+750,40765,EGY,Egypt,11,residential,20,30
+751,1006344,MEX,Mexico,1,motorway,100,6
+752,1006344,MEX,Mexico,2,trunk,100,6
+753,1006344,MEX,Mexico,11,residential,10,60
+754,1011440,MMR,Myanmar,2,trunk,100,6
+755,1011440,MMR,Myanmar,4,primary,100,6
+756,1011440,MMR,Myanmar,5,secondary,100,6
+757,1011440,MMR,Myanmar,6,tertiary,30,20
+758,1011440,MMR,Myanmar,11,res_and_ls,23,27
+759,1011441,PNG,Papua New Guinea,4,primary,60,10
+760,1011441,PNG,Papua New Guinea,6,tertiary,60,10
+761,1011441,PNG,Papua New Guinea,11,residential,30,20
+762,1011442,PER,Peru,1,motorway,100,6
+763,1011442,PER,Peru,2,trunk,120,5
+764,1011442,PER,Peru,5,secondary,120,5
+765,1011442,PER,Peru,7,motorway_link,100,6
+766,1011442,PER,Peru,11,residential,10,60
+767,1011443,KOR,"Korea, Republic of",1,motorway,100,6
+768,1011443,KOR,"Korea, Republic of",2,trunk,100,6
+769,1011443,KOR,"Korea, Republic of",4,primary,100,6
+770,1011443,KOR,"Korea, Republic of",5,secondary,100,6
+771,1011443,KOR,"Korea, Republic of",7,motorway_link,100,6
+772,1011443,KOR,"Korea, Republic of",11,res_and_ls,20,30
+773,1011446,AFG,Afghanistan,6,tertiary,30,20
+774,1011446,AFG,Afghanistan,11,residential,40,15
+775,1011447,VNM,Viet Nam,1,motorway,100,6
+776,1011447,VNM,Viet Nam,6,tertiary,20,30
+777,1011447,VNM,Viet Nam,7,motorway_link,100,6
+778,1011447,VNM,Viet Nam,8,primary_link,40,15
+779,1011447,VNM,Viet Nam,11,res_and_ls,20,30
+780,1013696,IDN,Indonesia,1,motorway,100,6
+781,1013696,IDN,Indonesia,4,primary,100,6
+782,1013696,IDN,Indonesia,7,motorway_link,100,6
+783,1013696,IDN,Indonesia,11,living_street,10,60
+784,1013965,ZAF,South Africa,1,motorway,100,6
+785,1013965,ZAF,South Africa,2,trunk,100,6
+786,1013965,ZAF,South Africa,4,primary,100,6
+787,1013965,ZAF,South Africa,5,secondary,100,6
+788,1013965,ZAF,South Africa,7,motorway_link,100,6
+789,1013965,ZAF,South Africa,8,primary_link,100,6
+790,1013965,ZAF,South Africa,11,residential,10,60

@@ -10,14 +10,17 @@ import org.apache.hadoop.hbase.client.HTable
  */
 object ExecuteLoad {
 
-  val configuredTables = Map[String, GridLoader[_]](
+  val configuredTables = Map[String, GridLoaderX](
 
 //    "sp_grid" -> new LoadSppContextSensitive,
     "pa_grid" -> new DirectLoadPAs,
     "au_grid" -> new LoadAUs,
     "ee_grid" -> new LoadEEZs,
     "osm_grid" -> new LoadWayGrids,
-    "pa" -> new LoadPAs
+    "pa" -> new LoadPAs,
+    "sp" -> new LoadSppSimple,
+    "sp_test" -> new LoadTestSppSimple,
+    "site_test" -> new LoadTestPAs
 
   )
 

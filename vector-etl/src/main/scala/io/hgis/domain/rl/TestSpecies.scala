@@ -12,7 +12,8 @@ import org.hibernate.annotations.{Immutable, Type}
 @Entity
 @Immutable
 @Table(schema = "hgrid", name = "test_species")
-class TestSpecies extends AnalysisUnit {
+@SerialVersionUID(-132459812709L)
+class TestSpecies extends AnalysisUnit with Serializable {
 
   @Type(`type` = "org.hibernate.spatial.GeometryType")
   @Column(name = "geom")
@@ -24,9 +25,8 @@ class TestSpecies extends AnalysisUnit {
   @Column(name = "binomial")
   var binomial: String = _
 
-  @Id
-  var id: Long = _
 
+  @Id
   @Column(name = "ogc_fid")
   var ogcFid: Long = _
 

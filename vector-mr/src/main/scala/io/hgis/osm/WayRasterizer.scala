@@ -54,7 +54,6 @@ object WayRasterizer {
     TableMapReduceUtil.initTableMapperJob("ways", scan,
       classOf[WayRasterizer.WayMapper], classOf[ImmutableBytesWritable], classOf[IntWritable], job)
 
-
     TableMapReduceUtil.initTableReducerJob("hashcount", classOf[WayRasterizer.WayReducer], job)
     job.waitForCompletion(true)
 

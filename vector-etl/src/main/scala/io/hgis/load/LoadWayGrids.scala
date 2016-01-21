@@ -4,7 +4,7 @@ import com.esri.core.geometry.Geometry
 import com.vividsolutions.jts.io.WKBReader
 import io.hgis.ConfigurationFactory
 import io.hgis.accessutil.AccessUtil
-import io.hgis.domain.GridCell
+import io.hgis.domain.GridNode
 import io.hgis.domain.osm.Way
 import io.hgis.hdomain.GriddedObjectDAO
 import org.apache.hadoop.hbase.client._

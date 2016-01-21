@@ -30,7 +30,7 @@ class DumpEcoregionProtection extends ExtractionBase  {
 
   override def withArguments(args: Array[String]) = {
     catID = args(0).toInt
-    println("extracting category %s".format(catID))
+    println(s"extracting category $catID")
     this
   }
 

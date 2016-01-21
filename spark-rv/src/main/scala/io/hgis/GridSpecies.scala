@@ -1,10 +1,14 @@
 package io.hgis
 
+import java.io.{DataInputStream, ByteArrayInputStream, DataOutputStream}
+
 import com.esri.core.geometry.{Geometry, WktImportFlags, OperatorImportFromWkt, OperatorImportFromWkb}
+import com.sun.corba.se.spi.ior.Writeable
 import io.hgis.accessutil.AccessUtil
 import io.hgis.hdomain.{GriddedEntity, GriddedObjectDAO}
 import io.hgis.op.IntersectUtil
 import io.hgis.vector.domain.SiteDAO
+import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
@@ -23,6 +27,7 @@ import org.apache.hadoop.hbase.mapreduce.{TableMapReduceUtil, TableMapper}
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.mapreduce.{Job, Mapper}
 /**
+  * spark-submit --class io.hgis.GridSpecies --jars target/dependency/hbase-mr-0.1-SNAPSHOT.jar,target/dependency/vector-mr-0.1-SNAPSHOT.jar,target/dependency/esri-geometry-api-1.2.jar --master yarn-client target/spark-rv-0.1-SNAPSHOT.jar
  *
  * Created by tempehu on 23-Oct-14.
  */
@@ -37,15 +42,28 @@ object GridSpecies {
 
   val geomColumn  = AccessUtil.stringColumn("cfv", "geom") _
 
+  def confToBytes(configuration: Configuration): Array[Byte] = {
+    val baos = new ByteArrayOutputStream()
+    configuration.write(new DataOutputStream(baos))
+    baos.toByteArray
+  }
+
+  def confFromBytes(byteArray: Array[Byte]) = {
+    val bais = new ByteArrayInputStream(byteArray)
+    val nconf = new Configuration()
+    nconf.readFields(new DataInputStream(bais))
+    nconf
+  }
+
   def main(args: Array[String]) {
 
     val conf: Configuration = ConfigurationFactory.get
 
-    val tableName = "site"
+    val tableName = "site_test"
     println("Table " + tableName)
 
     conf.set(TableInputFormat.INPUT_TABLE, tableName)
-    conf.set(TableInputFormat.SCAN_COLUMNS, "cfv:geom")
+    conf.set(TableInputFormat.SCAN_COLUMN_FAMILY, "cfv")
 
 
     val sparkConf = new SparkConf().setAppName("pa_grid_spark")
@@ -55,20 +73,21 @@ object GridSpecies {
 
     println(rdd.count())
 
-    val hTable = new HTable(conf, "pa_grid_spark")
 
-    def doIX = doIntersection(hTable) _
+//    def doIX = doIntersection(conf) _
 
-    rdd.foreach(f => doIX(f._2))
+//    rdd.foreach(f => doIX(f._2))
+    val confBytes = confToBytes(conf)
+
+    rdd.foreachPartition(partition => partition.foreach(f => doIntersection(confBytes, f._2)))
 
   }
 
-  def doIntersection(htable: HTable)(result: Result) {
+  def doIntersection(conf: Array[Byte], result: Result) {
+
+      val hTable = new HTable(confFromBytes(conf), "pa_grid_spark")
 
       val wktImportOp = OperatorImportFromWkt.local()
-
-//    override def map(key: ImmutableBytesWritable, result: Result,
-//                     context: Mapper[ImmutableBytesWritable, Result, ImmutableBytesWritable, Put]#Context): Unit = {
 
       val site = SiteDAO.fromResult(result)
 
@@ -84,12 +103,10 @@ object GridSpecies {
         put.add(GriddedObjectDAO.getCF, "is_designated".getBytes, Bytes.toBytes(site.isDesignated))
         put.add(GriddedObjectDAO.getCF, "is_point".getBytes, Bytes.toBytes(site.isPoint))
 
-        htable.put(put)
-//      }
+        hTable.put(put)
     }
 
   }
-
 
   def getScans: String = {
     val s1 = new Scan()
@@ -109,7 +126,6 @@ object GridSpecies {
     val proto = ProtobufUtil.toScan(scan)
     Base64.encodeBytes(proto.toByteArray)
   }
-
 
 }
 

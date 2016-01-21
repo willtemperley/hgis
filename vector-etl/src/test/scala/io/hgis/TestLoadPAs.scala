@@ -2,7 +2,7 @@ package io.hgis
 
 import com.vividsolutions.jts.io.WKBReader
 import io.hgis.accessutil.AccessUtil
-import io.hgis.load.{LoadPAs, DirectLoadPAs}
+import io.hgis.load.{LoadTestPAs, LoadPAs, DirectLoadPAs}
 import io.hgis.scanutil.TableIterator
 import io.hgis.vector.domain.SiteDAO
 import org.apache.hadoop.hbase.client.{Result, Scan}
@@ -17,7 +17,7 @@ class TestLoadPAs extends TableIterator {
   val hTable = MockHTable.create()
   val CF = "cfv".getBytes
 
-  val lpas = new LoadPAs {
+  val lpas = new LoadTestPAs {
     override def getIds = Array(2978149l, 2815932l)
   }
 

@@ -22,15 +22,15 @@ class Species extends AnalysisUnit {
   @Transient
   override var geom: Geometry = _
 
+  @Column(name = "id_no")
+  override var entityId: Long = _
+
   @Column(name = "binomial")
   var binomial: String = _
 
   @Id
   @Column(name = "ogc_fid")
   var ogcFid: Long = _
-
-  @Column(name = "id_no")
-  override var entityId: Long = _
 
   @Column
   var kingdom: String = _

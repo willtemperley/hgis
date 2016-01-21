@@ -21,7 +21,7 @@ class ShapeWriter(val geomType: String = "Point", val srid: Int = 4326, schemaDe
 
 
 //  val TYPE= DataUtilities.createType("Location", "the_geom:Polygon:srid=4326," + "i:Integer," + "j:Integer")
-  val TYPE = DataUtilities.createType("Location", schema)
+  val SIMPLE_FEATURE_TYPE: SimpleFeatureType = DataUtilities.createType("Location", schema)
   val features = new util.ArrayList[SimpleFeature]
 
 //  private def getCoords(env: Envelope): Array[Coordinate] = {
@@ -38,7 +38,7 @@ class ShapeWriter(val geomType: String = "Point", val srid: Int = 4326, schemaDe
 
     if (geometry == null) return null
 
-    val featureBuilder: SimpleFeatureBuilder = new SimpleFeatureBuilder(TYPE)
+    val featureBuilder: SimpleFeatureBuilder = new SimpleFeatureBuilder(SIMPLE_FEATURE_TYPE)
     featureBuilder.add(geometry)
     if (attrs != null) {
       attrs.foreach(featureBuilder.add)
@@ -54,41 +54,46 @@ class ShapeWriter(val geomType: String = "Point", val srid: Int = 4326, schemaDe
 
   @throws(classOf[Exception])
   def write(fileLocation: String = "target/tiles.shp") {
+
     println("Writing " + features.size() + " Features")
     val newFile: File = new File(fileLocation)
     val dataStoreFactory: ShapefileDataStoreFactory = new ShapefileDataStoreFactory
     val params: util.Map[String, java.io.Serializable] = new util.HashMap[String, java.io.Serializable]
+
     println(newFile.getAbsolutePath)
     println(newFile.getPath)
+
     params.put("create spatial index", "true")
-    params.put("url", "file://" +newFile.getAbsolutePath)
-    val newDataStore: ShapefileDataStore = dataStoreFactory.createNewDataStore(params).asInstanceOf[ShapefileDataStore]
-    System.out.println("TYPE:" + TYPE)
-    newDataStore.createSchema(TYPE)
+    params.put("url", "file://" + newFile.getAbsolutePath)
+
+    val newDataStore = dataStoreFactory.createNewDataStore(params).asInstanceOf[ShapefileDataStore]
+    System.out.println("TYPE:" + SIMPLE_FEATURE_TYPE)
+    newDataStore.createSchema(SIMPLE_FEATURE_TYPE)
+
     val transaction: Transaction = new DefaultTransaction("create")
     val typeName: String = newDataStore.getTypeNames()(0)
     val featureSource: SimpleFeatureSource = newDataStore.getFeatureSource(typeName)
     val SHAPE_TYPE: SimpleFeatureType = featureSource.getSchema
     System.out.println("SHAPE:" + SHAPE_TYPE)
 
-    if (featureSource.isInstanceOf[SimpleFeatureStore]) {
-      val featureStore: SimpleFeatureStore = featureSource.asInstanceOf[SimpleFeatureStore]
-      val collection: SimpleFeatureCollection = new ListFeatureCollection(TYPE, features)
-      featureStore.setTransaction(transaction)
-      try {
-        featureStore.addFeatures(collection)
-        transaction.commit()
-      }
-      catch {
-        case problem: Exception => {
-          problem.printStackTrace()
-          transaction.rollback()
+    featureSource match {
+      case featureStore: SimpleFeatureStore =>
+        val collection: SimpleFeatureCollection = new ListFeatureCollection(SIMPLE_FEATURE_TYPE, features)
+        featureStore.setTransaction(transaction)
+        try {
+          featureStore.addFeatures(collection)
+          transaction.commit()
         }
-      } finally {
-        transaction.close()
-      }
-    } else {
-      System.out.println(typeName + " does not support read/write access")
+        catch {
+          case problem: Exception => {
+            problem.printStackTrace()
+            transaction.rollback()
+          }
+        } finally {
+          transaction.close()
+        }
+      case _ =>
+        System.out.println(typeName + " does not support read/write access")
     }
   }
 
