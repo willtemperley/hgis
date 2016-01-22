@@ -9,19 +9,23 @@ import org.geotools.data.shapefile.{ShapefileDataStore, ShapefileDataStoreFactor
 import org.geotools.data.simple.{SimpleFeatureCollection, SimpleFeatureSource, SimpleFeatureStore}
 import org.geotools.data.{DataUtilities, DefaultTransaction, Transaction}
 import org.geotools.feature.simple.SimpleFeatureBuilder
+import org.geotools.geometry.jts.{CompoundCurve, CircularString}
 import org.opengis.feature.simple.{SimpleFeature, SimpleFeatureType}
+import org.opengis.geometry.aggregate.MultiSurface
+import org.opengis.geometry.coordinate.PolyhedralSurface
 
 
 /**
  * Store features then write them to a shapefile
  */
-class ShapeWriter(val geomType: String = "Point", val srid: Int = 4326, schemaDef: String = "x:Double," + "y:Double") {
+//TODO move to core package
+class ShapeWriter(val geomType: GeomType.Value = GeomType.Point, val srid: Int = 4326, schemaDef: String = "description:String") {
 
   val schema =  "the_geom:" + geomType + ":srid=" + srid + "," + schemaDef
 
-
 //  val TYPE= DataUtilities.createType("Location", "the_geom:Polygon:srid=4326," + "i:Integer," + "j:Integer")
   val SIMPLE_FEATURE_TYPE: SimpleFeatureType = DataUtilities.createType("Location", schema)
+
   val features = new util.ArrayList[SimpleFeature]
 
 //  private def getCoords(env: Envelope): Array[Coordinate] = {
