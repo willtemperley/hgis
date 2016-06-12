@@ -95,6 +95,4 @@ class GlobalGrid(val w: Int, val h: Int, val tileSize: Int) {
     geomFact.createPoint(new Coordinate(x2, y2))
   }
 
-  def toRasterIdx(x: Int, y: Int) = (w * (h - y)) + x
-
 }
